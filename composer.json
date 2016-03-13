@@ -1,0 +1,27 @@
+{
+  "name": "html",
+  "type":"library",
+  "repo": "devlucid/html",
+  "description": "",
+  "authors": [
+      {
+          "name":     "Mike Thorn",
+          "email":    "mthorn@devlucid.com"
+      }
+  ],
+  "maintainers": [
+      {
+          "name":     "Mike Thorn",
+          "email":    "mthorn@devlucid.com"
+      }
+  ],
+  "autoload": {
+      "psr-4": {"DevLucid\\": "/"}
+  },
+  "autoload-dev": {
+      "psr-4": {"DevLucid\\": "/"}
+  },
+  "license": "MIT",
+  "bin": [
+  ]
+}

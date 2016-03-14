@@ -276,7 +276,7 @@ class base_tag extends base_tags__class_style_methods
         {
             throw new \Exception('Class '.get_class($this).' does not support ->paragraph because this class does not support having children.');
         }
-        $this->add(factory::p($text));
+        $this->add(html::p($text));
         return $this;
     }
 }

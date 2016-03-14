@@ -1,4 +1,4 @@
-factory.dataTable = {
+html.dataTable = {
     'colSelector':'table > thead > tr > th',
     'refreshSelector':'table > tbody',
     'pagerSelector':'span.data-table-pager',
@@ -8,7 +8,7 @@ factory.dataTable = {
     'refreshTimeouts':{}
 };
 
-factory.dataTable.getTableProperties=function(obj){
+html.dataTable.getTableProperties=function(obj){
     obj = jQuery(obj);
     while(obj.hasClass('data-table') === false){
         obj = obj.parent();
@@ -39,7 +39,7 @@ factory.dataTable.getTableProperties=function(obj){
     return props;
 };
 
-factory.dataTable.getRefreshParameters=function(props){
+html.dataTable.getRefreshParameters=function(props){
     var data = {
         'sort-col'     : props['sort-col'],
         'sort-dir'     : props['sort-dir'],
@@ -53,9 +53,9 @@ factory.dataTable.getRefreshParameters=function(props){
     return data;
 };
 
-factory.dataTable.sort=function(col){
-    var props = factory.dataTable.getTableProperties(col);
-    var cols  = props.jquery.find(factory.dataTable.colSelector);
+html.dataTable.sort=function(col){
+    var props = html.dataTable.getTableProperties(col);
+    var cols  = props.jquery.find(html.dataTable.colSelector);
     var thisCol = null;
     for(var i=0; i<cols.length; i++){
         if(cols[i] == col){
@@ -69,12 +69,12 @@ factory.dataTable.sort=function(col){
         props.setProperty('sort-dir', 'asc');
     }
     props.setProperty('current-page', 0);
-    factory.dataTable.updateSortIndictors(props);
-    factory.dataTable.requestData(props);
+    html.dataTable.updateSortIndictors(props);
+    html.dataTable.requestData(props);
 };
 
-factory.dataTable.page=function(pager, direction){
-    var props = factory.dataTable.getTableProperties(pager);
+html.dataTable.page=function(pager, direction){
+    var props = html.dataTable.getTableProperties(pager);
     var newPage = props['current-page'];
     switch(direction){
         case 'first':
@@ -103,55 +103,55 @@ factory.dataTable.page=function(pager, direction){
 
     if(newPage != props['current-page']){
         props.setProperty('current-page', newPage);
-        factory.dataTable.requestData(props);
+        html.dataTable.requestData(props);
     }
 };
 
-factory.dataTable.filter = function(filter, delay){
-    var props = factory.dataTable.getTableProperties(filter);
+html.dataTable.filter = function(filter, delay){
+    var props = html.dataTable.getTableProperties(filter);
     props.setProperty('current-page',0);
     if(delay === false){
-        factory.dataTable.requestData(props);
+        html.dataTable.requestData(props);
     }else{
-        window.clearTimeout(factory.dataTable.refreshTimeouts[props.id]);
-        factory.dataTable.refreshTimeouts[props.id] = window.setTimeout(function(){
-            factory.dataTable.requestData(props);
-        }, factory.dataTable.searchDelay);
+        window.clearTimeout(html.dataTable.refreshTimeouts[props.id]);
+        html.dataTable.refreshTimeouts[props.id] = window.setTimeout(function(){
+            html.dataTable.requestData(props);
+        }, html.dataTable.searchDelay);
     }
 };
 
-factory.dataTable.noDataMessage=function(props, show){
+html.dataTable.noDataMessage=function(props, show){
     if(show === true){
-        props.jquery.find(factory.dataTable.colsSelector).hide();
-        props.jquery.find(factory.dataTable.pagerSelector).hide();
+        props.jquery.find(html.dataTable.colsSelector).hide();
+        props.jquery.find(html.dataTable.pagerSelector).hide();
     }else{
-        props.jquery.find(factory.dataTable.colsSelector).show();
-        props.jquery.find(factory.dataTable.pagerSelector).show();
+        props.jquery.find(html.dataTable.colsSelector).show();
+        props.jquery.find(html.dataTable.pagerSelector).show();
     }
 };
 
-factory.dataTable.requestData=function(props){
+html.dataTable.requestData=function(props){
     window.jQuery.ajax(props['refresh-url'], {
         'method':'POST',
-        'data':factory.dataTable.getRefreshParameters(props),
+        'data':html.dataTable.getRefreshParameters(props),
         'complete':function(response, statusCode){
             console.log('loading new data');
-            props.jquery.find(factory.dataTable.refreshSelector).html(response.responseJSON.tbody);
+            props.jquery.find(html.dataTable.refreshSelector).html(response.responseJSON.tbody);
             props.setProperty('max-page', response.responseJSON.max_page);
-            factory.dataTable.updatePager(props, response.responseJSON.pager);
-            factory.dataTable.noDataMessage(props, (response.responseJSON.max_page === 0));
+            html.dataTable.updatePager(props, response.responseJSON.pager);
+            html.dataTable.noDataMessage(props, (response.responseJSON.max_page === 0));
         }
     });
 };
 
-factory.dataTable.updateSortIndictors=function(props){
-    var cols = props.jquery.find(factory.dataTable.colSelector);
+html.dataTable.updateSortIndictors=function(props){
+    var cols = props.jquery.find(html.dataTable.colSelector);
     console.log(cols);
     var i = 0;
     cols.each(function(){
         var col = $(this);
         if(col.attr('data-sortable') == 'true'){
-            var sortIcon = col.find(factory.dataTable.sortIconSelector);
+            var sortIcon = col.find(html.dataTable.sortIconSelector);
             sortIcon.removeClass('fa-chevron-up fa-chevron-down fa-chevron-right');
             if(i == props['sort-col']){
                 sortIcon.addClass('fa-chevron-'+((props['sort-dir'] == 'asc')?'up':'down'));
@@ -163,7 +163,7 @@ factory.dataTable.updateSortIndictors=function(props){
     });
 };
 
-factory.dataTable.updatePager=function(props, newPager){
-    var pager = props.jquery.find(factory.dataTable.pagerSelector);
+html.dataTable.updatePager=function(props, newPager){
+    var pager = props.jquery.find(html.dataTable.pagerSelector);
     pager.html(newPager);
 };

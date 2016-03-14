@@ -26,6 +26,7 @@ class bootstrap_data_table extends bootstrap_table
     public $topright    = null;
     public $bottomleft  = null;
     public $bottomright = null;
+    public $renderer    = null;
 
     public $components = [
         'pager'=>null,

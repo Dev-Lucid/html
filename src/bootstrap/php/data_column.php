@@ -51,13 +51,13 @@ class bootstrap_data_column extends base_tag
         $html = '<td';
         $html .= '>';
 
-        if(is_callable($this->renderer))
-        {
+        if (is_callable($this->renderer) === true) {
             $func = $this->renderer;
             $html .= $func($row);
-        }
-        else
-        {
+        } elseif (is_callable($this->parent->renderer) === true) {
+            $func = $this->parent->renderer;
+            $html .= $func($row, $this->data_name);
+        } else {
             $data_name = $this->data_name;
             $html .= $row[$data_name];
         }

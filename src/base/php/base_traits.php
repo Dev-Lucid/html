@@ -18,7 +18,7 @@ trait trait_base_checkable
         }
         if ($val !== true && $val !== false)
         {
-            throw new Exception('Attribute checked only accepts values true or false.');
+            throw new \Exception('Attribute checked only accepts values true or false.');
         }
         $this->attributes['checked'] = $val;
         return $this;

@@ -36,7 +36,7 @@ class bootstrap_data_column extends base_tag
         $html .= ' data-sortable="'.(($this->sortable === true)?'true':'false').'"';
         if($this->sortable === true)
         {
-            $html .= ' onclick="factory.dataTable.sort(this);"';
+            $html .= ' onclick="html.dataTable.sort(this);"';
         }
 
         $html .= '>';

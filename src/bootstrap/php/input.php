@@ -62,4 +62,19 @@ class bootstrap_input extends base_input
         }
         return parent::pre_render();
     }
+
+    public function set_type($type)
+    {
+        parent::set_type($type);
+
+        if ($type == 'date') {
+            $this->attributes['type'] = 'text';
+            #$this->post_addon = html::icon('calendar');
+            $this->attributes['onfocus'] = "window.jQuery(this).datetimepicker({mask:'9999-12-39 23:59', format:'Y-m-d H:i'});window.jQuery(this).datetimepicker('toggle');";
+        }
+
+        return $this;
+    }
+
+
 }

@@ -10,6 +10,9 @@ class base_input extends base_tag
     # $parameters doesn't matter because it will be overridden once 'type' has been set.
     public $parameters = ['type', null, null, null, null, null, null,];
     public $parameters_by_type = [
+        'date'        => ['type', 'name', 'value', ],
+        'datetime'        => ['type', 'name', 'value', ],
+        'datetime-local'        => ['type', 'name', 'value', ],
         'text'        => ['type', 'name', 'value', 'placeholder', ],
         'email'       => ['type', 'name', 'value', 'placeholder',],
         'password'    => ['type', 'name', 'placeholder',],
@@ -20,6 +23,8 @@ class base_input extends base_tag
         'hidden'      => ['type', 'name', 'value',],
     ];
     public $allowed_attributes_by_type = [
+        'date'        => ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress', ],
+        'datetime-local'=> ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress', ],
         'text'        => ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress', ],
         'email'       => ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress',],
         'password'    => ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress',],

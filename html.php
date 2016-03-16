@@ -44,7 +44,7 @@ class html
         }
 
         foreach (html::$flavors as $flavor) {
-            $files = html::make_load_paths($flavor);
+            $files = html::makeLoadPaths($flavor);
             foreach ($files as $file) {
                 include($file);
             }
@@ -53,7 +53,7 @@ class html
         class_alias('DevLucid\\html','html');
     }
 
-    private static function make_load_paths($flavor)
+    private static function makeLoadPaths($flavor)
     {
         $files = [];
         $suffixes = ['traits','tags',];
@@ -89,7 +89,7 @@ class html
         }
 
         #$obj->type = $name;
-        if(is_null($obj->tag) === true) {
+        if (is_null($obj->tag) === true) {
             $obj->tag = $name;
         }
         $obj->set_properties($params);
@@ -122,8 +122,12 @@ class html
             throw new \Exception('Class '.get_class($obj).' can only have children with tag '.implode(', ',$allowed_tags));
         }
 
-        if(is_null($disallowed_tags) === false && in_array($bad_tag, $disallowed_tags) === true) {
+        if (is_null($disallowed_tags) === false && in_array($bad_tag, $disallowed_tags) === true) {
             throw new \Exception('Class '.get_class($obj).' can not have children with tag '.implode(', ',$disallowed_tags));
         }
     }
 }
+
+html::$hooks['javascript'] = function($js) {
+    return '<script language="Javascript">'.$js.'</script>';
+};

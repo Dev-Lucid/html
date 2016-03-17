@@ -1,83 +1,80 @@
 <?php
+namespace DevLucid\Tag;
 
-namespace DevLucid;
-
-if(class_exists('\DevLucid\base_table') === false)
-{
+if (class_exists('DevLucid\\Tag\\BaseTable') === false) {
     include(__DIR__.'/../../base/php/table.php');
 }
 
-class bootstrap_table extends base_table
+class BootstrapTable extends BaseTable
 {
-    use trait_bootstrap_sizeable;
-    public $_bootstrap_size_prefix = 'table';
-    public $_bootstrap_size_allowed = ['sm'];
+    use BootstrapSizeableTrait;
+    public $bootstrapSizePrefix = 'table';
+    public $bootstrapSizesAllowed = ['sm'];
 
     public function init()
     {
-        $this->add_class('table');
+        $this->addClass('table');
         $this->responsive = true;
         $this->hover = true;
         parent::init();
     }
 
-    public function set_inverse($val)
+    public function setInverse($val)
     {
-        html::error_boolean($this, 'inverse', $val);
-        return $this->toggle_class('table-inverse', $val);
+        \DevLucid\html::errorBoolean($this, 'inverse', $val);
+        return $this->toggleClass('table-inverse', $val);
     }
 
-    public function get_inverse()
+    public function getInverse()
     {
-        return $this->has_class('table-inverse');
+        return $this->hasClass('table-inverse');
     }
 
-    public function set_striped($val)
+    public function setStriped($val)
     {
-        html::error_boolean($this, 'striped', $val);
-        return $this->toggle_class('table-striped', $val);
+        \DevLucid\html::errorBoolean($this, 'striped', $val);
+        return $this->toggleClass('table-striped', $val);
     }
 
-    public function get_striped()
+    public function getStriped()
     {
-        return $this->has_class('table-striped');
+        return $this->hasClass('table-striped');
     }
 
-    public function set_bordered($val)
+    public function setBordered($val)
     {
-        html::error_boolean($this, 'bordered', $val);
-        return $this->toggle_class('table-bordered', $val);
+        \DevLucid\html::errorBoolean($this, 'bordered', $val);
+        return $this->toggleClass('table-bordered', $val);
     }
 
-    public function get_bordered()
+    public function getBordered()
     {
-        return $this->has_class('table-bordered');
+        return $this->hasClass('table-bordered');
     }
 
-    public function set_hover($val)
+    public function setHover($val)
     {
-        html::error_boolean($this, 'hover', $val);
-        return $this->toggle_class('table-hover', $val);
+        \DevLucid\html::errorBoolean($this, 'hover', $val);
+        return $this->toggleClass('table-hover', $val);
     }
 
-    public function get_hover()
+    public function getHover()
     {
-        return $this->has_class('table-hover');
+        return $this->hasClass('table-hover');
     }
 
-    public function set_responsive($val)
+    public function setResponsive($val)
     {
-        if($val === true)
-        {
-            $this->pre_html  .= '<div class="table-responsive">';
-            $this->post_html .= '</div>';
+        if($val === true) {
+            $this->preHtml  .= '<div class="table-responsive">';
+            $this->postHtml .= '</div>';
         }
 
         return $this;
     }
 
-    public function get_responsive()
+    public function getTesponsive()
     {
-        return (strpos($this->pre_html, '<div class="table-responsive">') !== false);
+        return (strpos($this->preHtml, '<div class="table-responsive">') !== false);
     }
 }

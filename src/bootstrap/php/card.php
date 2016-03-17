@@ -1,120 +1,100 @@
 <?php
-namespace Devlucid;
+namespace Devlucid\Tag;
 
-class bootstrap_card extends base_tag
+class BootstrapCard extends BaseTag
 {
+    use BootstrapGridableTrait;
+
     public $tag = 'div';
-    use trait_bootstrap_gridable;
 
     public function init()
     {
         parent::init();
-        $this->add_class('card');
+        $this->addClass('card');
     }
 
-    public function get_header()
+    public function getHeader()
     {
-        if(count($this->children) == 0)
-        {
-            $this->add(html::card_header());
-            return $this->last_child();
-        }
-        else if($this->children[0]->has_class('card-header') === false)
-        {
-            $this->prepend(html::card_header());
-            return $this->first_child();
+        if (count($this->children) == 0) {
+            $this->add(\DevLucid\html::cardHeader());
+            return $this->lastChild();
+        } elseif ($this->children[0]->hasClass('card-header') === false) {
+            $this->prepend(\DevLucid\html::cardHeader());
+            return $this->firstChild();
         }
         return $this->children[0];
     }
 
-    public function set_header($value)
+    public function setHeader($value)
     {
-        $header = $this->get_header();
+        $header = $this->getHeader();
         $header->add($value);
         return $this;
     }
 
-    public function get_footer()
+    public function getFooter()
     {
-        if(count($this->children) == 0)
-        {
-            $this->add(html::card_footer());
-            return $this->last_child();
+        if (count($this->children) == 0) {
+            $this->add(\DevLucid\html::cardFooter());
+            return $this->lastChild();
+        } elseif($this->lastChild()->hasClass('card-footer') === false) {
+            $this->add(\DevLucid\html::cardFooter());
+            return $this->lastChild();
         }
-        else if($this->last_child()->has_class('card-footer') === false)
-        {
-            $this->add(html::card_footer());
-            return $this->last_child();
-        }
-        return $this->last_child();
+        return $this->lastChild();
     }
 
-    public function set_footer($value)
+    public function setFooter($value)
     {
-        $footer = $this->get_footer();
+        $footer = $this->getFooter();
         $footer->add($value);
         return $this;
     }
 
-    public function get_block()
+    public function getBlock()
     {
-        foreach($this->children as $child)
-        {
-            if($child->has_class('card-block'))
-            {
+        foreach ($this->children as $child) {
+            if ($child->hasClass('card-block')) {
                 return $child;
             }
         }
-        $this->add(html::card_block());
-        return $this->last_child();
+
+        $this->add(\DevLucid\html::cardBlock());
+        return $this->lastChild();
     }
 
-    public function set_block($value)
+    public function setBlock($value)
     {
-        $block = $this->get_block();
+        $block = $this->getBlock();
         $block->add($value);
         return $this;
     }
 
-    public function pre_render()
+    public function preRender()
     {
-        for($i=0; $i<count($this->children); $i++)
-        {
+        for ($i=0; $i<count($this->children); $i++) {
             $child = $this->children[$i];
-            if($child->tag == 'img')
-            {
-                if($i === 0)
-                {
-                    $child->add_class('card-img-top');
+            if ($child->tag == 'img') {
+                if ($i === 0) {
+                    $child->addClass('card-img-top');
+                } elseif (($i + 1) === count($this->children)) {
+                    $child->addClass('card-img-bottom');
                 }
-                else if(($i + 1) === count($this->children))
-                {
-                    $child->add_class('card-img-bottom');
-                }
-            }
-            else if (in_array($child->tag,['h3','h4']))
-            {
-                $this->add_class('block');
-                $child->add_class('card-title');
-            }
-            else if($child->tag == 'p')
-            {
-                $this->add_class('block');
-                $child->add_class('card-text');
-            }
-            else if($child->tag == 'ul')
-            {
-                $child->add_class('list-group-flush');
-            }
-            else if($child->tag == 'blockquote')
-            {
-                $child->add_class('card-blockquote');
-            }
-            else if($child->tag == 'a' && $child->has_class('btn') === false)
-            {
-                $child->add_class('card-link');
+            } elseif (in_array($child->tag,['h3','h4']) === true) {
+                $this->addClass('block');
+                $child->addClass('card-title');
+            } elseif ($child->tag == 'p') {
+                $this->addClass('block');
+                $child->addClass('card-text');
+            } elseif ($child->tag == 'ul') {
+                $child->addClass('list-group');
+                $child->addClass('list-group-flush');
+            } elseif ($child->tag == 'blockquote') {
+                $child->addClass('card-blockquote');
+            } elseif($child->tag == 'a' && $child->hasClass('btn') === false) {
+                $child->addClass('card-link');
             }
         }
-        return parent::pre_render();
+        return parent::preRender();
     }
 }

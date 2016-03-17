@@ -4,10 +4,12 @@ namespace DevLucid;
 
 class html
 {
-    static $logger = null;
-    static $flavors = [];
-    static $icon_prefix = 'fa';
-    static $hooks = [];
+    public static $logger = null;
+    public static $flavors = [];
+    public static $iconPrefix = 'fa';
+    public static $hooks = [];
+
+    public static $loadedClassCache = [];
 
     public static function log($text = null)
     {
@@ -25,7 +27,7 @@ class html
             } else {
                 $text = rtrim($text);
                 if ($text != '') {
-                    if (is_object(factory::$logger) === true) {
+                    if (is_object(html::$logger) === true) {
                         html::$logger->debug($text);
                     }
                 }
@@ -66,33 +68,55 @@ class html
         return $files;
     }
 
+    private static function checkForClass($possibleClassNames)
+    {
+        $finalClassName = null;
+        # loop over this list and look for a match. If we find one, use that class name.
+        foreach ($possibleClassNames as $possibleClassName) {
+            if ( class_exists($possibleClassName) === true) {
+                return $possibleClassName;
+            }
+        }
+        return $finalClassName;
+    }
+
+
     public static function __callStatic($name,$params)
     {
         $final_class = null;
-        foreach (html::$flavors as $flavor) {
-            $file_name  = $flavor['path'].'/'.$name.'.php';
-            $class_name = 'DevLucid\\'.$flavor['prefix'].'_'.$name;
 
-            if (class_exists($class_name) === false && file_exists($file_name) === true){
-                include($file_name);
+        # build an array of possible class names for this type.
+        $possibleClassNames = [];
+        foreach (html::$flavors as $flavor) {
+            $possibleClassNames[] = strtolower('DevLucid\\Tag\\'.$flavor['prefix'].$name);
+        }
+        $possibleClassNames = array_reverse($possibleClassNames);
+
+
+        $finalClassName = \DevLucid\html::checkForClass($possibleClassNames);
+
+        # if we didn't find one, then load class files
+        if (is_null($finalClassName) === true) {
+            foreach (html::$flavors as $flavor) {
+                $fileName  = $flavor['path'].$name.'.php';
+                if (file_exists($fileName) === true){
+                    include($fileName);
+                }
             }
-            if (class_exists($class_name) === true) {
-                $final_class = $class_name;
-            }
+            $finalClassName = \DevLucid\html::checkForClass($possibleClassNames);
         }
 
-        if (is_null($final_class) === true){
-            //throw new Exception('Unable to create html for class '.$name.', could not find a definition in any of the configured paths.');
-            $obj = new base_tag();
+        if (is_null($finalClassName) === true){
+            $obj = new Tag\BaseTag();
         } else {
-            $obj = new $final_class();
+            $obj = new $finalClassName();
         }
 
         #$obj->type = $name;
         if (is_null($obj->tag) === true) {
             $obj->tag = $name;
         }
-        $obj->set_properties($params);
+        $obj->setProperties($params);
 
         if (isset(html::$hooks[$name.'__create']) === true && is_callable(html::$hooks[$name.'__create']) === true) {
             $func = html::$hooks[$name.'__create'];
@@ -102,28 +126,28 @@ class html
         return $obj;
     }
 
-    public static function error_boolean($obj, $property, $bad_value)
+    public static function errorBoolean($obj, $property, $bad_value)
     {
         if ($bad_value !== true && $bad_value !== false && is_null($value) === false) {
             throw new \Exception('Class '.get_class($obj).' property '.$property.' must be set to true, false, or null.');
         }
     }
 
-    public static function error_values($obj, $property, $bad_value, $good_values)
+    public static function errorValues($obj, $property, $bad_value, $good_values)
     {
         if (in_array($bad_value, $good_values) === false) {
             throw new \Exception('Class '.get_class($obj).' property '.$property.' must be one of the following values: '.implode(', ',$good_values));
         }
     }
 
-    public static function error_child_tag($obj, $bad_tag, $allowed_tags=null, $disallowed_tags=null)
+    public static function errorChildTag($obj, $badTag, $allowedTags=null, $disallowedTags=null)
     {
-        if (is_null($allowed_tags) === false && in_array($bad_tag, $allowed_tags) === false) {
-            throw new \Exception('Class '.get_class($obj).' can only have children with tag '.implode(', ',$allowed_tags));
+        if (is_null($allowedTags) === false && in_array($badTag, $allowedTags) === false) {
+            throw new \Exception('Class '.get_class($obj).' can only have children with tag '.implode(', ',$allowedTags));
         }
 
-        if (is_null($disallowed_tags) === false && in_array($bad_tag, $disallowed_tags) === true) {
-            throw new \Exception('Class '.get_class($obj).' can not have children with tag '.implode(', ',$disallowed_tags));
+        if (is_null($disallowedTags) === false && in_array($badTag, $disallowedTags) === true) {
+            throw new \Exception('Class '.get_class($obj).' can not have children with tag '.implode(', ',$disallowedTags));
         }
     }
 }

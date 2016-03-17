@@ -1,14 +1,11 @@
 <?php
+namespace DevLucid\Tag;
 
-namespace DevLucid;
-
-
-if(class_exists('\DevLucid\bootstrap_table') === false)
-{
+if(class_exists('DevLucid\\Tag\\BootstrapTable') === false) {
     include(__DIR__.'/table.php');
 }
 
-class bootstrap_data_column extends base_tag
+class BootstrapDataColumn extends BaseTag
 {
     public $label     = null;
     public $data_name = null;
@@ -24,29 +21,28 @@ class bootstrap_data_column extends base_tag
         $this->parameters = ['label', 'data_name', 'width', 'sortable', 'renderer',];
     }
 
-    public function render_column()
+    public function renderColumn()
     {
         return '<col width="'.$this->width.'" />';
     }
 
-    public function render_header()
+    public function renderHeader()
     {
         $html = '<th';
 
         $html .= ' data-sortable="'.(($this->sortable === true)?'true':'false').'"';
-        if($this->sortable === true)
-        {
+        if ($this->sortable === true) {
             $html .= ' onclick="html.dataTable.sort(this);"';
         }
 
         $html .= '>';
-        $html .= $this->render_sort_indicator();
+        $html .= $this->renderSortIndicator();
         $html .= $this->label;
         $html .= '</th>';
         return $html;
     }
 
-    public function render_data($row)
+    public function renderData($row)
     {
         $html = '<td';
         $html .= '>';
@@ -65,14 +61,12 @@ class bootstrap_data_column extends base_tag
         return $html;
     }
 
-    public function render_sort_indicator()
+    public function renderSortIndicator()
     {
-        if($this->sortable === true)
-        {
+        if ($this->sortable === true) {
             $class = 'fa-chevron-right';
 
-            if($this->parent->sort_col == $this->index)
-            {
+            if ($this->parent->sort_col == $this->index) {
                 $class = 'fa-chevron-' . (($this->parent->sort_dir == 'asc')?'up':'down');
             }
             return '<i class="fa '.$class.'"></i> ';

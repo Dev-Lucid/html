@@ -1,15 +1,15 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-trait trait_base_checkable
+trait BaseCheckableTrait
 {
-    public function _trait_base_checkbable_init()
+    public function BaseCheckableTraitInit()
     {
-        $this->allowed_attributes[] = 'checked';
+        $this->allowedAttributes[] = 'checked';
     }
 
-    public function set_checked($val)
+    public function setChecked($val)
     {
         # some databases (sqlite3) are annoying about how they store/return booleans.
         # This code makes some reasonable attempts to coerce the passed value into a real php boolean.
@@ -26,8 +26,8 @@ trait trait_base_checkable
         }
 
         $type = (isset($this->attributes['type']))?$this->attributes['type']:'unknown';
-        if (in_array($type, ['radio','checkbox',]) === false) {
-            throw new Exception('Attribute checked cannot be used on input type '.$type.'; only for types radio and checkbox.');
+        if (in_array($type, ['radio', 'checkbox',]) === false) {
+            throw new \Exception('Attribute checked cannot be used on input type '.$type.'; only for types radio and checkbox.');
         }
         if ($val !== true && $val !== false) {
             throw new \Exception('Attribute checked only accepts values true or false.');
@@ -36,21 +36,21 @@ trait trait_base_checkable
         return $this;
     }
 
-    public function render_checked()
+    public function renderChecked()
     {
         $val = ($this->attributes['checked'] === true)?'checked':null;
         return $val;
     }
 }
 
-trait trait_base_disablable
+trait BaseDisableableTrait
 {
-    public function _trait_base_disablable_init()
+    public function BaseDisableableTraitInit()
     {
-        $this->allowed_attributes[] = 'disabled';
+        $this->allowedAttributes[] = 'disabled';
     }
 
-    public function set_disabled($val)
+    public function setDisabled($val)
     {
         if ($val !== true && $val !== false)
         {
@@ -60,7 +60,7 @@ trait trait_base_disablable
         return $this;
     }
 
-    public function render_disabled()
+    public function renderDisabled()
     {
         $val = ($this->attributes['disabled'] === true)?'disabled':null;
         return $val;

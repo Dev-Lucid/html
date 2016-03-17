@@ -1,8 +1,8 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-class base_select extends base_tag
+class BaseSelect extends BaseTag
 {
     # $parameters doesn't matter because it will be overridden once 'type' has been set.
     public $parameters = ['name', 'value', 'data', 'onchange',];
@@ -10,30 +10,25 @@ class base_select extends base_tag
     public $value = null;
     public $data  = null;
 
-    public function pre_render()
+    public function preRender()
     {
-        if(is_null($this->data) === false)
-        {
-            foreach($this->data as $option)
-            {
+        if (is_null($this->data) === false) {
+            foreach ($this->data as $option) {
                 $value = '';
                 $label = '';
 
-                if(isset($option['label']))
-                {
+                if (isset($option['label']) === true) {
                     $value = $option['value'];
                     $label = $option['label'];
-                }
-                else if (isset($option[1]) === true)
-                {
+                } elseif (isset($option[1]) === true) {
                     $value = $option[0];
                     $label = $option[1];
                 }
                 settype($this->value,'string');
                 settype($value,'string');
-                $this->add(html::option($value, $label, ($this->value == $value)));
+                $this->add(\DevLucid\html::option($value, $label, ($this->value == $value)));
             }
         }
-        return parent::pre_render();
+        return parent::preRender();
     }
 }

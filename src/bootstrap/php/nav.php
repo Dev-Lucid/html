@@ -1,128 +1,113 @@
 <?php
-namespace Devlucid;
+namespace Devlucid\Tag;
 
-class bootstrap_nav extends base_tag
+class BootstrapNav extends BaseTag
 {
     public $tag = 'ul';
     public $active_target = null;
     public $parameters = ['active_target',];
     public $panes = [];
-    public $post_render_tabs = true;
+    public $postRenderTabs = true;
 
     public function init()
     {
         parent::init();
-        $this->add_class('nav');
-        $this->add_class('nav-pills');
+        $this->addClass('nav');
+        $this->addClass('nav-pills');
     }
 
-    public function pre_render()
+    public function preRender()
     {
-        $is_tabs = $this->get_tabs();
+        $is_tabs = $this->getTabs();
         $active_index = false;
-        for($i=0; $i<count($this->children); $i++)
-        {
-            if($this->children[$i]->href == $this->active_target)
-            {
+        for ($i=0; $i<count($this->children); $i++) {
+            if ($this->children[$i]->href == $this->active_target) {
                 $this->children[$i]->active(true);
             }
-            if($is_tabs === true)
-            {
+            if ($is_tabs === true) {
                 $this->children[$i]->attributes['data-toggle'] = 'tab';
                 $this->children[$i]->attributes['role'] = 'tab';
-                if($this->children[$i]->active() === true)
-                {
+                if ($this->children[$i]->active() === true) {
                     $active_index = $i;
                     $this->panes[$i]->active(true);
                 }
             }
-            $this->children[$i]->pre_html = '<li class="nav-item">'.$this->children[$i]->pre_html;
-            $this->children[$i]->post_html = $this->children[$i]->post_html.'</li>';
+            $this->children[$i]->preHtml = '<li class="nav-item">'.$this->children[$i]->preHtml;
+            $this->children[$i]->postHtml = $this->children[$i]->postHtml.'</li>';
         }
 
-        if($is_tabs === true && $active_index === false)
-        {
+        if ($is_tabs === true && $active_index === false) {
             $this->children[0]->active(true);
             $this->panes[0]->active(true);
             $this->active_target = $this->children[0]->href;
         }
 
-        return parent::pre_render();
+        return parent::preRender();
     }
 
-    public function set_pills($val)
+    public function setPills($val)
     {
-        if($val === true)
-        {
-            $this->remove_class('nav-inline');
-            $this->remove_class('nav-tabs');
-            $this->add_class('nav-pills');
-        }
-        else
-        {
-            $this->remove_class('nav-pills');
+        if ($val === true) {
+            $this->removeClass('nav-inline');
+            $this->removeClass('nav-tabs');
+            $this->addClass('nav-pills');
+        } else {
+            $this->removeClass('nav-pills');
         }
         return $this;
     }
 
-    public function get_pills()
+    public function getPills()
     {
-        return $this->has_class('nav-pills');
+        return $this->hasClass('nav-pills');
     }
 
-    public function set_stacked($val)
+    public function setStacked($val)
     {
-        if($val === true)
-        {
-            $this->set_pills(true);
-            $this->add_class('nav-stacked');
-        }
-        else
-        {
-            $this->remove_class('nav-stacked');
+        if ($val === true) {
+            $this->setPills(true);
+            $this->addClass('nav-stacked');
+        } else {
+            $this->removeClass('nav-stacked');
         }
         return $this;
     }
 
-    public function get_stacked()
+    public function getStacked()
     {
-        return $this->has_class('nav-stacked');
+        return $this->hasClass('nav-stacked');
     }
 
 
-    public function set_tabs($val)
+    public function setTabs($val)
     {
-        if($val === true)
-        {
-            $this->remove_class('nav-inline');
-            $this->remove_class('nav-pills');
-            $this->add_class('nav-tabs');
+        if($val === true){
+            $this->removeClass('nav-inline');
+            $this->removeClass('nav-pills');
+            $this->addClass('nav-tabs');
             $this->attributes['role'] = 'tablist';
 
             $link_count = count($this->children);
             $pane_count = count($this->panes);
 
-            while(count($this->panes) < $link_count)
-            {
-                $this->add_pane();
+            while (count($this->panes) < $link_count) {
+                $this->addPane();
             }
-        }
-        else
-        {
-            $this->remove_class('nav-tabs');
+        } else {
+            $this->removeClass('nav-tabs');
             $this->attributes['role'] = null;
         }
         return $this;
     }
 
-    public function get_tabs()
+    public function getTabs()
     {
-        return $this->has_class('nav-tabs');
+        return $this->hasClass('nav-tabs');
     }
 
-    public function add_pane()
+    public function addPane()
     {
-        $pane = html::tab_pane($this->last_child()->href);
+        $pane = \DevLucid\html::tabPane($this->lastChild()->href);
         $pane->parent = $this;
         $this->panes[] = $pane;
         return $this;
@@ -131,40 +116,35 @@ class bootstrap_nav extends base_tag
     public function add($child)
     {
         parent::add($child);
-        if($this->tabs() === true)
-        {
-            $this->add_pane();
+        if( $this->tabs() === true) {
+            $this->addPane();
         }
         return $this;
     }
 
-    public function first_pane()
+    public function firstPane()
     {
-        if(count($this->panes) === 0)
-        {
+        if (count($this->panes) === 0) {
             return null;
         }
         return $this->panes[0];
     }
 
-    public function last_pane()
+    public function lastPane()
     {
-        if(count($this->panes) === 0)
-        {
+        if (count($this->panes) === 0) {
             return null;
         }
         return $this->panes[count($this->panes) - 1];
     }
 
-    public function render_panes($force = false)
+    public function renderPanes($force = false)
     {
         $html = '';
-        $is_forced = ($this->post_render_tabs === true || $force === true);
-        if($is_forced === true && count($this->panes) > 0 && $this->get_tabs() === true)
-        {
+        $isForced = ($this->postRenderTabs === true || $force === true);
+        if ($isForced === true && count($this->panes) > 0 && $this->getTabs() === true) {
             $html .= '<div class="tab-content">';
-            foreach($this->panes as $pane)
-            {
+            foreach ($this->panes as $pane) {
                 $html .= $pane->render();
             }
             $html .= '</div>';
@@ -172,11 +152,11 @@ class bootstrap_nav extends base_tag
         return $html;
     }
 
-    public function post_render()
+    public function postRender()
     {
-        $html = '';
-        $html .= $this->render_panes();
-        $html .= parent::post_render();
+        $html = parent::postRender();
+        $html .= $this->renderPanes();
+        $html .= parent::postRender();
         return $html;
     }
 }

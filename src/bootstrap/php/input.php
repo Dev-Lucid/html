@@ -1,80 +1,69 @@
 <?php
-namespace Devlucid;
+namespace Devlucid\Tag;
 
-class bootstrap_input extends base_input
+class BootstrapInput extends BaseInput
 {
-    public $pre_addon  = null;
-    public $post_addon = null;
+    use BootstrapSizeableTrait, BootstrapPullableTrait;
 
-    use trait_bootstrap_sizeable, trait_bootstrap_pullable;
-    public $_bootstrap_size_prefix  = 'form-control';
-    public $_bootstrap_size_allowed = ['sm', 'lg', ];
+    public $preAddon  = null;
+    public $postAddon = null;
 
-    public function pre_render()
+    public $bootstrapSizePrefix  = 'form-control';
+    public $bootstrapSizesAllowed = ['sm', 'lg', ];
+
+    public function preRender()
     {
-        switch($this->type)
-        {
+        switch ($this->type) {
             case 'radio':
             case 'checkbox':
                 break;
             case 'file':
-                $this->add_class('form-control-file');
+                $this->addClass('form-control-file');
                 break;
             default:
-                $this->add_class('form-control');
+                $this->addClass('form-control');
                 break;
         }
 
-        if(is_null($this->pre_addon) === false || is_null($this->post_addon) === false)
-        {
+        if (is_null($this->preAddon) === false || is_null($this->postAddon) === false) {
             $class = 'input-group';
-            foreach($this->_bootstrap_size_allowed as $size)
-            {
-                if($this->has_class($this->_bootstrap_size_prefix.'-'.$size))
-                {
-                    $this->remove_class($this->_bootstrap_size_prefix.'-'.$size);
+            foreach ($this->bootstrapSizesAllowed as $size) {
+                if($this->hasClass($this->bootstrapSizePrefix.'-'.$size) === true) {
+                    $this->removeClass($this->bootstrapSizePrefix.'-'.$size);
                     $class .= ' input-group-'.$size;
                 }
             }
-            if($this->has_class('pull-right'))
-            {
-                $this->remove_class('pull-right');
+            if ($this->hasClass('pull-right')) {
+                $this->removeClass('pull-right');
                 $class .= ' pull-right';
             }
-            if($this->has_class('pull-left'))
-            {
-                $this->remove_class('pull-left');
+            if ($this->hasClass('pull-left')) {
+                $this->removeClass('pull-left');
                 $class .= ' pull-left';
             }
 
-            $this->pre_html .= '<div class="'.$class.'">';
-            $this->post_html .= '</div>';
+            $this->preHtml  .= '<div class="'.$class.'">';
+            $this->postHtml .= '</div>';
 
-            if(is_null($this->pre_addon) === false)
-            {
-                $this->pre_html .= '<span class="input-group-addon">'.$this->pre_addon.'</span>';
+            if (is_null($this->preAddon) === false) {
+                $this->preHtml .= '<span class="input-group-addon">'.$this->preAddon.'</span>';
             }
-            if(is_null($this->post_addon) === false)
-            {
-                $this->post_html = '<span class="input-group-addon">'.$this->post_addon.'</span>'.$this->post_html;
-
+            if (is_null($this->postAddon) === false) {
+                $this->postHtml = '<span class="input-group-addon">'.$this->postAddon.'</span>'.$this->postHtml;
             }
         }
-        return parent::pre_render();
+        return parent::preRender();
     }
 
-    public function set_type($type)
+    public function setType($type)
     {
-        parent::set_type($type);
+        parent::settype($type);
 
         if ($type == 'date') {
             $this->attributes['type'] = 'text';
-            #$this->post_addon = html::icon('calendar');
+            #$this->postAddon = html::icon('calendar');
             $this->attributes['onfocus'] = "window.jQuery(this).datetimepicker({mask:'9999-12-39 23:59', format:'Y-m-d H:i'});window.jQuery(this).datetimepicker('toggle');";
         }
-
         return $this;
     }
-
-
 }

@@ -1,162 +1,145 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-trait trait_bootstrap_pullable
+trait BootstrapPullableTrait
 {
-    public function get_pull()
+    public function getPull()
     {
         $pull = null;
-        if($this->has_class('pull-left') === true)
+        if($this->hasClass('pull-left') === true)
         {
             $pull = 'left';
         }
-        if($this->has_class('pull-right') === true)
+        if($this->hasClass('pull-right') === true)
         {
             $pull = 'right';
         }
         return $pull;
     }
 
-    public function set_pull($new_pull)
+    public function setPull($newPull)
     {
-        if ($new_pull !== 'left' && $new_pull !== 'right' && is_null($new_pull) === false)
-        {
+        if ($newPull !== 'left' && $newPull !== 'right' && is_null($newPull) === false) {
             throw new \Exception('->pull may only be set to left, right, or null');
         }
 
-        if(is_null($new_pull) === true)
-        {
-            $this->remove_class('pull-left')->remove_class('pull-right');
-        }
-        else
-        {
-            $this->add_class('pull-'.$new_pull);
+        if (is_null($newPull) === true) {
+            $this->removeClass('pull-left')->removeClass('pull-right');
+        } else {
+            $this->addClass('pull-'.$newPull);
         }
         return $this;
     }
 }
 
-trait trait_bootstrap_modifiable
+trait BootstrapModifiableTrait
 {
     # to use this trait, you must define two properties on your class. Below are examples:
-    #public $_bootstrap_modifier_prefix  = 'alert';
-    #public $_bootstrap_modifier_allowed = ['primary','secondary','success','info','danger','warning'];
-    public function set_modifier($val)
+    # public $bootstrapModifierPrefix   = 'alert';
+    # public $bootstrapModifiersAllowed = ['primary','secondary','success','info','danger','warning'];
+    public function setModifier($val)
     {
-        if(in_array($val, $this->_bootstrap_modifier_allowed) === false && is_null($val) == false)
-        {
-            throw new \Exception('Class '.get_class($this).' does not support modifier '.$val.'. The only supported modifieres are: '.implode(', ', $this->_bootstrap_modifier_allowed));
+        if (in_array($val, $this->bootstrapModifiersAllowed) === false && is_null($val) === false) {
+            throw new \Exception('Class '.get_class($this).' does not support modifier '.$val.'. The only supported modifieres are: '.implode(', ', $this->bootstrapModifiersAllowed));
         }
 
-        $classes_to_remove = [];
-        foreach($this->_bootstrap_modifier_allowed as $modifier)
-        {
-            $classes_to_remove[] = $this->_bootstrap_modifier_prefix.'-'.$modifier;
+        $classesToRemove = [];
+        foreach ($this->bootstrapModifiersAllowed as $modifier) {
+            $classesToRemove[] = $this->bootstrapModifierPrefix.'-'.$modifier;
         }
-        $this->remove_class($classes_to_remove);
+        $this->removeClass($classesToRemove);
 
-        if(is_null($val) === true)
-        {
+        if(is_null($val) === true) {
             return $this;
-        }
-        else
-        {
-            $this->add_class($this->_bootstrap_modifier_prefix.'-'.$val);
+        } else {
+            $this->addClass($this->bootstrapModifierPrefix.'-'.$val);
             return $this;
         }
     }
 }
 
-trait trait_bootstrap_sizeable
+trait BootstrapSizeableTrait
 {
     # to use this trait, you must define two properties on your class. Below are examples:
-    #public $_bootstrap_size_prefix  = 'btn';
-    #public $_bootstrap_size_allowed = ['xs', 'sm', 'md', 'lg', 'xl',];
-    public function set_size($val)
+    # public $bootstrapSizePrefix  = 'btn';
+    # public $bootstrapSizesAllowed = ['xs', 'sm', 'md', 'lg', 'xl',];
+    public function setSize($val)
     {
-        if(in_array($val, $this->_bootstrap_size_allowed) === false && is_null($val) == false)
-        {
-            throw new \Exception('Class '.get_class($this).' does not support size '.$val.'. The only supported sizes are: '.implode(', ', $this->_bootstrap_size_allowed));
+        if (in_array($val, $this->bootstrapSizesAllowed) === false && is_null($val) === false){
+            throw new \Exception('Class '.get_class($this).' does not support size '.$val.'. The only supported sizes are: '.implode(', ', $this->bootstrapSizesAllowed));
         }
 
-        $classes_to_remove = [];
-        foreach($this->_bootstrap_size_allowed as $size)
-        {
-            $classes_to_remove[] = $this->_bootstrap_size_prefix.'-'.$size;
+        $classesToRemove = [];
+        foreach ($this->bootstrapSizesAllowed as $size) {
+            $classesToRemove[] = $this->bootstrapSizePrefix.'-'.$size;
         }
-        $this->remove_class($classes_to_remove);
+        $this->removeClass($classesToRemove);
 
-        if(is_null($val) === true)
-        {
+        if (is_null($val) === true) {
             return $this;
-        }
-        else
-        {
-            $this->add_class($this->_bootstrap_size_prefix.'-'.$val);
+        } else {
+            $this->addClass($this->bootstrapSizePrefix.'-'.$val);
             return $this;
         }
     }
 }
 
-trait trait_bootstrap_activable
+trait BootstrapActivableTrait
 {
-    public function set_active($val)
+    public function setActive($val)
     {
-        return $this->toggle_class('active', $val);
+        return $this->toggleClass('active', $val);
     }
 
-    public function get_active()
+    public function getActive()
     {
-        return $this->has_class('active');
+        return $this->hasClass('active');
     }
 }
 
-trait trait_bootstrap_gridable
+trait BootstrapGridableTrait
 {
-    public $_bootstrap_grid_size_names = ['xs','sm','md','lg','xl'];
+    public $bootstrapGridSizeNames = ['xs','sm','md','lg','xl'];
     public function grid($columns)
     {
         $cols = [];
-        for($i=0; $i<count($columns); $i++)
-        {
-            $cols[$i] = html::column();
-            $cols[$i]->grid_size($columns[$i]);
+        for ($i=0; $i<count($columns); $i++){
+            $cols[$i] = \DevLucid\html::column();
+            $cols[$i]->gridSize($columns[$i]);
             $this->add($cols[$i]);
         }
         return $cols;
     }
-    public function grid_size($sizes)
+    public function gridSize($sizes)
     {
-        $this->grid_apply_sizes($sizes,'');
+        $this->gridApplySizes($sizes, '');
         return $this;
     }
 
-    public function grid_offset($sizes)
+    public function gridOffset($sizes)
     {
-        $this->grid_apply_sizes($sizes,'offset-');
+        $this->gridApplySizes($sizes, 'offset-');
         return $this;
     }
 
-    public function grid_push($sizes)
+    public function gridPush($sizes)
     {
-        $this->grid_apply_sizes($sizes,'push-');
+        $this->gridApplySizes($sizes, 'push-');
         return $this;
     }
 
-    public function grid_pull($sizes)
+    public function gridPull($sizes)
     {
-        $this->grid_apply_sizes($sizes,'pull-');
+        $this->gridApplySizes($sizes, 'pull-');
         return $this;
     }
 
-    private function grid_apply_sizes($sizes, $modifier = '')
+    private function gridApplySizes($sizes, $modifier = '')
     {
-        for($i=0; $i<count($this->_bootstrap_grid_size_names);$i++)
-        {
-            if (isset($sizes[$i]) === true and is_null($sizes[$i]) === false)
-            {
-                $this->add_class('col-'.$this->_bootstrap_grid_size_names[$i].'-'.$modifier.$sizes[$i]);
+        for ($i=0; $i<count($this->bootstrapGridSizeNames); $i++) {
+            if (isset($sizes[$i]) === true and is_null($sizes[$i]) === false) {
+                $this->addClass('col-'.$this->bootstrapGridSizeNames[$i].'-'.$modifier.$sizes[$i]);
             }
         }
         return $this;

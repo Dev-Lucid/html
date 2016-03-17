@@ -1,18 +1,18 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-class base_submit extends base_tag
+class BaseSubmit extends BaseTag
 {
+    use BaseDisableableTrait;
+
     # $parameters doesn't matter because it will be overridden once 'type' has been set.
     public $parameters = ['text',];
-
-    use trait_base_disablable;
 
     public function init()
     {
         parent::init();
-        $this->allowed_attributes[] = 'type';
+        $this->allowedAttributes[] = 'type';
         $this->type = 'submit';
         $this->tag = 'button';
     }
@@ -25,6 +25,6 @@ class base_submit extends base_tag
 
     public function get_text()
     {
-        return $this->render_children();
+        return $this->renderChildren();
     }
 }

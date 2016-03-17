@@ -1,11 +1,10 @@
 <?php
+namespace DevLucid\Tag;
 
-namespace DevLucid;
-
-class base_tags__class_style_methods
+class BaseTags__class_style_methods
 {
 
-    public function set_class($new_class)
+    public function setClass($new_class)
     {
         if(!is_array($this->attributes['class']))
         {
@@ -15,12 +14,12 @@ class base_tags__class_style_methods
         return $this;
     }
 
-    public function render_class()
+    public function renderClass()
     {
         return implode(' ',$this->attributes['class']);
     }
 
-    public function has_class($class)
+    public function hasClass($class)
     {
         if (isset($this->attributes['class']) === false || is_array($this->attributes['class']) === false)
         {
@@ -29,16 +28,16 @@ class base_tags__class_style_methods
         return in_array($class, $this->attributes['class']);
     }
 
-    public function add_class($class)
+    public function addClass($class)
     {
-        if($this->has_class($class) === false)
+        if($this->hasClass($class) === false)
         {
             $this->attributes['class'][] = $class;
         }
         return $this;
     }
 
-    public function remove_class($class)
+    public function removeClass($class)
     {
         if(isset($this->attributes['class']) === true && is_array($this->attributes['class']) === true)
         {
@@ -51,32 +50,32 @@ class base_tags__class_style_methods
         return $this;
     }
 
-    public function toggle_class($class, $new_state = null)
+    public function toggleClass($class, $new_state = null)
     {
         if(is_null($new_state) === false)
         {
             if($new_state === true)
             {
-                $this->add_class($class);
+                $this->addClass($class);
             }
             else if ($new_state === false)
             {
-                $this->remove_class($class);
+                $this->removeClass($class);
             }
             return $this;
         }
-        if($this->has_class($class) === false)
+        if($this->hasClass($class) === false)
         {
             $this->attributes['class'][] = $class;
         }
         else
         {
-            $this->remove_class($class);
+            $this->removeClass($class);
         }
         return $this;
     }
 
-    public function set_style($new_style)
+    public function setStyle($new_style)
     {
         if(isset($this->attributes['style']) === false || is_array($this->attributes['style']) === false)
         {
@@ -97,7 +96,7 @@ class base_tags__class_style_methods
         return $this;
     }
 
-    public function render_style()
+    public function renderStyle()
     {
         $css = '';
         foreach($this->attributes['style'] as $key=>$value)
@@ -110,7 +109,7 @@ class base_tags__class_style_methods
         return $css;
     }
 
-    public function set_hidden($val)
+    public function setHidden($val)
     {
         if ($val !== true && $val !== false)
         {
@@ -120,7 +119,7 @@ class base_tags__class_style_methods
         return $this;
     }
 
-    public function render_hidden()
+    public function renderHidden()
     {
         $val = ($this->attributes['hidden'] === true)?'hidden':null;
         return $val;

@@ -1,13 +1,13 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-class base_button extends base_tag
+class BaseButton extends BaseTag
 {
+    use BaseDisableableTrait;
+
     # $parameters doesn't matter because it will be overridden once 'type' has been set.
     public $parameters = ['text','onclick','type',];
-
-    use trait_base_disablable;
 
     public function init()
     {
@@ -15,21 +15,21 @@ class base_button extends base_tag
         parent::init();
     }
 
-    public function set_type($val)
+    public function setType($val)
     {
-        html::error_values($this, 'type', $val,['button','submit']);
+        \DevLucid\html::errorValues($this, 'type', $val,['button','submit']);
         $this->attributes['type'] = $val;
         return $this;
     }
 
-    public function set_text($value)
+    public function setText($value)
     {
         $this->add($value);
         return $this;
     }
 
-    public function get_text()
+    public function getText()
     {
-        return $this->render_children();
+        return $this->renderChildren();
     }
 }

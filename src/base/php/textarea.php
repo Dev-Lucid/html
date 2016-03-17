@@ -1,16 +1,17 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-class base_textarea extends base_tag
+class BaseTextarea extends BaseTag
 {
+    use BaseDisableableTrait;
+
     public $parameters = ['name', 'value', 'placeholder',];
-    use trait_base_disablable;
 
     public function init()
     {
-        $this->allowed_attributes[] = 'rows';
-        $this->allowed_attributes[] = 'cols';
+        $this->allowedAttributes[] = 'rows';
+        $this->allowedAttributes[] = 'cols';
     }
 
     public function set_value($val)

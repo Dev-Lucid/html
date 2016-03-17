@@ -2,40 +2,36 @@
 
 namespace DevLucid;
 
-class base_fieldset extends base_tag
+class base_fieldset extends BaseTag
 {
-    private $_legend = null;
+    private $legend = null;
 
-    function check_valid_child($child)
+    function checkValidChild($child)
     {
-        if($child->tag == 'legend')
-        {
-            throw new \Exception(html::error_child_tag($child->tag, ['tr'], null));
+        if ($child->tag == 'legend') {
+            throw new \Exception(html::errorChildTag($child->tag, ['tr'], null));
         }
     }
 
-    function pre_children()
+    function preChildren()
     {
-        if(is_null($this->_legend) === false)
-        {
-            if (count($this->_legend->children) > 0)
-            {
-                return $this->_legend->render();
+        if (is_null($this->legend) === false) {
+            if (count($this->legend->children) > 0) {
+                return $this->legend->render();
             }
         }
         return '';
     }
 
-    public function get_legend()
+    public function getlegend()
     {
-        if(is_null($this->_legend))
-        {
-            $this->_legend = html::legend();
+        if (is_null($this->legend) === true){
+            $this->legend = \DevLucid\html::legend();
         }
-        return $this->_legend;
+        return $this->legend;
     }
 
-    public function set_legend($text)
+    public function setlegend($text)
     {
         $legend = $this->legend();
         $legend->children = [];

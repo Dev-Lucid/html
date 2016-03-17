@@ -1,4 +1,4 @@
 <?php
 
-include(__DIR__.'/../factory.php');
-DevLucid\factory::init();
+include(__DIR__.'/../html.php');
+DevLucid\html::init();

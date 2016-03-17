@@ -1,28 +1,30 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-class base_input extends base_tag
+class BaseInput extends BaseTag
 {
-    public $allow_quick_close = true;
-    public $allow_children    = false;
+    use BaseCheckableTrait, BaseDisableableTrait;
+
+    public $allowQuickClose = true;
+    public $allowChildren    = false;
 
     # $parameters doesn't matter because it will be overridden once 'type' has been set.
     public $parameters = ['type', null, null, null, null, null, null,];
-    public $parameters_by_type = [
+    public $parametersByType = [
         'date'        => ['type', 'name', 'value', ],
         'datetime'        => ['type', 'name', 'value', ],
         'datetime-local'        => ['type', 'name', 'value', ],
         'text'        => ['type', 'name', 'value', 'placeholder', ],
         'email'       => ['type', 'name', 'value', 'placeholder',],
         'password'    => ['type', 'name', 'placeholder',],
-        'checkbox'    => ['type', 'name', 'checked', 'post_html',],
+        'checkbox'    => ['type', 'name', 'checked', 'postHtml',],
         'radio'       => ['type', 'name', 'value', 'checked',],
         'button'      => ['type', 'value', 'onclick',],
         'submit'      => ['type', 'value',],
         'hidden'      => ['type', 'name', 'value',],
     ];
-    public $allowed_attributes_by_type = [
+    public $allowedAttributesByType = [
         'date'        => ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress', ],
         'datetime-local'=> ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress', ],
         'text'        => ['onblur', 'onfocus', 'onkeyup', 'onkeydown', 'onkeypress', ],
@@ -35,26 +37,24 @@ class base_input extends base_tag
         'hidden'      => [],
     ];
 
-    use trait_base_checkable, trait_base_disablable;
-
     public function init()
     {
-        $this->allowed_attributes[] = 'type';
-        $this->allowed_attributes[] = 'value';
-        $this->allowed_attributes[] = 'disabled';
-        $this->allowed_attributes[] = 'placeholder';
-        $this->allowed_attributes[] = 'disabled';
+        $this->allowedAttributes[] = 'type';
+        $this->allowedAttributes[] = 'value';
+        $this->allowedAttributes[] = 'disabled';
+        $this->allowedAttributes[] = 'placeholder';
+        $this->allowedAttributes[] = 'disabled';
     }
 
-    public function set_type($val)
+    public function setType($val)
     {
-        $allowed_types = array_keys($this->parameters_by_type);
-        if(in_array($val, $allowed_types) === false)
+        $allowedTypes = array_keys($this->parametersByType);
+        if(in_array($val, $allowedTypes) === false)
         {
-            throw new \Exception('Input class does not support type '.$val.'; only types '.implode(', ',$allowed_types));
+            throw new \Exception('Input class does not support type '.$val.'; only types '.implode(', ',$allowedTypes));
         }
         $this->attributes['type'] = $val;
-        $this->parameters = $this->parameters_by_type[$val];
-        $this->allowed_attributes = array_merge($this->allowed_attributes, $this->allowed_attributes_by_type[$val]);
+        $this->parameters = $this->parametersByType[$val];
+        $this->allowedAttributes = array_merge($this->allowedAttributes, $this->allowedAttributesByType[$val]);
     }
 }

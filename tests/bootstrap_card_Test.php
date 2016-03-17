@@ -10,9 +10,9 @@ class bootstrap_card_test extends PHPUnit_Framework_TestCase
         $this->assertEquals('<div class="card"></div>', $card->render());
 
         # more complete structure, also ensures that 'child' is correctly handled as first parameter for header/block/footer
-        $card->add(html::card_header('test header'));
-        $card->add(html::card_block('test block'));
-        $card->add(html::card_footer('test footer'));
+        $card->add(html::cardHeader('test header'));
+        $card->add(html::cardBlock('test block'));
+        $card->add(html::cardFooter('test footer'));
         $this->assertEquals('<div class="card"><div class="card-header">test header</div><div class="card-block">test block</div><div class="card-footer">test footer</div></div>', $card->render());
 
         # try out the auto header functionality

@@ -1,162 +1,174 @@
 <?php
 
-namespace DevLucid;
+namespace DevLucid\Tag;
 
-class bootstrap_anchor extends base_anchor{    use trait_bootstrap_pullable, trait_bootstrap_activable; }
-class bootstrap_h1 extends base_tag{    use trait_bootstrap_pullable; }
-class bootstrap_h2 extends base_tag{    use trait_bootstrap_pullable; }
-class bootstrap_h3 extends base_tag{    use trait_bootstrap_pullable; }
-class bootstrap_h4 extends base_tag{    use trait_bootstrap_pullable; }
-class bootstrap_h5 extends base_tag{    use trait_bootstrap_pullable; }
-class bootstrap_h6 extends base_tag{    use trait_bootstrap_pullable; }
-class bootstrap_h7 extends base_tag{    use trait_bootstrap_pullable; }
+class BootstrapAnchor extends BaseAnchor{    use BootstrapPullableTrait, BootstrapActivableTrait; }
+class BootstrapH1 extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapH2 extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapH3 extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapH4 extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapH5 extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapH6 extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapH7 extends BaseTag{    use BootstrapPullableTrait; }
 
-class bootstrap_div extends base_tag{   use trait_bootstrap_pullable; }
-class bootstrap_span extends base_tag{  use trait_bootstrap_pullable; }
-class bootstrap_ul extends base_tag{    use trait_bootstrap_pullable; }
-class bootstrap_image extends base_tag{ use trait_bootstrap_pullable; }
+class BootstrapDiv extends BaseTag{   use BootstrapPullableTrait; }
+class BootstrapSpan extends BaseTag{  use BootstrapPullableTrait; }
+class BootstrapUl extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapOl extends BaseTag{    use BootstrapPullableTrait; }
+class BootstrapImage extends BaseTag{ use BootstrapPullableTrait; }
 
 
-class bootstrap_anchor_button extends bootstrap_anchor
+class BootstrapAnchorButton extends BootstrapAnchor
 {
-    use trait_bootstrap_modifiable, trait_bootstrap_sizeable;
-    public $_bootstrap_modifier_allowed = ['primary', 'secondary', 'info', 'success', 'warning', 'danger', ];
-    public $_bootstrap_modifier_prefix  = 'btn';
-    public $_bootstrap_size_prefix = 'btn';
-    public $_bootstrap_size_allowed = ['sm','lg',];
+    use BootstrapModifiableTrait, BootstrapSizeableTrait;
+
+    public $bootstrapModifiersAllowed = ['primary', 'secondary', 'info', 'success', 'warning', 'danger', ];
+    public $bootstrapModifierPrefix  = 'btn';
+    public $bootstrapSizePrefix = 'btn';
+    public $bootstrapSizesAllowed = ['sm','lg',];
 
     public $parameters = ['href','child','modifier',];
+
     public function init()
     {
         parent::init();
-        $this->add_class('btn');
+        $this->addClass('btn');
         $this->modifier('primary');
     }
 }
 
 
-class bootstrap_tr extends base_tr
+class BootstrapTr extends BaseTr
 {
-    use trait_bootstrap_modifiable;
-    public $_bootstrap_modifier_allowed = ['active', 'success', 'info', 'warning', 'danger', ];
-    public $_bootstrap_modifier_prefix = 'table';
+    use BootstrapModifiableTrait;
+
+    public $bootstrapModifiersAllowed = ['active', 'success', 'info', 'warning', 'danger', ];
+    public $bootstrapModifierPrefix = 'table';
 }
 
-class bootstrap_th extends base_th
+class BootstrapTh extends BaseTh
 {
-    use trait_bootstrap_modifiable;
-    public $_bootstrap_modifier_allowed = ['active', 'success', 'info', 'warning', 'danger', ];
-    public $_bootstrap_modifier_prefix = 'table';
+    use BootstrapModifiableTrait;
+
+    public $bootstrapModifiersAllowed = ['active', 'success', 'info', 'warning', 'danger', ];
+    public $bootstrapModifierPrefix = 'table';
 }
 
-class bootstrap_td extends base_td
+class BootstrapTd extends BaseTd
 {
-    use trait_bootstrap_modifiable;
-    public $_bootstrap_modifier_allowed = ['active', 'success', 'info', 'warning', 'danger', ];
-    public $_bootstrap_modifier_prefix = 'table';
+    use BootstrapModifiableTrait;
+
+    public $bootstrapModifiersAllowed = ['active', 'success', 'info', 'warning', 'danger', ];
+    public $bootstrapModifierPrefix = 'table';
 }
 
-class bootstrap_input_group extends base_tag
+class BootstrapInputGroup extends BaseTag
 {
+    use BootstrapSizeableTrait, BootstrapPullableTrait;
+
     public $tag = 'div';
-    use trait_bootstrap_sizeable;
-    public $_bootstrap_size_prefix  = 'form-control';
-    public $_bootstrap_size_allowed = ['sm', 'lg', ];
+    public $bootstrapSizePrefix  = 'form-control';
+    public $bootstrapSizesAllowed = ['sm', 'lg', ];
 
     public function init()
     {
         parent::init();
-        $this->add_class('input-group');
+        $this->addClass('input-group');
     }
 }
 
-class bootstrap_button_group extends base_tag
+class BootstrapButtonGroup extends BaseTag
 {
-    use trait_bootstrap_pullable, trait_bootstrap_sizeable;
+    use BootstrapPullableTrait, BootstrapSizeableTrait;
+
     public $tag = 'div';
-    public $_bootstrap_size_prefix  = 'btn-group';
-    public $_bootstrap_size_allowed = ['sm','lg'];
+    public $bootstrapSizePrefix  = 'btn-group';
+    public $bootstrapSizesAllowed = ['sm','lg'];
+
     public function init()
     {
         parent::init();
-        $this->add_class('btn-group');
+        $this->addClass('btn-group');
         $this->attributes['role'] = 'group';
 
     }
 
-    function set_vertical($val)
+    function setVertical($val)
     {
-        html::error_boolean($this, 'vertical', $val);
-        return $this->toggle_class('btn-group-vertical',$val);
+        \DevLucid\html::errorBoolean($this, 'vertical', $val);
+        return $this->toggleClass('btn-group-vertical',$val);
     }
 
-    function get_vertical()
+    function getVertical()
     {
-        return $this->has_class('btn-group-vertical');
+        return $this->hasClass('btn-group-vertical');
     }
 }
 
-class button_toolbar extends base_tag
+class BootstrapButtonToolbar extends BaseTag
 {
-    use trait_bootstrap_pullable, trait_bootstrap_sizeable;
+    use BootstrapPullableTrait, BootstrapSizeableTrait;
+
     public $tag = 'div';
-    public $_bootstrap_size_prefix  = 'btn-group';
-    public $_bootstrap_size_allowed = ['sm','lg'];
+    public $bootstrapSizePrefix  = 'btn-group';
+    public $bootstrapSizesAllowed = ['sm','lg'];
+
     public function init()
     {
         parent::init();
-        $this->add_class('btn-toolbar');
+        $this->addClass('btn-toolbar');
         $this->attributes['role'] = 'toolbar';
     }
 }
 
-class bootstrap_nav_item extends base_tag
+class BootstrapNavItem extends BaseTag
 {
     public function init()
     {
         parent::init();
         $this->tag = 'li';
-        $this->add_class('nav-item');
+        $this->addClass('nav-item');
     }
 }
 
-class bootstrap_row extends base_tag
+class BootstrapRow extends BaseTag
 {
-    use trait_bootstrap_gridable;
+    use BootstrapGridableTrait;
 
-    public $tag = 'div';
-    public function init()
-    {
-        parent::init();
-        $this->add_class('row');
-
-    }
-}
-
-class bootstrap_column extends base_tag
-{
-    public $tag = 'div';
-    use trait_bootstrap_gridable;
-}
-
-class bootstrap_card_header extends base_tag
-{
     public $tag = 'div';
 
     public function init()
     {
         parent::init();
-        $this->add_class('card-header');
+        $this->addClass('row');
     }
 }
 
-class bootstrap_card_footer extends base_tag
+class BootstrapColumn extends BaseTag
+{
+    use BootstrapGridableTrait;
+
+    public $tag = 'div';
+}
+
+class BootstrapCardHeader extends BaseTag
 {
     public $tag = 'div';
 
     public function init()
     {
         parent::init();
-        $this->add_class('card-footer');
+        $this->addClass('card-header');
+    }
+}
+
+class BootstrapCardFooter extends BaseTag
+{
+    public $tag = 'div';
+
+    public function init()
+    {
+        parent::init();
+        $this->addClass('card-footer');
     }
 }

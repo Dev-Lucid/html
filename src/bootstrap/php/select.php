@@ -1,17 +1,22 @@
 <?php
-namespace Devlucid;
+namespace Devlucid\Tag;
 
-class bootstrap_select extends base_select
+if (class_exists('DevLucid\\Tag\\BaseSelect') === false) {
+    include(__DIR__.'/../../base/php/select.php');
+}
+
+
+class BootstrapSelect extends BaseSelect
 {
-    use trait_bootstrap_modifiable, trait_bootstrap_sizeable, trait_bootstrap_pullable;
-    public $_bootstrap_modifier_prefix  = 'select';
-    public $_bootstrap_modifier_allowed = ['primary', 'secondary', 'info', 'success', 'warning', 'danger', ];
-    public $_bootstrap_size_prefix  = 'form-control';
-    public $_bootstrap_size_allowed = ['sm', 'lg', ];
+    use BootstrapModifiableTrait, BootstrapSizeableTrait, BootstrapPullableTrait;
+    public $bootstrapModifierPrefix  = 'select';
+    public $bootstrapModifiersAllowed = ['primary', 'secondary', 'info', 'success', 'warning', 'danger', ];
+    public $bootstrapSizePrefix  = 'form-control';
+    public $bootstrapSizesAllowed = ['sm', 'lg', ];
 
     public function init()
     {
         parent::init();
-        $this->add_class('form-control');
+        $this->addClass('form-control');
     }
 }

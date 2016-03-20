@@ -1,6 +1,7 @@
 <?php
 namespace DevLucid\Tag;
 
+
 class BootstrapAlert extends BaseTag
 {
     use BootstrapPullableTrait, BootstrapModifiableTrait;
@@ -23,7 +24,7 @@ class BootstrapAlert extends BaseTag
     public function preRender()
     {
         if ($this->title != '') {
-            $this->preChildrenHtml = html::strong($this->title);
+            $this->preChildrenHtml = \DevLucid\html::strong($this->title);
         }
         return parent::preRender();
     }

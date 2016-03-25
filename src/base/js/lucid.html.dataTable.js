@@ -1,4 +1,4 @@
-html.dataTable = {
+lucid.html.dataTable = {
     'colSelector':'table > thead > tr > th',
     'refreshSelector':'table > tbody',
     'pagerSelector':'span.data-table-pager',
@@ -8,7 +8,7 @@ html.dataTable = {
     'refreshTimeouts':{}
 };
 
-html.dataTable.getTableProperties=function(obj){
+lucid.html.dataTable.getTableProperties=function(obj){
     obj = jQuery(obj);
     while(obj.hasClass('data-table') === false){
         obj = obj.parent();
@@ -39,7 +39,7 @@ html.dataTable.getTableProperties=function(obj){
     return props;
 };
 
-html.dataTable.getRefreshParameters=function(props){
+lucid.html.dataTable.getRefreshParameters=function(props){
     var data = {
         'sort-col'     : props['sort-col'],
         'sort-dir'     : props['sort-dir'],
@@ -53,9 +53,9 @@ html.dataTable.getRefreshParameters=function(props){
     return data;
 };
 
-html.dataTable.sort=function(col){
+lucid.html.dataTable.sort=function(col){
     var props = html.dataTable.getTableProperties(col);
-    var cols  = props.jquery.find(html.dataTable.colSelector);
+    var cols  = props.jquery.find(lucid.html.dataTable.colSelector);
     var thisCol = null;
     for(var i=0; i<cols.length; i++){
         if(cols[i] == col){
@@ -73,8 +73,8 @@ html.dataTable.sort=function(col){
     html.dataTable.requestData(props);
 };
 
-html.dataTable.page=function(pager, direction){
-    var props = html.dataTable.getTableProperties(pager);
+lucid.html.dataTable.page=function(pager, direction){
+    var props = lucid.html.dataTable.getTableProperties(pager);
     var newPage = props['current-page'];
     switch(direction){
         case 'first':
@@ -107,36 +107,36 @@ html.dataTable.page=function(pager, direction){
     }
 };
 
-html.dataTable.filter = function(filter, delay){
-    var props = html.dataTable.getTableProperties(filter);
+lucid.html.dataTable.filter = function(filter, delay){
+    var props = lucid.html.dataTable.getTableProperties(filter);
     props.setProperty('current-page',0);
     if(delay === false){
         html.dataTable.requestData(props);
     }else{
-        window.clearTimeout(html.dataTable.refreshTimeouts[props.id]);
-        html.dataTable.refreshTimeouts[props.id] = window.setTimeout(function(){
-            html.dataTable.requestData(props);
-        }, html.dataTable.searchDelay);
+        window.clearTimeout(lucid.html.dataTable.refreshTimeouts[props.id]);
+        lucid.html.dataTable.refreshTimeouts[props.id] = window.setTimeout(function(){
+            lucid.html.dataTable.requestData(props);
+        }, lucid.html.dataTable.searchDelay);
     }
 };
 
-html.dataTable.noDataMessage=function(props, show){
+lucid.html.dataTable.noDataMessage=function(props, show){
     if(show === true){
-        props.jquery.find(html.dataTable.colsSelector).hide();
-        props.jquery.find(html.dataTable.pagerSelector).hide();
+        props.jquery.find(lucid.html.dataTable.colsSelector).hide();
+        props.jquery.find(lucid.html.dataTable.pagerSelector).hide();
     }else{
-        props.jquery.find(html.dataTable.colsSelector).show();
-        props.jquery.find(html.dataTable.pagerSelector).show();
+        props.jquery.find(lucid.html.dataTable.colsSelector).show();
+        props.jquery.find(lucid.html.dataTable.pagerSelector).show();
     }
 };
 
-html.dataTable.requestData=function(props){
+lucid.html.dataTable.requestData=function(props){
     window.jQuery.ajax(props['refresh-url'], {
         'method':'POST',
-        'data':html.dataTable.getRefreshParameters(props),
+        'data':lucid.html.dataTable.getRefreshParameters(props),
         'complete':function(response, statusCode){
             console.log('loading new data');
-            props.jquery.find(html.dataTable.refreshSelector).html(response.responseJSON.tbody);
+            props.jquery.find(lucid.html.dataTable.refreshSelector).html(response.responseJSON.tbody);
             props.setProperty('max-page', response.responseJSON.max_page);
             html.dataTable.updatePager(props, response.responseJSON.pager);
             html.dataTable.noDataMessage(props, (response.responseJSON.max_page === 0));
@@ -144,14 +144,14 @@ html.dataTable.requestData=function(props){
     });
 };
 
-html.dataTable.updateSortIndictors=function(props){
-    var cols = props.jquery.find(html.dataTable.colSelector);
+lucid.html.dataTable.updateSortIndictors=function(props){
+    var cols = props.jquery.find(lucid.html.dataTable.colSelector);
     console.log(cols);
     var i = 0;
     cols.each(function(){
         var col = $(this);
         if(col.attr('data-sortable') == 'true'){
-            var sortIcon = col.find(html.dataTable.sortIconSelector);
+            var sortIcon = col.find(lucid.html.dataTable.sortIconSelector);
             sortIcon.removeClass('fa-chevron-up fa-chevron-down fa-chevron-right');
             if(i == props['sort-col']){
                 sortIcon.addClass('fa-chevron-'+((props['sort-dir'] == 'asc')?'up':'down'));
@@ -163,7 +163,7 @@ html.dataTable.updateSortIndictors=function(props){
     });
 };
 
-html.dataTable.updatePager=function(props, newPager){
-    var pager = props.jquery.find(html.dataTable.pagerSelector);
+lucid.html.dataTable.updatePager=function(props, newPager){
+    var pager = props.jquery.find(lucid.html.dataTable.pagerSelector);
     pager.html(newPager);
 };

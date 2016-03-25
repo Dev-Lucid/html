@@ -1,4 +1,3 @@
 <?php
-
 include(__DIR__.'/../html.php');
-DevLucid\html::init();
+\Lucid\Html\html::init();

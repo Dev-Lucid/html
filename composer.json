@@ -16,10 +16,10 @@
       }
   ],
   "autoload": {
-      "psr-4": {"DevLucid\\": "/"}
+      "psr-4": {"Lucid\\Html\\": "/"}
   },
   "autoload-dev": {
-      "psr-4": {"DevLucid\\": "/"}
+      "psr-4": {"Lucid\\Html\\": "/"}
   },
   "license": "MIT",
   "bin": [

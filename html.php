@@ -1,16 +1,19 @@
 <?php
-
-namespace DevLucid;
+namespace Lucid\Html;
 
 class html
 {
+    protected static $isInited = false;
     public static $logger = null;
     public static $flavors = [];
     public static $iconPrefix = 'fa';
     public static $hooks = [];
 
     public static $loadedClassCache = [];
+    public static $autoloadMap = [];
 
+
+    /*
     public static function log($text = null)
     {
         if (is_null(html::$logger) === false) {
@@ -34,88 +37,98 @@ class html
             }
         }
     }
+    */
 
-    public static function init($flavor = null, $additional=null)
+    public static function init($logger=null, $flavor = null, $additionals=null)
     {
-        html::$flavors[] = ['prefix'=>'base', 'path'=>__DIR__.'/src/base/php/'];
+        static::$isInited = true;
+        if (is_null($logger)) {
+            static::$logger = new \Lucid\Component\BasicLogger\BasicLogger();
+        } else {
+            if (is_object($logger) === false || in_array('Psr\\Log\\LoggerInterface', class_implements($logger)) === false) {
+                throw new \Exception('Html contructor parameter $logger must either be null, or implement Psr\\Log\\LoggerInterface. If null is passed, then an instance of Lucid\\Component\\BasicLogger\\BasicLogger will be instantiated instead, and all messages will be passed along to error_log();');
+            }
+            static::$logger = $logger;
+        }
+        static::$logger->debug('logging initted for html compontent');
+
+        html::$autoloadMap['Lucid\\Html\\base'] = __DIR__.'/src/base/';
+
         if (is_null($flavor) === false) {
             html::$flavors[] = ['prefix'=>$flavor, 'path'=>__DIR__.'/src/'.$flavor.'/php/'];
-        }
-        if(is_null($additional) === false) {
-            html::$flavors[] = $additional;
+            html::$autoloadMap['Lucid\\Html\\'.$flavor] = __DIR__.'/src/'.$flavor.'/';
         }
 
-        foreach (html::$flavors as $flavor) {
-            $files = html::makeLoadPaths($flavor);
-            foreach ($files as $file) {
-                include($file);
-            }
+        foreach ($additionals as $prefix=>$path) {
+            html::$flavors[] = $prefix;
+            html::$autoloadMap['Lucid\\Html\\'.$prefix] = $path;
         }
+        static::$logger->debug(print_r(html::$autoloadMap,true));
+        include(__DIR__.'/src/tag.php');
 
-        class_alias('DevLucid\\html','html');
+        spl_autoload_register('\\Lucid\\Html\\Html::autoLoader');
     }
 
-    private static function makeLoadPaths($flavor)
+    private static function autoLoader(string $name)
     {
-        $files = [];
-        $suffixes = ['traits','tags',];
-        foreach ($suffixes as $suffix) {
-            $file_name = $flavor['path'].$flavor['prefix'].'_'.$suffix.'.php';
-            if (file_exists($file_name) === true) {
-                $files[] = $file_name;
-            }
+
+        # this can be called one of two ways:
+        #   1) via autoload, which means the path will be fully qualified. This is in the case where
+        #      it is being used for inheritance purposes
+        #   2) from DevLucid\html::__callStatic, in which case only the final class name is known, and all possible paths
+        #      need to be checked.
+
+        if (isset(html::$loadedClassCache[$name]) === true) {
+            return html::$loadedClassCache[$name];
         }
-        return $files;
-    }
 
-    private static function checkForClass($possibleClassNames)
-    {
-        $finalClassName = null;
-        # loop over this list and look for a match. If we find one, use that class name.
-        foreach ($possibleClassNames as $possibleClassName) {
-            if ( class_exists($possibleClassName) === true) {
-                return $possibleClassName;
-            }
-        }
-        return $finalClassName;
-    }
+        # Check if we're in condition 1 and build a map of possible file names and equivalent class names.
+        if (strpos($name, '\\') === false) {
+            foreach (html::$autoloadMap as $prefix=>$path) {
+                $filePath = $path.'tag/'.$name.'.php';
+                $class = $prefix.'\\Tag\\'.$name;
+                if (file_exists($filePath) === true) {
 
+                    html::$loadedClassCache[$name] = $class;
+                    if (class_exists($class) === false) {
+                        include($filePath);
 
-    public static function __callStatic($name,$params)
-    {
-        $final_class = null;
-
-        # build an array of possible class names for this type.
-        $possibleClassNames = [];
-        foreach (html::$flavors as $flavor) {
-            $possibleClassNames[] = strtolower('DevLucid\\Tag\\'.$flavor['prefix'].$name);
-        }
-        $possibleClassNames = array_reverse($possibleClassNames);
-
-
-        $finalClassName = \DevLucid\html::checkForClass($possibleClassNames);
-
-        # if we didn't find one, then load class files
-        if (is_null($finalClassName) === true) {
-            foreach (html::$flavors as $flavor) {
-                $fileName  = $flavor['path'].$name.'.php';
-                if (file_exists($fileName) === true){
-                    include($fileName);
+                        if (class_exists($class) === false) {
+                            throw new \Exception('File did not contain correctly namespaced class definition for html tag');
+                        }
+                    }
                 }
             }
-            $finalClassName = \DevLucid\html::checkForClass($possibleClassNames);
-        }
-
-        if (is_null($finalClassName) === true){
-            $obj = new Tag\BaseTag();
+            return html::$loadedClassCache[$name] ?? null;
         } else {
-            $obj = new $finalClassName();
+            $nameParts = explode('\\', strtolower($name));
+            if ($nameParts[0] == 'devlucid' && in_array('Lucid\\Html\\'.$nameParts[1], array_keys(html::$autoloadMap)) === true && count($nameParts) == 4) {
+                $tagOrTrait = $name[2];
+                $finalName  = $name[3];
+                $finalPath = html::$autoloadMap['Lucid\\Html\\'.$nameParts[1]].$nameParts[2].'/'.$nameParts[3].'.php';
+                include($finalPath);
+                return true;
+            }
+        }
+    }
+
+    public static function __callStatic($name, $params)
+    {
+        if (static::$isInited === false ){
+            static::init();
+        }
+        $finalClass = html::autoLoader($name);
+
+        if (is_null($finalClass) === true){
+            $obj = new Tag();
+        } else {
+            $obj = new $finalClass();
         }
 
-        #$obj->type = $name;
         if (is_null($obj->tag) === true) {
             $obj->tag = $name;
         }
+        $obj->instantiatorName = $name;
         $obj->setProperties($params);
 
         if (isset(html::$hooks[$name.'__create']) === true && is_callable(html::$hooks[$name.'__create']) === true) {

@@ -1,4 +1,6 @@
 <?php
+use Lucid\Html\Html;
+
 
 class bootstrap_card_test extends PHPUnit_Framework_TestCase
 {

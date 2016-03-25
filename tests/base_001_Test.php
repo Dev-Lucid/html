@@ -1,4 +1,5 @@
 <?php
+use Lucid\Html\Html;
 
 class base_001_Test extends PHPUnit_Framework_TestCase
 {

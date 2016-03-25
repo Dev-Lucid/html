@@ -28,7 +28,7 @@ class DataColumn extends \Lucid\Html\Tag
 
         $html .= ' data-sortable="'.(($this->sortable === true)?'true':'false').'"';
         if ($this->sortable === true) {
-            $html .= ' onclick="html.dataTable.sort(this);"';
+            $html .= ' onclick="lucid.html.dataTable.sort(this);"';
         }
 
         $html .= '>';

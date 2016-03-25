@@ -54,7 +54,7 @@ lucid.html.dataTable.getRefreshParameters=function(props){
 };
 
 lucid.html.dataTable.sort=function(col){
-    var props = html.dataTable.getTableProperties(col);
+    var props = lucid.html.dataTable.getTableProperties(col);
     var cols  = props.jquery.find(lucid.html.dataTable.colSelector);
     var thisCol = null;
     for(var i=0; i<cols.length; i++){
@@ -69,8 +69,8 @@ lucid.html.dataTable.sort=function(col){
         props.setProperty('sort-dir', 'asc');
     }
     props.setProperty('current-page', 0);
-    html.dataTable.updateSortIndictors(props);
-    html.dataTable.requestData(props);
+    lucid.html.dataTable.updateSortIndictors(props);
+    lucid.html.dataTable.requestData(props);
 };
 
 lucid.html.dataTable.page=function(pager, direction){

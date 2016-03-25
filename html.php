@@ -50,7 +50,7 @@ class html
             }
             static::$logger = $logger;
         }
-        static::$logger->debug('logging initted for html compontent');
+        #static::$logger->debug('logging initted for html compontent');
 
         html::$autoloadMap['Lucid\\Html\\base'] = __DIR__.'/src/base/';
 
@@ -63,7 +63,7 @@ class html
             html::$flavors[] = $prefix;
             html::$autoloadMap['Lucid\\Html\\'.$prefix] = $path;
         }
-        static::$logger->debug(print_r(html::$autoloadMap,true));
+        #static::$logger->debug(print_r(html::$autoloadMap,true));
         include(__DIR__.'/src/tag.php');
 
         spl_autoload_register('\\Lucid\\Html\\Html::autoLoader');
@@ -85,8 +85,9 @@ class html
         # Check if we're in condition 1 and build a map of possible file names and equivalent class names.
         if (strpos($name, '\\') === false) {
             foreach (html::$autoloadMap as $prefix=>$path) {
-                $filePath = $path.'tag/'.$name.'.php';
-                $class = $prefix.'\\Tag\\'.$name;
+                $filePath = $path.'tags/'.$name.'.php';
+                $class = $prefix.'\\Tags\\'.$name;
+                #static::$logger->debug('looking in '.$filePath.' for '.$class);
                 if (file_exists($filePath) === true) {
 
                     html::$loadedClassCache[$name] = $class;
@@ -102,10 +103,10 @@ class html
             return html::$loadedClassCache[$name] ?? null;
         } else {
             $nameParts = explode('\\', strtolower($name));
-            if ($nameParts[0] == 'devlucid' && in_array('Lucid\\Html\\'.$nameParts[1], array_keys(html::$autoloadMap)) === true && count($nameParts) == 4) {
-                $tagOrTrait = $name[2];
-                $finalName  = $name[3];
-                $finalPath = html::$autoloadMap['Lucid\\Html\\'.$nameParts[1]].$nameParts[2].'/'.$nameParts[3].'.php';
+            if (strtolower($nameParts[0]) == 'lucid' && in_array('Lucid\\Html\\'.$nameParts[2], array_keys(static::$autoloadMap)) === true) {
+                $tagOrTrait = $name[3];
+                $finalName  = $name[4];
+                $finalPath = html::$autoloadMap['Lucid\\Html\\'.$nameParts[2]].$nameParts[3].'/'.$nameParts[4].'.php';
                 include($finalPath);
                 return true;
             }
@@ -118,7 +119,6 @@ class html
             static::init();
         }
         $finalClass = html::autoLoader($name);
-
         if (is_null($finalClass) === true){
             $obj = new Tag();
         } else {

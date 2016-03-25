@@ -1,5 +1,6 @@
 <?php
 namespace Lucid\Html;
+use Lucid\Html\html;
 
 include(__DIR__.'/tag__class_style_methods.php');
 
@@ -45,8 +46,8 @@ class Tag extends Tag__class_style_methods
 
     public function setProperties($params)
     {
-        if (count($params) > $this->parameters) {
-            throw new \Exception('Too many parameters for construction. Type '.get_class($this).' has the following parameters: '.print_r($this->parameters,true));
+        if (count($params) > count($this->parameters)) {
+            throw new \Exception('Too many parameters for construction. Type '.$this->instantiatorName.' has the following parameters: '.print_r($this->parameters,true));
         }
 
         for ($i=0; $i<count($params); $i++) {
@@ -244,7 +245,7 @@ class Tag extends Tag__class_style_methods
         if ($this->allowChildren === false) {
             throw new \Exception('Class '.get_class($this).' does not support ->paragraph because this class does not support having children.');
         }
-        $this->add(\DevLucid\html::p($text));
+        $this->add(html::p($text));
         return $this;
     }
 }

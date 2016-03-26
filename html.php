@@ -87,7 +87,7 @@ class html
             foreach (html::$autoloadMap as $prefix=>$path) {
                 $filePath = $path.'tags/'.$name.'.php';
                 $class = $prefix.'\\Tags\\'.$name;
-                #static::$logger->debug('looking in '.$filePath.' for '.$class);
+                static::$logger->debug('looking in '.$filePath.' for '.$class);
                 if (file_exists($filePath) === true) {
 
                     html::$loadedClassCache[$name] = $class;

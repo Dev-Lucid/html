@@ -1,5 +1,5 @@
 <?php
-namespace Devlucid\Bootstrap\Tags;
+namespace Lucid\Html\Bootstrap\Tags;
 use \Lucid\html\html;
 
 class Card extends \Lucid\Html\Tag

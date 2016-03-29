@@ -16,13 +16,13 @@ class Submit extends \Lucid\Html\Tag
         $this->tag = 'button';
     }
 
-    public function set_text($value)
+    public function setText($value)
     {
         $this->add($value);
         return $this;
     }
 
-    public function get_text()
+    public function getText()
     {
         return $this->renderChildren();
     }

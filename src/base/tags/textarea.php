@@ -14,7 +14,7 @@ class Textarea extends \Lucid\Html\Tag
         $this->allowedAttributes[] = 'cols';
     }
 
-    public function set_value($val)
+    public function setValue($val)
     {
         $this->add($val.'');
     }

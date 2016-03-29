@@ -1,13 +1,16 @@
 <?php
 namespace Lucid\Html\Bootstrap\Tags;
+use Lucid\Html\html;
 
 class Input extends \Lucid\Html\Base\Tags\Input
 {
-    use \Lucid\Html\Bootstrap\Traits\Sizeable, \Lucid\Html\Bootstrap\Traits\Pullable;
+    use \Lucid\Html\Bootstrap\Traits\Sizeable, \Lucid\Html\Bootstrap\Traits\Modifiable, \Lucid\Html\Bootstrap\Traits\Pullable;
 
     public $preAddon  = null;
     public $postAddon = null;
-
+    
+    public $bootstrapModifierPrefix  = 'has';
+    public $bootstrapModifiersAllowed = ['primary', 'secondary', 'info', 'success', 'warning', 'danger', ];
     public $bootstrapSizePrefix  = 'form-control';
     public $bootstrapSizesAllowed = ['sm', 'lg', ];
 
@@ -61,8 +64,18 @@ class Input extends \Lucid\Html\Base\Tags\Input
 
         if ($type == 'date') {
             $this->attributes['type'] = 'text';
-            #$this->postAddon = html::icon('calendar');
-            $this->attributes['onfocus'] = "window.jQuery(this).datetimepicker({mask:'9999-12-39 23:59', format:'Y-m-d H:i'});window.jQuery(this).datetimepicker('toggle');";
+            $this->postAddon = html::icon('calendar');
+            # { format:'Y-m-d H:i'}
+            if (is_null($this->id)) {
+                $this->id = 'datetimepicker-'.uniqid();
+            }
+
+            html::$hooks['javascript']("window.jQuery('#".$this->id."').datetimepicker({format:'".html::$formats['datetime']."',icons: {
+                    time: 'fa fa-clock-o',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-arrow-up',
+                    down: 'fa fa-arrow-down'
+                }});");
         }
         return $this;
     }

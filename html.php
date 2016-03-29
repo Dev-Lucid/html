@@ -12,6 +12,9 @@ class html
     public static $loadedClassCache = [];
     public static $autoloadMap = [];
 
+    public static $formats = [
+        'datetime'=>'YYYY-MM-DD HH:mm',
+    ];
 
     /*
     public static function log($text = null)
@@ -87,7 +90,7 @@ class html
             foreach (html::$autoloadMap as $prefix=>$path) {
                 $filePath = $path.'tags/'.$name.'.php';
                 $class = $prefix.'\\Tags\\'.$name;
-                static::$logger->debug('looking in '.$filePath.' for '.$class);
+                #static::$logger->debug('looking in '.$filePath.' for '.$class);
                 if (file_exists($filePath) === true) {
 
                     html::$loadedClassCache[$name] = $class;
@@ -107,6 +110,7 @@ class html
                 $tagOrTrait = $name[3];
                 $finalName  = $name[4];
                 $finalPath = html::$autoloadMap['Lucid\\Html\\'.$nameParts[2]].$nameParts[3].'/'.$nameParts[4].'.php';
+                #html::$logger->debug('autoloader final path: '.$finalPath);
                 include($finalPath);
                 return true;
             }

@@ -5,7 +5,7 @@ use Lucid\Html\html;
 trait Gridable
 {
     public $bootstrapGridSizeNames = ['xs','sm','md','lg','xl'];
-    public function grid($columns)
+    public function grid(...$columns)
     {
         $cols = [];
         for ($i=0; $i<count($columns); $i++){

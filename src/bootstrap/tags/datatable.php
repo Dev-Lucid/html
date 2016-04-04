@@ -340,16 +340,16 @@ class DataTable extends \Lucid\Html\Bootstrap\Tags\Table
     {
         $pager = html::buttonGroup(); #->size('sm');
 
-        $pager->add(html::button(html::icon('fast-backward'), 'primary', 'html.dataTable.page(this,\'first\');'));
-        $pager->add(html::button(html::icon('backward'), 'primary', 'html.dataTable.page(this,\'previous\');'));
+        $pager->add(html::button(html::icon('fast-backward'), 'primary', 'lucid.html.dataTable.page(this,\'first\');'));
+        $pager->add(html::button(html::icon('backward'), 'primary', 'lucid.html.dataTable.page(this,\'previous\');'));
 
-        $pager->add(html::select(null, $this->currentPage, $this->buildPagerOptions(), "html.dataTable.page(this,this.options[this.selectedIndex].value);"));
+        $pager->add(html::select(null, $this->currentPage, $this->buildPagerOptions(), "lucid.html.dataTable.page(this,this.options[this.selectedIndex].value);"));
         $pager->lastChild()->modifier('primary');
 
-        $pager->add(html::button(html::icon('forward'), 'primary', 'html.dataTable.page(this,\'next\');'));
-        $pager->add(html::button(html::icon('fast-forward'), 'primary', 'html.dataTable.page(this,\'last\');'));
+        $pager->add(html::button(html::icon('forward'), 'primary', 'lucid.html.dataTable.page(this,\'next\');'));
+        $pager->add(html::button(html::icon('fast-forward'), 'primary', 'lucid.html.dataTable.page(this,\'last\');'));
 
-        return $pager;
+        return html::span()->addClass('data-table-pager')->add($pager);
     }
 
     public function buildPagerOptions()
@@ -378,7 +378,7 @@ class DataTable extends \Lucid\Html\Bootstrap\Tags\Table
         $id = $this->id.'-filter-'.$field;
         $value = $this->determineFilterValue($field);
 
-        $this->components['filter_select'] = \Lucid\html\html::select(null, $value, $data, "html.dataTable.filter(this,false);")
+        $this->components['filter_select'] = \Lucid\html\html::select(null, $value, $data, "lucid.html.dataTable.filter(this,false);")
             ->id($id)
             ->size('sm')
             ->style('width:auto;');
@@ -402,7 +402,7 @@ class DataTable extends \Lucid\Html\Bootstrap\Tags\Table
             ->preAddon(\Lucid\html\html::icon('search'))
             ->size('sm')
             ->style('width:auto;')
-            ->onkeyup('html.dataTable.filter(this, true);');
+            ->onkeyup('lucid.html.dataTable.filter(this, true);');
 
         $this->filters[$filter_name] = [
             'field' => $fields,

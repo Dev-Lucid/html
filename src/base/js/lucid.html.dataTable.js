@@ -103,7 +103,7 @@ lucid.html.dataTable.page=function(pager, direction){
 
     if(newPage != props['current-page']){
         props.setProperty('current-page', newPage);
-        html.dataTable.requestData(props);
+        lucid.html.dataTable.requestData(props);
     }
 };
 
@@ -111,7 +111,7 @@ lucid.html.dataTable.filter = function(filter, delay){
     var props = lucid.html.dataTable.getTableProperties(filter);
     props.setProperty('current-page',0);
     if(delay === false){
-        html.dataTable.requestData(props);
+        lucid.html.dataTable.requestData(props);
     }else{
         window.clearTimeout(lucid.html.dataTable.refreshTimeouts[props.id]);
         lucid.html.dataTable.refreshTimeouts[props.id] = window.setTimeout(function(){
@@ -138,8 +138,8 @@ lucid.html.dataTable.requestData=function(props){
             console.log('loading new data');
             props.jquery.find(lucid.html.dataTable.refreshSelector).html(response.responseJSON.tbody);
             props.setProperty('max-page', response.responseJSON.max_page);
-            html.dataTable.updatePager(props, response.responseJSON.pager);
-            html.dataTable.noDataMessage(props, (response.responseJSON.max_page === 0));
+            lucid.html.dataTable.updatePager(props, response.responseJSON.pager);
+            lucid.html.dataTable.noDataMessage(props, (response.responseJSON.max_page === 0));
         }
     });
 };

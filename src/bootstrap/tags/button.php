@@ -16,6 +16,7 @@ class Button extends \Lucid\Html\Tag
     public function init()
     {
         $this->addClass('btn');
+        $this->type = 'button';
         parent::init();
     }
 }

@@ -13,7 +13,7 @@ class html
     public static $autoloadMap = [];
 
     public static $formats = [
-        'datetime'=>'YYYY-MM-DD HH:mm',
+        'datetime'=>'yyyy-mm-dd hh:ii',
     ];
 
     /*

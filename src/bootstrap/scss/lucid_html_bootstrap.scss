@@ -80,3 +80,13 @@ select.select-success{
 th[data-sortable]{
     cursor: pointer;
 }
+
+.glyphicon-arrow-right {
+  @extend .fa;
+  @extend .fa-arrow-right;
+}
+
+.glyphicon-arrow-left {
+  @extend .fa;
+  @extend .fa-arrow-left;
+}

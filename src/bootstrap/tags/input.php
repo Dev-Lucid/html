@@ -8,7 +8,7 @@ class Input extends \Lucid\Html\Base\Tags\Input
 
     public $preAddon  = null;
     public $postAddon = null;
-    
+
     public $bootstrapModifierPrefix  = 'has';
     public $bootstrapModifiersAllowed = ['primary', 'secondary', 'info', 'success', 'warning', 'danger', ];
     public $bootstrapSizePrefix  = 'form-control';
@@ -70,12 +70,7 @@ class Input extends \Lucid\Html\Base\Tags\Input
                 $this->id = 'datetimepicker-'.uniqid();
             }
 
-            html::$hooks['javascript']("window.jQuery('#".$this->id."').datetimepicker({format:'".html::$formats['datetime']."',icons: {
-                    time: 'fa fa-clock-o',
-                    date: 'fa fa-calendar',
-                    up: 'fa fa-arrow-up',
-                    down: 'fa fa-arrow-down'
-                }});");
+            html::$hooks['javascript']("window.jQuery('#".$this->id."').datetimepicker({format:'".html::$formats['datetime']."',showMeridian: true, todayBtn:true});");
         }
         return $this;
     }

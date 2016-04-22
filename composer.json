@@ -1,7 +1,7 @@
 {
   "name": "dev-lucid/html",
   "type":"library",
-  "description": "",
+  "description": "A library for building HTML. ",
   "authors": [
       {
           "name":     "Mike Thorn",

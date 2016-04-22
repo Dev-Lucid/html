@@ -70,7 +70,7 @@ class Input extends \Lucid\Html\Base\Tags\Input
                 $this->id = 'datetimepicker-'.uniqid();
             }
 
-            html::$hooks['javascript']("window.jQuery('#".$this->id."').datetimepicker({format:'".html::$formats['datetime']."',showMeridian: true, todayBtn:true});");
+            html::$hooks['javascript']("window.jQuery('#".$this->id."').datetimepicker({format:'".html::$config->get('formats')['datetime']."',showMeridian: true, todayBtn:true});");
         }
         return $this;
     }

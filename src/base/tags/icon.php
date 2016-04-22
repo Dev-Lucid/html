@@ -11,11 +11,11 @@ class Icon extends \Lucid\Html\Tag
     public function init()
     {
         $this->tag = 'i';
-        $this->addClass(html::$iconPrefix);
+        $this->addClass(html::$config->get('iconPrefix'));
     }
 
     public function setIcon($val)
     {
-        $this->addClass(html::$iconPrefix.'-'.$val);
+        $this->addClass(html::$config->get('iconPrefix').'-'.$val);
     }
 }

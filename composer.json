@@ -1,7 +1,6 @@
 {
-  "name": "html",
+  "name": "dev-lucid/html",
   "type":"library",
-  "repo": "devlucid/html",
   "description": "",
   "authors": [
       {
@@ -19,7 +18,18 @@
       "psr-4": {"Lucid\\Html\\": "/"}
   },
   "autoload-dev": {
-      "psr-4": {"Lucid\\Html\\": "/"}
+      "psr-4": {"Lucid\\Html\\": ""}
+  },
+  "require":{
+      "php": "^7.0",
+      "dev-lucid/container": "~1.0.0"
+  },
+  "require-dev":{
+      "phpunit/phpunit": "^5.0"
+  },
+  "suggest": {
+      "twbs/bootstrap": "dev-v4-dev",
+      "zurb/foundation": "^6.2.0"
   },
   "license": "MIT",
   "bin": [

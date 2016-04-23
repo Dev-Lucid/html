@@ -12,7 +12,7 @@ class html
             static::$config = new \Lucid\Component\Container\Container();
         } else {
             if (is_object($config) === false || in_array('Lucid\\Component\\Container\\ContainerInterface', class_implements($config)) === false) {
-                throw new \Exception('Factory contructor parameter $config must either be null, or implement Lucid\\$config\\Container\\ContainerInterface (https://github.com/Dev-Lucid/container). If null is passed, then an instance of Lucid\\Component\\Container\\Container will be instantiated instead.');
+                throw new \Exception('Html contructor parameter $config must either be null, or implement Lucid\\Component\\Container\\ContainerInterface (https://github.com/Dev-Lucid/container). If null is passed, then an instance of Lucid\\Component\\Container\\Container will be instantiated instead.');
             }
 
             # if a config object has been passed in, decorate it so that internally all indexes are prefixed with html:

@@ -16,7 +16,7 @@ class html
             }
 
             # if a config object has been passed in, decorate it so that internally all indexes are prefixed with html:
-            static::$config = new \Lucid\Component\Container\PrefixDecorator('dev-lucid/html:', $config);
+            static::$config = $config;
         }
 
         static::$config->set('loadedClassCache', []);

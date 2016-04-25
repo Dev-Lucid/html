@@ -7,42 +7,39 @@ class html
 
     public static function init($config = null, $flavor = null)
     {
-
-        if (is_null($config)) {
-            static::$config = new \Lucid\Component\Container\Container();
-        } else {
-            if (is_object($config) === false || in_array('Lucid\\Component\\Container\\ContainerInterface', class_implements($config)) === false) {
-                throw new \Exception('Html contructor parameter $config must either be null, or implement Lucid\\Component\\Container\\ContainerInterface (https://github.com/Dev-Lucid/container). If null is passed, then an instance of Lucid\\Component\\Container\\Container will be instantiated instead.');
-            }
-
-            # if a config object has been passed in, decorate it so that internally all indexes are prefixed with html:
+        if (is_null($config) === true) {
+            static::$config = [];
+        } elseif (is_array($config) === true){
+            static::$config =& $config;
+        } elseif (is_object($config) === true && in_array('ArrayAccess', class_implements($config)) === true) {
             static::$config = $config;
+        } else {
+            throw new \Exception('Html contructor parameter $config must either be null, an array, or an object that implements ArrayAccess.');
         }
 
-        static::$config->set('loadedClassCache', []);
+        static::$config['loadedClassCache'] = [];
         $hooks = [];
 
         try{
             $hooks['javascript'] = function($js) {
                 return '<script language="Javascript">'.$js.'</script>';
             };
-            static::$config->set('hooks', $hooks);
+            static::$config['hooks'] = $hooks;
         }
         catch(\Exception $e) {
             exit($e->getMessage());
         }
 
-        static::$config->set('iconPrefix', 'fa');     # default to font-awesome's prefix
-        static::$config->set('formats', [
+        static::$config['iconPrefix'] = 'fa';     # default to font-awesome's prefix
+        static::$config['formats'] = [
             'datetime'=>'yyyy-mm-dd hh:ii',
-        ]);
+        ];
 
-        static::$config->set('autoloadMap', []);
-        static::$config->get('autoloadMap')['Lucid\\Html\\base'] = __DIR__.'/src/base/';
-        static::$config->get('autoloadMap')['Lucid\\Html\\base'] = __DIR__.'/src/base/';
+        static::$config['autoloadMap'] = [];
+        static::$config['autoloadMap']['Lucid\\Html\\base'] = __DIR__.'/src/base/';
 
         if (is_null($flavor) === false) {
-            static::$config->get('autoloadMap')['Lucid\\Html\\'.$flavor] = __DIR__.'/src/'.$flavor.'/';
+            static::$config['autoloadMap']['Lucid\\Html\\'.$flavor] = __DIR__.'/src/'.$flavor.'/';
         }
 
         include(__DIR__.'/src/tag.php');
@@ -53,7 +50,7 @@ class html
     public static function addFlavor($namespacePrefix, $path)
     {
 
-        static::$config->get('autoloadMap')[$namespacePrefix] = $path;
+        static::$config['autoloadMap'][$namespacePrefix] = $path;
     }
 
     private static function autoLoader(string $name)
@@ -64,19 +61,19 @@ class html
         #   2) from DevLucid\html::__callStatic, in which case only the final class name is known, and all possible paths
         #      need to be checked.
 
-        if (isset(static::$config->get('loadedClassCache')[$name]) === true) {
-            return static::$config->get('loadedClassCache')[$name];
+        if (isset(static::$config['loadedClassCache'][$name]) === true) {
+            return static::$config['loadedClassCache'][$name];
         }
 
         # Check if we're in condition 1 and build a map of possible file names and equivalent class names.
         if (strpos($name, '\\') === false) {
-            foreach (static::$config->get('autoloadMap') as $prefix=>$path) {
+            foreach (static::$config['autoloadMap'] as $prefix=>$path) {
                 $filePath = $path.'tags/'.$name.'.php';
                 $class = $prefix.'\\Tags\\'.$name;
                 #static::$logger->debug('looking in '.$filePath.' for '.$class);
                 if (file_exists($filePath) === true) {
 
-                    static::$config->get('loadedClassCache')[$name] = $class;
+                    static::$config['loadedClassCache'][$name] = $class;
                     if (class_exists($class) === false) {
                         include($filePath);
 
@@ -86,13 +83,13 @@ class html
                     }
                 }
             }
-            return static::$config->get('loadedClassCache')[$name] ?? null;
+            return static::$config['loadedClassCache'][$name] ?? null;
         } else {
             $nameParts = explode('\\', strtolower($name));
-            if (strtolower($nameParts[0]) == 'lucid' && in_array('Lucid\\Html\\'.$nameParts[2], array_keys(static::$config->get('autoloadMap'))) === true) {
+            if (strtolower($nameParts[0]) == 'lucid' && in_array('Lucid\\Html\\'.$nameParts[2], array_keys(static::$config['autoloadMap'])) === true) {
                 $tagOrTrait = $name[3];
                 $finalName  = $name[4];
-                $finalPath = static::$config->get('autoloadMap')['Lucid\\Html\\'.$nameParts[2]].$nameParts[3].'/'.$nameParts[4].'.php';
+                $finalPath = static::$config['autoloadMap']['Lucid\\Html\\'.$nameParts[2]].$nameParts[3].'/'.$nameParts[4].'.php';
                 include($finalPath);
                 return true;
             }
@@ -114,8 +111,8 @@ class html
         $obj->instantiatorName = $name;
         $obj->setProperties($params);
 
-        if (isset(static::$config->get('hooks')[$name.'__create']) === true && is_callable(static::$config->get('hooks')[$name.'__create']) === true) {
-            $func = static::$config->get('hooks')[$name.'__create'];
+        if (isset(static::$config['hooks'][$name.'__create']) === true && is_callable(static::$config['hooks'][$name.'__create']) === true) {
+            $func = static::$config['hooks'][$name.'__create'];
             $func($obj);
         }
 

@@ -230,7 +230,7 @@ class DataTable extends \Lucid\Html\Bootstrap\Tags\Table
         }
         $this->determineQueryProperties();
 
-        $func = html::$hooks['data_table__query'];
+        $func = html::$config['hooks']['data_table__query'];
         $sortColumn_name = (is_null($this->sortColumn) === true)?null:$this->children[$this->sortColumn]->data_name;
         list($this->maxPage, $this->result) = $func($this->data, $sortColumn_name, $this->sortDirection, $this->currentPage, $this->rowsPerPage, $this->filters);
     }
@@ -420,8 +420,8 @@ class DataTable extends \Lucid\Html\Bootstrap\Tags\Table
     }
 }
 
-if (isset(html::$hooks['data_table__query']) === false || is_null(html::$hooks['data_table__query']) === true) {
-    html::$hooks['data_table__query'] = function($data, $column = null, $direction = null, $page = 0, $limit = 10, $filters = []) {
+if (isset(html::$config['hooks']['data_table__query']) === false || is_null(html::$config['hooks']['data_table__query']) === true) {
+    html::$config['hooks']['data_table__query'] = function($data, $column = null, $direction = null, $page = 0, $limit = 10, $filters = []) {
         # apply filters
         foreach ($filters as $key=>$filter) {
             if (is_null($filter['value']) === false && strval($filter['value'] !== '')) {

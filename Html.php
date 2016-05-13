@@ -1,20 +1,14 @@
 <?php
 namespace Lucid\Html;
 
-class html
+class Html
 {
     public static $config = null;
 
-    public static function init($config = null, $flavor = null)
+    public static function init($flavor = null, ArrayAccess $config = null)
     {
         if (is_null($config) === true) {
             static::$config = [];
-        } elseif (is_array($config) === true){
-            static::$config =& $config;
-        } elseif (is_object($config) === true && in_array('ArrayAccess', class_implements($config)) === true) {
-            static::$config = $config;
-        } else {
-            throw new \Exception('Html contructor parameter $config must either be null, an array, or an object that implements ArrayAccess.');
         }
 
         static::$config['loadedClassCache'] = [];
@@ -32,7 +26,7 @@ class html
 
         static::$config['iconPrefix'] = 'fa';     # default to font-awesome's prefix
         static::$config['formats'] = [
-            'datetime'=>'yyyy-mm-dd hh:ii',
+            'datetime'=>'yyyy-mm-dd hh:ii::ss',
         ];
 
         static::$config['autoloadMap'] = [];
@@ -70,7 +64,6 @@ class html
             foreach (static::$config['autoloadMap'] as $prefix=>$path) {
                 $filePath = $path.'tags/'.$name.'.php';
                 $class = $prefix.'\\Tags\\'.$name;
-                #static::$logger->debug('looking in '.$filePath.' for '.$class);
                 if (file_exists($filePath) === true) {
 
                     static::$config['loadedClassCache'][$name] = $class;

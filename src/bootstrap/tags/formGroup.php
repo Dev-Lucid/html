@@ -11,8 +11,7 @@ class FormGroup extends \Lucid\Html\Tag
     public $help            = null;
     public $parameters      = ['label', 'child', 'help',];
     public $use_grid        = false;
-    public $labelGridSize = 2;
-
+    public $labelGridSize   = 2;
 
     public function init()
     {

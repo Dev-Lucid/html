@@ -1,0 +1,1 @@
+process.stdout.write(lucid.html.build('html').render());

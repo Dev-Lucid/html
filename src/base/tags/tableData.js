@@ -1,12 +1,14 @@
 lucid.html.builder.tags.tableData = function(){
+	lucid.html.tag.call(this);
 	this.tag = 'td';
 };
-lucid.html.builder.tags.tableData.prototype = new lucid.html.tag();
+lucid.html.builder.tags.tableData.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.tableData.prototype.constructor = lucid.html.builder.tags.tableData;
 
 lucid.html.builder.tags.tableData.prototype.init=function(){
 	this.allowedAttributes.push('rowspan');
 	this.allowedAttributes.push('colspan');
-	this.prototype.init.apply(this);
+	lucid.html.tag.prototype.init.apply(this);
 };
 
 lucid.html.builder.tags.tableData.prototype.checkValidChild=function(child){

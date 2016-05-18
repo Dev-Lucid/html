@@ -1,13 +1,15 @@
 lucid.html.builder.tags.anchor = function(){
+	lucid.html.tag.call(this);
 	this.tag = 'a';
 	this.parameters = ['href', 'child'];
 };
-lucid.html.builder.tags.anchor.prototype = new lucid.html.tag();
+lucid.html.builder.tags.anchor.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.anchor.prototype.constructor = lucid.html.builder.tags.anchor;
 
 lucid.html.builder.tags.anchor.prototype.init=function(){
 	this.allowedAttributes.push('name');
 	this.allowedAttributes.push('target');
-	this.prototype.init.apply(this);
+	lucid.html.tag.prototype.init.apply(this);
 };
 
 lucid.html.builder.tags.anchor.prototype.checkValidChild=function(child){

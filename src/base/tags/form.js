@@ -1,15 +1,17 @@
 lucid.html.builder.tags.form = function(){
+	lucid.html.tag.call(this);
 	this.tag = 'form';
 	this.parameters = ['name', 'action'];
 };
-lucid.html.builder.tags.form.prototype = new lucid.html.tag();
+lucid.html.builder.tags.form.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.form.prototype.constructor = lucid.html.builder.tags.form;
 
 lucid.html.builder.tags.form.prototype.init=function(){
 	this.allowedAttributes.push('onsubmit');
 	this.allowedAttributes.push('enctype');
 	this.allowedAttributes.push('method');
 	this.allowedAttributes.push('target');
-	this.prototype.init.apply(this);
+	lucid.html.tag.prototype.init.apply(this);
 };
 
 lucid.html.builder.tags.form.prototype.checkValidChild=function(child){

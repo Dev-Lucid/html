@@ -3,7 +3,9 @@ lucid.html.tag = function(){
     this.instantiatorName = null;
 
     this.attributes = {};
-    this.allowedAttributes = ['id', 'class', 'style', 'hidden', ];
+
+    // From here: http://www.w3schools.com/tags/ref_standardattributes.asp
+    this.allowedAttributes = ['accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate'];
     this.parameters = ['child'];
 
     this.allowChildren   = true;
@@ -22,6 +24,7 @@ lucid.html.tag = function(){
     this.init();
 };
 
+// sort of a compatibility hack for php traits
 lucid.html.tag.prototype.addTrait=function(){
 };
 
@@ -38,6 +41,7 @@ lucid.html.tag.prototype.setProperties=function(params) {
             this.set(property, params[i]);
         }
     }
+    return this;
 };
 
 lucid.html.tag.prototype.set=function(name, value) {
@@ -45,6 +49,9 @@ lucid.html.tag.prototype.set=function(name, value) {
     if (typeof(this['set'+key]) == 'function') {
         this['set_'+key](value);
     } else {
+        if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
+            throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + (this.allowedAttributes.concat(this.parameters).join(', '));
+        }
         this.attributes[name] = value;
     }
     return this;
@@ -55,7 +62,10 @@ lucid.html.tag.prototype.get=function(name){
     if (typeof(this['get'+key]) == 'function') {
         return this['get'+key]();
     } else {
-        return this.attributes[name];
+        if (typeof(this.attributes[name]) !== 'undefined') {
+            return this.attributes[name];
+        }
+        return null;
     }
 };
 
@@ -281,11 +291,11 @@ lucid.html.tag.prototype.setHidden=function(val) {
     if (val !== true && val !== false) {
         throw 'Attribute hidden only accepts values true or false.';
     }
-    this.attributes['hidden'] = val;
+    this.attributes.hidden = val;
     return this;
 };
 
 lucid.html.tag.prototype.renderHidden=function() {
-    var val = (this.attributes['hidden'] === true)?'hidden':null;
+    var val = (this.attributes.hidden === true)?'hidden':null;
     return val;
 };

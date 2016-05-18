@@ -1,7 +1,9 @@
 lucid.html.builder.tags.definitionList = function(){
+	lucid.html.tag.call(this);
 	this.tag = 'dl';
 };
-lucid.html.builder.tags.definitionList.prototype = new lucid.html.tag();
+lucid.html.builder.tags.definitionList.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.definitionList.prototype.constructor = lucid.html.builder.tags.definitionList;
 
 lucid.html.builder.tags.definitionList.prototype.checkValidChild=function(child){
 	if (['dd', 'dl'].indexOf(child.tag) < 0) {

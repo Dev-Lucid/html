@@ -20,7 +20,7 @@ if [ $? -ne 0 ]; then
 fi
 echo "Successfully loaded dist js in node."
 
-phpunit $DIR/../tests/BaseTagTest.php
+$DIR/../vendor/bin/phpunit $DIR/../tests/BaseTagTest.php
 if [ $? -ne 0 ]; then
     exit
 fi

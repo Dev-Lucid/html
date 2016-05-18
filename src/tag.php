@@ -8,7 +8,9 @@ class Tag
     public $instantiatorName = null;
 
     public $attributes = [];
-    public $allowedAttributes = ['id', 'class', 'style', 'hidden', ];
+
+    # From here: http://www.w3schools.com/tags/ref_standardattributes.asp
+    public $allowedAttributes = ['accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate'];
     public $parameters = ['child'];
 
     public $allowChildren    = true;
@@ -53,9 +55,10 @@ class Tag
             if ($property == 'child') {
                 $this->add($params[$i]);
             } else {
-                $this->$property = $params[$i];
+                $this->set($property, $params[$i]);
             }
         }
+        return $this;
     }
 
     public function init()
@@ -63,11 +66,12 @@ class Tag
         # empty, implement in inherited classes
     }
 
-    public function checkValidChild($child)
+    public function checkValidChild($child) : bool
     {
+        return true;
     }
 
-    public function render()
+    public function render() : string
     {
         $html = '';
         $html .= $this->preRender();
@@ -109,7 +113,7 @@ class Tag
         return '';
     }
 
-    public function renderChildren($list = 'children')
+    public function renderChildren($list = 'children') : string
     {
         $html = '';
         foreach ($this->$list as $child) {
@@ -138,7 +142,7 @@ class Tag
         return $this;
     }
 
-    protected function setupChild($child, $action='add')
+    protected function setupChild($child, $action='add') : bool
     {
         if ($this->allowChildren === false){
             throw new \Exception('Class '.get_class($this).' does not allow children to be added.');
@@ -166,7 +170,7 @@ class Tag
         return $this->children[count($this->children) - 1];
     }
 
-    protected function renderTagStart()
+    protected function renderTagStart() : string
     {
         $html = '<'.$this->tag;
         foreach ($this->attributes as $key=>$value) {
@@ -190,7 +194,7 @@ class Tag
         return $html.'>';
     }
 
-    protected function renderTagEnd()
+    protected function renderTagEnd() : string
     {
         if ($this->allowQuickClose === true && count($this->children) === 0) {
             return '';
@@ -198,17 +202,34 @@ class Tag
         return '</'.$this->tag.'>';
     }
 
-    public function __set($name, $value)
+    public function set($name, $value)
     {
-        return $this->$name($value);
+        $setter = 'set'.$name;
+        if (method_exists($this, $setter) === true) {
+            $this->$setter($value);
+            return $this;
+        }
+        if (in_array($name, $this->allowedAttributes) === false && in_array($name, $this->parameters) === false) {
+            throw new \Exception('Invalid attribute '.$name.'. Tag '.$this->tag.' only allows these attributes: ' . (implode(', ', $this->allowedAttributes) .', '. implode(', ', $this->parameters)));
+        }
+        $this->attributes[$name] = $value;
+        return $this;
     }
 
-    public function __get($name)
+    public function get($name)
     {
-        return $this->$name();
+        $getter = 'get'.$name;
+        if (method_exists($this, $getter) === true) {
+            return $this->$getter($name);
+        }
+        if (isset($this->attributes[$name]) === true) {
+            return $this->attributes[$name];
+        }
+        return null;
     }
 
-    public function __call($name, $params)
+    /*
+    public function set($name, $value)
     {
         $getter = 'get'.$name;
         $setter = 'set'.$name;
@@ -237,6 +258,7 @@ class Tag
             return $this;
         }
     }
+    */
 
     public function paragraph($text)
     {

@@ -1,22 +1,22 @@
 <?php
 namespace Lucid\Html\Base\Tags;
-use Lucid\Html\html;
 
-class Anchor extends \Lucid\Html\Tag
+class anchor extends \Lucid\Html\Tag
 {
-    public $tag = 'a';
-    public $parameters = ['href','child'];
+	public $tag = 'a';
+	public $parameters = ['href', 'child'];
 
-    public function init()
-    {
-        $this->allowedAttributes[] = 'name';
-        $this->allowedAttributes[] = 'target';
-    }
+	public function init()
+	{
+		$this->allowedAttributes[] = 'name';
+		$this->allowedAttributes[] = 'target';
+		parent::init();
+	}
 
-    public function checkValidChild($child)
-    {
-        if ($child->tag == 'a') {
-            throw new \Exception(html::errorChildTag('a', null, ['a']));
-        }
-    }
+	public function checkValidChild($child)
+	{
+		if (in_array($child->tag, ['a']) === true) {
+			throw new \Exception('Invalid child. Tag a does not allow these tags as children: a');
+		}
+	}
 }

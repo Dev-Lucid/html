@@ -9,7 +9,6 @@ class JavascriptBasicTest extends PHPUnit_Framework_TestCase
     {
         $this->includeFiles[] = __DIR__.'/../src/base/js/lucid.html.js';
         $this->includeFiles[] = __DIR__.'/../src/tag.js';
-        $this->includeFiles[] = __DIR__.'/../src/tag__class_style_methods.js';
         $this->includeFiles[] = __DIR__.'/../src/base/js/lucid.html.builder.js';
         $this->includeFiles[] = __DIR__.'/../src/base/tags/anchor.js';
         $this->includeFiles[] = __DIR__.'/../src/base/tags/h1.js';

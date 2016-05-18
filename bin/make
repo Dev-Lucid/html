@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+php -f $DIR/makeTags.php
+if [ $? -ne 0 ]; then
+    echo "Failed to make tags"
+    exit
+fi
+
+php -f $DIR/makeJsDist.php
+if [ $? -ne 0 ]; then
+    echo "Failed to build distribution js"
+    exit
+fi
+
+node $DIR/../dist/lucid.html.buildBaseTagsOnly.js
+if [ $? -ne 0 ]; then
+    echo "JS Build will not load in Node."
+    exit
+fi
+echo "Successfully loaded dist js in node."
+
+phpunit $DIR/../tests/BaseTagTest.php
+if [ $? -ne 0 ]; then
+    exit
+fi
+
+echo ""
+echo "Complete."
+

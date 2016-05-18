@@ -1,0 +1,5 @@
+{
+    "parameters":["name", "action"],
+    "allowedAttributes":["onsubmit", "enctype", "method", "target"],
+    "disallowChildTags":["form"]
+}

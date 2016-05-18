@@ -1,7 +1,7 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class Italic extends \Lucid\Html\Tag
+class italic extends \Lucid\Html\Tag
 {
-    public $tag = 'i';
+	public $tag = 'i';
 }

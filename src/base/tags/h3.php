@@ -1,6 +1,7 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class H3 extends \Lucid\Html\Tag
+class h3 extends \Lucid\Html\Tag
 {
+	public $tag = 'h3';
 }

@@ -1,0 +1,6 @@
+{
+    "tag":"img",
+    "parameters":["src","width","height","alt"],
+    "allowChildren":false,
+    "allowQuickClose":true
+}

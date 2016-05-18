@@ -89,7 +89,7 @@ class Html
         }
     }
 
-    public static function __callStatic($name, $params)
+    public static function build($name, ...$params)
     {
         $finalClass = static::autoLoader($name);
         if (is_null($finalClass) === true){

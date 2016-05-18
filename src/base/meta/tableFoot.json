@@ -1,0 +1,6 @@
+{
+    "tag":"tfoot",
+    "preChildrenHtml": "<tr>",
+    "postChildrenHtml": "</tr>",
+    "allowChildTags":["th", "td"]
+}

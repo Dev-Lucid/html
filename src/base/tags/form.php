@@ -1,23 +1,24 @@
 <?php
 namespace Lucid\Html\Base\Tags;
-use Lucid\Html\html;
 
 class form extends \Lucid\Html\Tag
 {
-    public $parameters = ['name','action',];
+	public $tag = 'form';
+	public $parameters = ['name', 'action'];
 
-    public function init()
-    {
-        $this->allowedAttributes[] = 'onsubmit';
-        $this->allowedAttributes[] = 'enctype';
-        $this->allowedAttributes[] = 'method';
-        $this->allowedAttributes[] = 'target';
-    }
+	public function init()
+	{
+		$this->allowedAttributes[] = 'onsubmit';
+		$this->allowedAttributes[] = 'enctype';
+		$this->allowedAttributes[] = 'method';
+		$this->allowedAttributes[] = 'target';
+		parent::init();
+	}
 
-    function checkValidChild($child)
-    {
-        if ($child->tag == 'form') {
-            throw new \Exception(html::errorChildTag($child->tag, null, ['form',]));
-        }
-    }
+	public function checkValidChild($child)
+	{
+		if (in_array($child->tag, ['form']) === true) {
+			throw new \Exception('Invalid child. Tag form does not allow these tags as children: form');
+		}
+	}
 }

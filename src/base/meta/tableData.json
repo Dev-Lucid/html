@@ -1,0 +1,5 @@
+{
+    "tag":"td",
+    "allowedAttributes":["rowspan", "colspan"],
+    "disallowChildTags":["th", "td", "tr"]
+}

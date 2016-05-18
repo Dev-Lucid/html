@@ -1,7 +1,7 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class Paragraph extends \Lucid\Html\Tag
+class paragraph extends \Lucid\Html\Tag
 {
-    public $tag = 'p';
+	public $tag = 'p';
 }

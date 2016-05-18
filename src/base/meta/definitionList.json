@@ -1,0 +1,4 @@
+{
+    "tag":"dl",
+    "allowChildTags":["dd", "dl"]
+}

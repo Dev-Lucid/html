@@ -1,10 +1,14 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class Label extends \Lucid\Html\Tag
+class label extends \Lucid\Html\Tag
 {
-    public function init()
-    {
-        $this->allowedAttributes[] = 'for';
-    }
+	public $tag = 'label';
+	public $parameters = ['for', 'child'];
+
+	public function init()
+	{
+		$this->allowedAttributes[] = 'for';
+		parent::init();
+	}
 }

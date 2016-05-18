@@ -1,0 +1,6 @@
+{
+    "tag":"a",
+    "parameters":["href", "child"],
+    "allowedAttributes":["name", "target"],
+    "disallowChildTags":["a"]
+}

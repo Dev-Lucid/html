@@ -1,0 +1,3 @@
+{
+    "allowedAttributes":["checked", "default", "disabled", "icon", "label", "radiogroup", "type"]
+}

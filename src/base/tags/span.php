@@ -1,6 +1,7 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class Span extends \Lucid\Html\Tag
+class span extends \Lucid\Html\Tag
 {
+	public $tag = 'span';
 }

@@ -1,9 +1,9 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class Hr extends \Lucid\Html\Tag
+class hr extends \Lucid\Html\Tag
 {
-    public $tag = 'hr';
-    public $allowChildren = false;
-    public $allowQuickClose = true;
+	public $tag = 'hr';
+	public $allowQuickClose = false;
+	public $allowChildren = false;
 }

@@ -1,4 +1,3 @@
-<?php
 
 lucid.html.tags.alert = function(){
 }

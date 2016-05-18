@@ -1113,7 +1113,6 @@ lucid.html.builder.tags.unorderedList.prototype.checkValidChild=function(child){
 };
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/unorderedList.js */
-<?php
 
 lucid.html.tags.alert = function(){
 }

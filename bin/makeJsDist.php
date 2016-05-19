@@ -24,7 +24,7 @@ echo("Building Distribution JS files...\n");
 foreach($files['base'] as $filePattern) {
     $fileList = glob(__DIR__.'/../src'.$filePattern);
     foreach ($fileList as $file) {
-        echo("\tIncluding ".str_pad(basename($file), 24, ".", STR_PAD_RIGHT));
+        echo("\tIncluding ".str_pad(basename($file), 25, ".", STR_PAD_RIGHT));
         $basejs .= "\n/* File start: $file */\n";
         $basejs .= file_get_contents($file);
         $basejs .= "\n/* File end: $file */\n";

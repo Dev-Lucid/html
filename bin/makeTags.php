@@ -23,7 +23,7 @@ foreach ($files as $file) {
     $config['namespace'] = "Lucid\Html\Base\Tags";
 
 
-    echo(str_pad("\tIncluding ".$config['name'], 25, ".", STR_PAD_RIGHT));
+    echo("\tBuilding ".str_pad($config['name'], 26, ".", STR_PAD_RIGHT));
     generatePHP($config);
     generateJavascript($config);
     echo("★\n");

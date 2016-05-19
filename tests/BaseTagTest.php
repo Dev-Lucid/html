@@ -4,6 +4,19 @@ use Lucid\Html\Html as html;
 class BaseTagTest extends BaseTest
 {
 
+    public function testClassFunctions()
+    {
+        $output = '<span class="testClass1 testClass3">testClassFunctions</span>';
+        $code = "\Lucid\Html\Html::build('span','testClassFunctions')->addClass('testClass1')->addClass('testClass2')->addClass('testClass3')->removeClass('testClass2')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<span class="testClass1">testClassFunctions</span>';
+        $code = "\Lucid\Html\Html::build('span','testClassFunctions')->addClass('testClass1')->addClass('testClass2')->toggleClass('testClass2')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+
     public function test_tags()
     {
         $this->runTestWithParameters('abbreviation', 'abbr', ['title'=>'titleAbbr']);
@@ -94,5 +107,4 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
-
 }

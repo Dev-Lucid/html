@@ -276,7 +276,7 @@ lucid.html.tag.prototype.removeClass=function(classToRemove) {
         var newClasses = [];
         for(var i=0; i<this.attributes['class'].length; i++){
             if (this.attributes['class'][i] != classToRemove) {
-                newClasses.push(classToRemove);
+                newClasses.push(this.attributes['class'][i] );
             }
         }
         this.attributes['class'] = newClasses;

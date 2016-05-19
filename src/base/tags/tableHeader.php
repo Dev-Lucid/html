@@ -12,11 +12,12 @@ class tableHeader extends \Lucid\Html\Tag
 		parent::init();
 	}
 
-	public function checkValidChild($child)
+	public function checkValidChild($child) : bool
 	{
 		if (in_array($child->tag, ['th', 'td', 'tr']) === true) {
 			throw new \Exception('Invalid child. Tag th does not allow these tags as children: th, td, tr');
 		}
+		return true;
 	}
 
     public function render_colspan()

@@ -1,4 +1,3 @@
 {
-    "parameters":["for", "child"],
-    "allowedAttributes":["for"]
+    "parameters":["for"]
 }

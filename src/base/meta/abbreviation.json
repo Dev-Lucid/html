@@ -1,4 +1,4 @@
 {
     "tag":"abbr",
-    "parameters":["child", "title"]
+    "parameters":["title"]
 }

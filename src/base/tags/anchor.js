@@ -1,7 +1,7 @@
 lucid.html.builder.tags.anchor = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'a';
-	this.parameters = ['href', 'child'];
+	this.parameters = ['href'];
 };
 lucid.html.builder.tags.anchor.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.anchor.prototype.constructor = lucid.html.builder.tags.anchor;

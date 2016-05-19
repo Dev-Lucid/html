@@ -44,14 +44,16 @@ class Tag
         $this->init();
     }
 
+    public function build(...$parameters)
+    {
+        return \Lucid\Html\Html::build(...$parameters);
+    }
+
     public function setProperties($params)
     {
-        if (count($params) > count($this->parameters)) {
-            throw new \Exception('Too many parameters for construction. Type '.$this->instantiatorName.' has the following parameters: '.print_r($this->parameters,true));
-        }
-
         for ($i=0; $i<count($params); $i++) {
-            $property = $this->parameters[$i];
+            $property = ($i < count($this->parameters))?$this->parameters[$i]:'child';
+
             if ($property == 'child') {
                 $this->add($params[$i]);
             } else {
@@ -228,38 +230,6 @@ class Tag
         return null;
     }
 
-    /*
-    public function set($name, $value)
-    {
-        $getter = 'get'.$name;
-        $setter = 'set'.$name;
-
-        if (count($params) == 0) {
-            # being called as a getter
-            if (method_exists($this, $getter) === true) {
-                return $this->$getter();
-            }
-            return (isset($this->attributes[$name]))?$this->attributes[$name]:null;
-        } elseif(count($params) == 1) {
-            # being called as a setter
-
-            if (property_exists($this, $name) === true) {
-                $this->$name = $params[0];
-                return $this;
-            }
-
-            if (method_exists($this, $setter) === true) {
-                return $this->$setter($params[0]);
-            }
-            if(in_array($name, $this->allowedAttributes) === false && in_array($name, $this->parameters) === false) {
-                throw new \Exception('Class '.$this->instantiatorName.' cannot have attribute '.$name.'; only '.implode(', ', array_merge($this->allowedAttributes, $this->parameters)));
-            }
-            $this->attributes[$name] = $params[0];
-            return $this;
-        }
-    }
-    */
-
     public function paragraph($text)
     {
         if ($this->allowChildren === false) {
@@ -271,8 +241,7 @@ class Tag
 
     public function setClass($new_class)
     {
-        if(!is_array($this->attributes['class']))
-        {
+        if (isset($this->attributes['class']) === false || is_array($this->attributes['class']) === false) {
             $this->attributes['class'] = [];
         }
         $this->attributes['class'][] = $new_class;
@@ -286,8 +255,7 @@ class Tag
 
     public function hasClass($class)
     {
-        if (isset($this->attributes['class']) === false || is_array($this->attributes['class']) === false)
-        {
+        if (isset($this->attributes['class']) === false || is_array($this->attributes['class']) === false) {
             return false;
         }
         return in_array($class, $this->attributes['class']);
@@ -295,8 +263,7 @@ class Tag
 
     public function addClass($class)
     {
-        if($this->hasClass($class) === false)
-        {
+        if($this->hasClass($class) === false) {
             $this->attributes['class'][] = $class;
         }
         return $this;
@@ -304,10 +271,8 @@ class Tag
 
     public function removeClass($class)
     {
-        if(isset($this->attributes['class']) === true && is_array($this->attributes['class']) === true)
-        {
-            if(!is_array($class))
-            {
+        if (isset($this->attributes['class']) === true && is_array($this->attributes['class']) === true) {
+            if(is_array($class) === false) {
                 $class = [$class];
             }
             $this->attributes['class'] = array_diff($this->attributes['class'], $class);
@@ -317,24 +282,18 @@ class Tag
 
     public function toggleClass($class, $new_state = null)
     {
-        if(is_null($new_state) === false)
-        {
-            if($new_state === true)
-            {
+        if (is_null($new_state) === false) {
+            if($new_state === true) {
                 $this->addClass($class);
-            }
-            else if ($new_state === false)
-            {
+            } else if ($new_state === false) {
                 $this->removeClass($class);
             }
             return $this;
         }
-        if($this->hasClass($class) === false)
-        {
+
+        if ($this->hasClass($class) === false) {
             $this->attributes['class'][] = $class;
-        }
-        else
-        {
+        } else {
             $this->removeClass($class);
         }
         return $this;
@@ -342,16 +301,13 @@ class Tag
 
     public function setStyle($new_style)
     {
-        if(isset($this->attributes['style']) === false || is_array($this->attributes['style']) === false)
-        {
+        if (isset($this->attributes['style']) === false || is_array($this->attributes['style']) === false) {
             $this->attributes['style'] = [];
         }
 
         $new_style_list = explode(';', trim($new_style));
-        foreach($new_style_list as $new_style_pair)
-        {
-            if($new_style_pair != '')
-            {
+        foreach ($new_style_list as $new_style_pair) {
+            if($new_style_pair != '') {
                 list($key, $value) = explode(':', $new_style_pair);
                 $key = strtolower(trim($key));
                 $value = trim($value);
@@ -364,10 +320,8 @@ class Tag
     public function renderStyle()
     {
         $css = '';
-        foreach($this->attributes['style'] as $key=>$value)
-        {
-            if(is_null($value) === false)
-            {
+        foreach ($this->attributes['style'] as $key=>$value) {
+            if (is_null($value) === false) {
                 $css .= $key.':'.$value.';';
             }
         }
@@ -376,8 +330,7 @@ class Tag
 
     public function setHidden($val)
     {
-        if ($val !== true && $val !== false)
-        {
+        if ($val !== true && $val !== false){
             throw new \Exception('Attribute hidden only accepts values true or false.');
         }
         $this->attributes['hidden'] = $val;

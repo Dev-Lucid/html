@@ -3,66 +3,42 @@ use Lucid\Html\Html as html;
 
 class BaseTagTest extends BaseTest
 {
-    public function test_abbreviation()
+
+    public function test_tags()
     {
-        $output = '<abbr title="titleAttr">test</abbr>';
-
-        $code = "\Lucid\Html\Html::build('abbreviation', 'test', 'titleAttr')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-
-        $code = "\Lucid\Html\Html::build('abbreviation')->set('title', 'titleAttr')->add('test')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-
+        $this->runTestWithParameters('abbreviation', 'abbr', ['title'=>'titleAbbr']);
+        $this->runTestWithoutParameters('address');
+        $this->runTestWithoutParameters('article');
+        $this->runTestWithParameters('blockquote', 'blockquote', ['cite'=>'testcite']);
+        $this->runTestWithoutParameters('bold', 'b');
+        $this->runTestWithSetCalls('caption', 'caption', ['align'=>'center']);
+        $this->runTestWithoutParameters('cite');
+        $this->runTestWithSetCalls('column', 'col', ['span'=>'3', 'class'=>'width-40']);
+        $this->runTestWithoutParameters('columnGroup', 'colgroup');
+        $this->runTestWithoutParameters('definition', 'dfn');
+        $this->runTestWithoutParameters('listItem', 'li');
+        $this->runTestWithoutParameters('details');
+        $this->runTestWithoutParameters('div');
+        $this->runTestWithoutParameters('emphasis', 'em');
+        $this->runTestWithoutParameters('definitionTerm', 'dt');
+        $this->runTestWithoutParameters('definitionDescription', 'dd');
+        $this->runTestWithoutParameters('figure');
+        $this->runTestWithoutParameters('figureCaption', 'figcaption');
+        $this->runTestWithoutParameters('footer');
+        $this->runTestWithParameters('form', 'form', ['name'=>'testForm', 'action'=>'action.php']);
+        $this->runTestWithSetCalls('form', 'form', ['name'=>'testForm', 'action'=>'action.php', 'method'=>'post']);
+        $this->runTestWithoutParameters('h1');
+        $this->runTestWithoutParameters('h2');
+        $this->runTestWithoutParameters('h3');
+        $this->runTestWithoutParameters('h4');
+        $this->runTestWithoutParameters('h5');
+        $this->runTestWithoutParameters('h6');
+        $this->runTestWithoutParameters('header');
+        $this->runTestWithoutParameters('insert', 'ins');
+        $this->runTestWithoutParameters('italic', 'i');
+        $this->runTestWithParameters('label', 'label', ['for'=>'testfor']);
     }
 
-    public function test_address()
-    {
-        $output = '<address>helloworld</address>';
-
-        $code = "\Lucid\Html\Html::build('address', 'helloworld')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-
-        $code = "\Lucid\Html\Html::build('address')->add('hello')->add('world')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-    }
-
-    public function test_article()
-    {
-        $output = '<article>hi</article>';
-
-        $code = "\Lucid\Html\Html::build('article', 'hi')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-
-        $code = "\Lucid\Html\Html::build('article')->add('hi')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-    }
-
-    public function test_blockquote()
-    {
-        $output = '<blockquote cite="google">hi</blockquote>';
-
-        $code = "\Lucid\Html\Html::build('blockquote', 'google', 'hi')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-
-        $code   = "\Lucid\Html\Html::build('blockquote')->set('cite','google')->add('hi')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-    }
-
-    public function test_bold()
-    {
-        $output = '<b>hi</b>';
-        $code = "\Lucid\Html\Html::build('bold')->add('hi')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-    }
 
     public function test_br()
     {
@@ -72,41 +48,22 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
     }
 
-    public function test_caption()
+    public function test_hr()
     {
-        $output = '<caption align="center">mycaption</caption>';
-        $code = "\Lucid\Html\Html::build('caption')->set('align', 'center')->add('mycaption')->render()";
+        $output = '<hr />';
+        $code = "\Lucid\Html\Html::build('hr')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
 
-    public function test_cite()
+    # note: this implicitly tests definitionTerm and definitionDescription
+    public function test_definitionList()
     {
-        $output = '<cite>mycite</cite>';
+        $output = '<dl><dt>term</dt><dd>description</dd></dl>';
 
-        $code = "\Lucid\Html\Html::build('cite', 'mycite')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-
-        $code = "\Lucid\Html\Html::build('cite')->add('mycite')->render()";
+        $code = "\Lucid\Html\Html::build('definitionList', \Lucid\Html\Html::build('definitionTerm', 'term'), \Lucid\Html\Html::build('definitionDescription', 'description'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
 
-    public function test_columnGroup()
-    {
-        $output = '<colgroup></colgroup>';
-
-        $code = "\Lucid\Html\Html::build('columnGroup')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-    }
-
-    public function test_listItem()
-    {
-        $output = '<li></li>';
-        $code   = "\Lucid\Html\Html::build('listItem')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
-    }
 }

@@ -28,13 +28,14 @@ lucid.html.tag = function(){
 lucid.html.tag.prototype.addTrait=function(){
 };
 
-lucid.html.tag.prototype.setProperties=function(params) {
-    if (params.length > this.parameters.length) {
-        throw 'Too many parameters for construction. Tag '+this.tag+' has the following parameters: '+this.parameters.join(', ');
-    }
+lucid.html.tag.prototype.build=function(){
+    return lucid.html.build.apply(null, arguments);
+};
 
+lucid.html.tag.prototype.setProperties=function(params) {
     for (var i=0;  i<params.length; i++) {
-        var property = this.parameters[i];
+        var property = (i < this.parameters.length)?this.parameters[i]:'child';
+
         if (property == 'child') {
             this.add(params[i]);
         } else {
@@ -47,7 +48,7 @@ lucid.html.tag.prototype.setProperties=function(params) {
 lucid.html.tag.prototype.set=function(name, value) {
     var key = String(name).charAt(0).toUpperCase() + String(name).slice(1);
     if (typeof(this['set'+key]) == 'function') {
-        this['set_'+key](value);
+        this['set'+key](value);
     } else {
         if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
             throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + (this.allowedAttributes.concat(this.parameters).join(', '));

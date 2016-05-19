@@ -68,13 +68,14 @@ lucid.html.tag = function(){
 lucid.html.tag.prototype.addTrait=function(){
 };
 
-lucid.html.tag.prototype.setProperties=function(params) {
-    if (params.length > this.parameters.length) {
-        throw 'Too many parameters for construction. Tag '+this.tag+' has the following parameters: '+this.parameters.join(', ');
-    }
+lucid.html.tag.prototype.build=function(){
+    return lucid.html.build.apply(null, arguments);
+};
 
+lucid.html.tag.prototype.setProperties=function(params) {
     for (var i=0;  i<params.length; i++) {
-        var property = this.parameters[i];
+        var property = (i < this.parameters.length)?this.parameters[i]:'child';
+
         if (property == 'child') {
             this.add(params[i]);
         } else {
@@ -87,7 +88,7 @@ lucid.html.tag.prototype.setProperties=function(params) {
 lucid.html.tag.prototype.set=function(name, value) {
     var key = String(name).charAt(0).toUpperCase() + String(name).slice(1);
     if (typeof(this['set'+key]) == 'function') {
-        this['set_'+key](value);
+        this['set'+key](value);
     } else {
         if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
             throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + (this.allowedAttributes.concat(this.parameters).join(', '));
@@ -345,7 +346,7 @@ lucid.html.tag.prototype.renderHidden=function() {
 lucid.html.builder.tags.abbreviation = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'abbr';
-	this.parameters = ['child', 'title'];
+	this.parameters = ['title'];
 };
 lucid.html.builder.tags.abbreviation.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.abbreviation.prototype.constructor = lucid.html.builder.tags.abbreviation;
@@ -366,7 +367,7 @@ lucid.html.builder.tags.address.prototype.constructor = lucid.html.builder.tags.
 lucid.html.builder.tags.anchor = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'a';
-	this.parameters = ['href', 'child'];
+	this.parameters = ['href'];
 };
 lucid.html.builder.tags.anchor.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.anchor.prototype.constructor = lucid.html.builder.tags.anchor;
@@ -399,7 +400,7 @@ lucid.html.builder.tags.article.prototype.constructor = lucid.html.builder.tags.
 lucid.html.builder.tags.blockquote = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'blockquote';
-	this.parameters = ['cite', 'child'];
+	this.parameters = ['cite'];
 };
 lucid.html.builder.tags.blockquote.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.blockquote.prototype.constructor = lucid.html.builder.tags.blockquote;
@@ -447,7 +448,6 @@ lucid.html.builder.tags.caption.prototype.init=function(){
 lucid.html.builder.tags.cite = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'cite';
-	this.parameters = ['child'];
 };
 lucid.html.builder.tags.cite.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.cite.prototype.constructor = lucid.html.builder.tags.cite;
@@ -464,6 +464,22 @@ lucid.html.builder.tags.code.prototype.constructor = lucid.html.builder.tags.cod
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/code.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/column.js */
+lucid.html.builder.tags.column = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'col';
+};
+lucid.html.builder.tags.column.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.column.prototype.constructor = lucid.html.builder.tags.column;
+
+lucid.html.builder.tags.column.prototype.init=function(){
+	this.allowedAttributes.push('width');
+	this.allowedAttributes.push('span');
+	lucid.html.tag.prototype.init.apply(this);
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/column.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/columnGroup.js */
 lucid.html.builder.tags.columnGroup = function(){
 	lucid.html.tag.call(this);
@@ -473,6 +489,16 @@ lucid.html.builder.tags.columnGroup.prototype = Object.create(lucid.html.tag.pro
 lucid.html.builder.tags.columnGroup.prototype.constructor = lucid.html.builder.tags.columnGroup;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/columnGroup.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/definition.js */
+lucid.html.builder.tags.definition = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'dfn';
+};
+lucid.html.builder.tags.definition.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.definition.prototype.constructor = lucid.html.builder.tags.definition;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/definition.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/definitionDescription.js */
 lucid.html.builder.tags.definitionDescription = function(){
@@ -493,8 +519,8 @@ lucid.html.builder.tags.definitionList.prototype = Object.create(lucid.html.tag.
 lucid.html.builder.tags.definitionList.prototype.constructor = lucid.html.builder.tags.definitionList;
 
 lucid.html.builder.tags.definitionList.prototype.checkValidChild=function(child){
-	if (['dd', 'dl'].indexOf(child.tag) < 0) {
-		throw 'Invalid child. Tag dl only allows these tags as children: dd, dl';
+	if (['dd', 'dt'].indexOf(child.tag) < 0) {
+		throw 'Invalid child. Tag dl only allows these tags as children: dd, dt';
 	}
 };
 
@@ -714,15 +740,10 @@ lucid.html.builder.tags.italic.prototype.constructor = lucid.html.builder.tags.i
 lucid.html.builder.tags.label = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'label';
-	this.parameters = ['for', 'child'];
+	this.parameters = ['for'];
 };
 lucid.html.builder.tags.label.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.label.prototype.constructor = lucid.html.builder.tags.label;
-
-lucid.html.builder.tags.label.prototype.init=function(){
-	this.allowedAttributes.push('for');
-	lucid.html.tag.prototype.init.apply(this);
-};
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/label.js */
 

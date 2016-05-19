@@ -4,7 +4,7 @@ namespace Lucid\Html\Base\Tags;
 class anchor extends \Lucid\Html\Tag
 {
 	public $tag = 'a';
-	public $parameters = ['href', 'child'];
+	public $parameters = ['href'];
 
 	public function init()
 	{
@@ -13,10 +13,11 @@ class anchor extends \Lucid\Html\Tag
 		parent::init();
 	}
 
-	public function checkValidChild($child)
+	public function checkValidChild($child) : bool
 	{
 		if (in_array($child->tag, ['a']) === true) {
 			throw new \Exception('Invalid child. Tag a does not allow these tags as children: a');
 		}
+		return true;
 	}
 }

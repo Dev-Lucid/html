@@ -1,6 +1,6 @@
 {
     "tag":"a",
-    "parameters":["href", "child"],
+    "parameters":["href"],
     "allowedAttributes":["name", "target"],
     "disallowChildTags":["a"]
 }

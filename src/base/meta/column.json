@@ -1,0 +1,4 @@
+{
+    "tag":"col",
+    "allowedAttributes":["width", "span"]
+}

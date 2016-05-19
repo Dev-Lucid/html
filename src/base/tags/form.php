@@ -15,10 +15,11 @@ class form extends \Lucid\Html\Tag
 		parent::init();
 	}
 
-	public function checkValidChild($child)
+	public function checkValidChild($child) : bool
 	{
 		if (in_array($child->tag, ['form']) === true) {
 			throw new \Exception('Invalid child. Tag form does not allow these tags as children: form');
 		}
+		return true;
 	}
 }

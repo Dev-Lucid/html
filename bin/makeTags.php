@@ -66,7 +66,7 @@ function generatePHP($config)
     }
 
     if (isset($config['disallowChildTags']) === true || isset($config['allowChildTags']) === true) {
-        $src .= "\n\tpublic function checkValidChild($"."child)\n\t{\n";
+        $src .= "\n\tpublic function checkValidChild($"."child) : bool\n\t{\n";
 
         if (isset($config['disallowChildTags']) === true) {
             $src .= "\t\tif (in_array($"."child->tag, ['".implode("', '", $config['disallowChildTags'])."']) === true) {\n";
@@ -80,7 +80,7 @@ function generatePHP($config)
             $src .= "\t\t}\n";
         }
 
-        $src .= "\t}\n";
+        $src .= "\t\treturn true;\n\t}\n";
     }
 
     $src .= $config['additionalPHP'];

@@ -22,8 +22,12 @@ class BaseTagTest extends BaseTest
         $this->runTestWithParameters('abbreviation', 'abbr', ['title'=>'titleAbbr']);
         $this->runTestWithoutParameters('address');
         $this->runTestWithoutParameters('article');
+        $this->runTestWithoutParameters('aside');
+        $this->runTestWithParameters('base', 'base', ['href'=>'google.com', 'target'=>'something']);
         $this->runTestWithParameters('blockquote', 'blockquote', ['cite'=>'testcite']);
+        $this->runTestWithoutParameters('body');
         $this->runTestWithoutParameters('bold', 'b');
+        $this->runTestWithParameters('canvas', 'canvas', ['height'=>80, 'width'=>60]);
         $this->runTestWithSetCalls('caption', 'caption', ['align'=>'center']);
         $this->runTestWithoutParameters('cite');
         $this->runTestWithSetCalls('column', 'col', ['span'=>'3', 'class'=>'width-40']);

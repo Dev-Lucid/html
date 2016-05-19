@@ -72,6 +72,7 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('superscript', 'sup');
         $this->runTestWithoutParameters('tableBody', 'tbody');
         $this->runTestWithoutParameters('tableData', 'td');
+        #$this->runTestWithoutParameters('tableData', 'td');
         #$this->runTestWithoutParameters('tableFoot', 'tfoot');
         #$this->runTestWithoutParameters('tableHead', 'thead');
         $this->runTestWithoutParameters('tableHeader', 'th');
@@ -94,6 +95,19 @@ class BaseTagTest extends BaseTest
     {
         $output = '<hr />';
         $code = "\Lucid\Html\Html::build('hr')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+
+    public function test_table()
+    {
+        $output = '<table><thead><tr></tr></thead><tbody></tbody><tfoot><tr></tr></tfoot></table>';
+        $code = "\Lucid\Html\Html::build('table')->add(\Lucid\Html\Html::build('tableHead'))->add(\Lucid\Html\Html::build('tableBody'))->add(\Lucid\Html\Html::build('tableFoot'))->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<thead><tr><th>col1</th><th>col2</th></tr></thead>';
+        $code = "\Lucid\Html\Html::build('tableHead')->add(\Lucid\Html\Html::build('tableHeader', 'col1'))->add(\Lucid\Html\Html::build('tableHeader', 'col2'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }

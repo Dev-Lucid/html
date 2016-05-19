@@ -1,0 +1,4 @@
+{
+    "allowedAttributes":["cellpadding", "cellspacing", "border", "width", "sortable"],
+    "allowChildTags":["thead", "tfoot", "tbody", "tr"]
+}

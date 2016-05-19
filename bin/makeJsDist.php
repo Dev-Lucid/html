@@ -4,9 +4,11 @@ include(__DIR__.'/../vendor/autoload.php');
 
 $files = [
     'base'=>[
-        '/base/js/lucid.html.js',
-        '/base/js/lucid.html.builder.js',
-        '/tag.js',
+        '/lucid.html.js',
+        '/lucid.html.builder.js',
+        '/lucid.html.tag.js',
+        '/base/js/*.js',
+        '/base/traits/*.js',
         '/base/tags/*.js',
     ],
     'bootstrap'=>[

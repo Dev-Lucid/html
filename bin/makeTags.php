@@ -94,7 +94,7 @@ function generatePHP($config)
 
 function generateJavascript($config)
 {
-    $src = "lucid.html.builder.tags.".$config['name']." = function(){\n";
+    $src = "lucid.html.base.tags.".$config['name']." = function(){\n";
     $src .= "\tlucid.html.tag.call(this);\n";
 
     if (isset($config['tag']) === true) {
@@ -118,12 +118,13 @@ function generateJavascript($config)
 
     $src .= "};\n";
 
-    $src .= "lucid.html.builder.tags.".$config['name'].".prototype = Object.create(lucid.html.tag.prototype);\n";
-    $src .= "lucid.html.builder.tags.".$config['name'].".prototype.constructor = lucid.html.builder.tags.".$config['name'].";\n";
+    $src .= "lucid.html.base.tags.".$config['name'].".prototype = Object.create(lucid.html.tag.prototype);\n";
+    $src .= "lucid.html.base.tags.".$config['name'].".prototype.constructor = lucid.html.base.tags.".$config['name'].";\n";
+    $src .= "lucid.html.builder.tags.".$config['name']." = lucid.html.base.tags.".$config['name'].";\n";
     #$src .= "lucid.html.builder.tags.".$config['name'].".prototype = new lucid.html.tag();\n";
 
     if (isset($config['allowedAttributes']) === true) {
-        $src .= "\nlucid.html.builder.tags.".$config['name'].".prototype.init=function(){\n";
+        $src .= "\nlucid.html.base.tags.".$config['name'].".prototype.init=function(){\n";
 
         if (isset($config['allowedAttributes']) === true) {
             foreach($config['allowedAttributes'] as $attribute) {
@@ -135,7 +136,7 @@ function generateJavascript($config)
     }
 
     if (isset($config['disallowChildTags']) === true || isset($config['allowChildTags']) === true) {
-        $src .= "\nlucid.html.builder.tags.".$config['name'].".prototype.checkValidChild=function(child){\n";
+        $src .= "\nlucid.html.base.tags.".$config['name'].".prototype.checkValidChild=function(child){\n";
 
         if (isset($config['disallowChildTags']) === true) {
             $src .= "\tif (['".implode("', '", $config['disallowChildTags'])."'].indexOf(child.tag) >= 0) {\n";

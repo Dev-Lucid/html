@@ -19,13 +19,20 @@ lucid.html.tag = function(){
     this.preChildrenHtml  = '';
     this.postChildrenHtml = '';
 
-    this.traits = [];
-
     this.init();
 };
 
 // sort of a compatibility hack for php traits
-lucid.html.tag.prototype.addTrait=function(){
+lucid.html.tag.prototype.addTrait=function(newTrait){
+    for(var key in newTrait) {
+        if (key != 'traitInit') {
+            this[key] = newTrait[key];
+        }
+    }
+    if (typeof(newTrait.traitInit) == 'function') {
+        newTrait.traitInit.call(this);
+    }
+    return this;
 };
 
 lucid.html.tag.prototype.build=function(){

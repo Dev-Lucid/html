@@ -37,6 +37,35 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('insert', 'ins');
         $this->runTestWithoutParameters('italic', 'i');
         $this->runTestWithParameters('label', 'label', ['for'=>'testfor']);
+        $this->runTestWithoutParameters('legend');
+        $this->runTestWithoutParameters('listItem', 'li');
+        $this->runTestWithoutParameters('main');
+        $this->runTestWithoutParameters('mark');
+        $this->runTestWithSetCalls('menu', 'menu', ['type'=>'context', 'label'=>'mymenu']);
+        #$this->runTestWithSetCalls('menuitem', 'menuitem');
+        $this->runTestWithoutParameters('nav');
+        $this->runTestWithoutParameters('orderedList', 'ol');
+        $this->runTestWithoutParameters('paragraph', 'p');
+        $this->runTestWithoutParameters('preformatted', 'pre');
+        $this->runTestWithoutParameters('quote', 'q');
+        $this->runTestWithoutParameters('sample', 'samp');
+        $this->runTestWithoutParameters('section');
+        $this->runTestWithoutParameters('small');
+        $this->runTestWithoutParameters('span');
+        $this->runTestWithoutParameters('strikethrough', 's');
+        $this->runTestWithoutParameters('strong');
+        $this->runTestWithoutParameters('subscript', 'sub');
+        $this->runTestWithoutParameters('summary');
+        $this->runTestWithoutParameters('superscript', 'sup');
+        $this->runTestWithoutParameters('tableBody', 'tbody');
+        $this->runTestWithoutParameters('tableData', 'td');
+        #$this->runTestWithoutParameters('tableFoot', 'tfoot');
+        #$this->runTestWithoutParameters('tableHead', 'thead');
+        $this->runTestWithoutParameters('tableHeader', 'th');
+        $this->runTestWithoutParameters('tableRow', 'tr');
+        $this->runTestWithoutParameters('time', 'time');
+        $this->runTestWithoutParameters('underline', 'u');
+        $this->runTestWithoutParameters('unorderedList', 'ul');
     }
 
 

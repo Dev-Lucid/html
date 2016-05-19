@@ -1,4 +1,4 @@
 {
     "tag":"time",
-    "parameters":["datetime"]
+    "allowedAttributes":["datetime"]
 }

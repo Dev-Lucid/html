@@ -1,26 +1,21 @@
 lucid.html.tag = function(){
-    this.tag  = null;
+    this.tag = null;
     this.instantiatorName = null;
-
     this.attributes = {};
 
     // From here: http://www.w3schools.com/tags/ref_standardattributes.asp
     this.allowedAttributes = ['accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'hidden', 'id', 'lang', 'spellcheck', 'style', 'tabindex', 'title', 'translate'];
     this.parameters = ['child'];
-
     this.allowChildren   = true;
     this.allowQuickClose = false;
-
     this.children = [];
     this.parent   = null;
-
     this.preHtml  = '';
     this.postHtml = '';
     this.preChildrenHtml  = '';
     this.postChildrenHtml = '';
-
-    this.init();
 };
+
 
 // sort of a compatibility hack for php traits
 lucid.html.tag.prototype.addTrait=function(newTrait){
@@ -58,7 +53,7 @@ lucid.html.tag.prototype.set=function(name, value) {
         this['set'+key](value);
     } else {
         if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
-            throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + (this.allowedAttributes.concat(this.parameters).join(', '));
+            throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + ((this.allowedAttributes.concat(this.parameters)).join(', '));
         }
         this.attributes[name] = value;
     }

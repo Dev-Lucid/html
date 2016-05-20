@@ -4,5 +4,5 @@ if (typeof lucid == 'undefined') {
 lucid.html = {};
 
 lucid.html.build=function(){
-    return lucid.html.builder.build.apply(lucid.html.build, lucid.html.build.arguments);
+    return lucid.html.builder.build.apply(null, arguments);
 };

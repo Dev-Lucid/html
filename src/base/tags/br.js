@@ -5,5 +5,4 @@ lucid.html.base.tags.br = function(){
 	this.allowChildren = false;
 };
 lucid.html.base.tags.br.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.br.prototype.constructor = lucid.html.base.tags.br;
 lucid.html.builder.tags.br = lucid.html.base.tags.br;

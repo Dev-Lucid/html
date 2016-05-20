@@ -5,7 +5,6 @@ lucid.html.base.tags.tableHead = function(){
 	this.postChildrenHtml = '</tr>';
 };
 lucid.html.base.tags.tableHead.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.tableHead.prototype.constructor = lucid.html.base.tags.tableHead;
 lucid.html.builder.tags.tableHead = lucid.html.base.tags.tableHead;
 
 lucid.html.base.tags.tableHead.prototype.checkValidChild=function(child){

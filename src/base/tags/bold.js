@@ -3,5 +3,4 @@ lucid.html.base.tags.bold = function(){
 	this.tag = 'b';
 };
 lucid.html.base.tags.bold.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.bold.prototype.constructor = lucid.html.base.tags.bold;
 lucid.html.builder.tags.bold = lucid.html.base.tags.bold;

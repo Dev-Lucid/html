@@ -3,7 +3,6 @@ lucid.html.base.tags.orderedList = function(){
 	this.tag = 'ol';
 };
 lucid.html.base.tags.orderedList.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.orderedList.prototype.constructor = lucid.html.base.tags.orderedList;
 lucid.html.builder.tags.orderedList = lucid.html.base.tags.orderedList;
 
 lucid.html.base.tags.orderedList.prototype.checkValidChild=function(child){

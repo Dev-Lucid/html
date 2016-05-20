@@ -1,0 +1,4 @@
+{
+    "tag":"datalist",
+    "allowChildTags":["option"]
+}

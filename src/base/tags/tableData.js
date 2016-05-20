@@ -1,16 +1,11 @@
 lucid.html.base.tags.tableData = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'td';
-};
-lucid.html.base.tags.tableData.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.tableData.prototype.constructor = lucid.html.base.tags.tableData;
-lucid.html.builder.tags.tableData = lucid.html.base.tags.tableData;
-
-lucid.html.base.tags.tableData.prototype.init=function(){
 	this.allowedAttributes.push('rowspan');
 	this.allowedAttributes.push('colspan');
-	lucid.html.tag.prototype.init.apply(this);
 };
+lucid.html.base.tags.tableData.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.tableData = lucid.html.base.tags.tableData;
 
 lucid.html.base.tags.tableData.prototype.checkValidChild=function(child){
 	if (['th', 'td', 'tr'].indexOf(child.tag) >= 0) {

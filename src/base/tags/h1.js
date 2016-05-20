@@ -3,5 +3,4 @@ lucid.html.base.tags.h1 = function(){
 	this.tag = 'h1';
 };
 lucid.html.base.tags.h1.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.h1.prototype.constructor = lucid.html.base.tags.h1;
 lucid.html.builder.tags.h1 = lucid.html.base.tags.h1;

@@ -6,5 +6,4 @@ lucid.html.base.tags.image = function(){
 	this.allowChildren = false;
 };
 lucid.html.base.tags.image.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.image.prototype.constructor = lucid.html.base.tags.image;
 lucid.html.builder.tags.image = lucid.html.base.tags.image;

@@ -3,7 +3,6 @@ lucid.html.base.tags.definitionList = function(){
 	this.tag = 'dl';
 };
 lucid.html.base.tags.definitionList.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.definitionList.prototype.constructor = lucid.html.base.tags.definitionList;
 lucid.html.builder.tags.definitionList = lucid.html.base.tags.definitionList;
 
 lucid.html.base.tags.definitionList.prototype.checkValidChild=function(child){

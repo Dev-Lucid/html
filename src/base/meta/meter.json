@@ -1,0 +1,3 @@
+{
+    "allowedAttributes":["form", "high", "low", "max", "min", "optimum", "value"]
+}

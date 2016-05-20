@@ -4,5 +4,4 @@ lucid.html.base.tags.blockquote = function(){
 	this.parameters = ['cite'];
 };
 lucid.html.base.tags.blockquote.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.blockquote.prototype.constructor = lucid.html.base.tags.blockquote;
 lucid.html.builder.tags.blockquote = lucid.html.base.tags.blockquote;

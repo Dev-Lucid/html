@@ -3,7 +3,6 @@ lucid.html.base.tags.tableBody = function(){
 	this.tag = 'tbody';
 };
 lucid.html.base.tags.tableBody.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.tableBody.prototype.constructor = lucid.html.base.tags.tableBody;
 lucid.html.builder.tags.tableBody = lucid.html.base.tags.tableBody;
 
 lucid.html.base.tags.tableBody.prototype.checkValidChild=function(child){

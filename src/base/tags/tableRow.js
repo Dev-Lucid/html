@@ -3,7 +3,6 @@ lucid.html.base.tags.tableRow = function(){
 	this.tag = 'tr';
 };
 lucid.html.base.tags.tableRow.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.tableRow.prototype.constructor = lucid.html.base.tags.tableRow;
 lucid.html.builder.tags.tableRow = lucid.html.base.tags.tableRow;
 
 lucid.html.base.tags.tableRow.prototype.checkValidChild=function(child){

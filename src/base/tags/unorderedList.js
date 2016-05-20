@@ -3,7 +3,6 @@ lucid.html.base.tags.unorderedList = function(){
 	this.tag = 'ul';
 };
 lucid.html.base.tags.unorderedList.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.base.tags.unorderedList.prototype.constructor = lucid.html.base.tags.unorderedList;
 lucid.html.builder.tags.unorderedList = lucid.html.base.tags.unorderedList;
 
 lucid.html.base.tags.unorderedList.prototype.checkValidChild=function(child){

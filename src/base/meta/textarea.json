@@ -1,0 +1,4 @@
+{
+    "parameters":["name", "rows", "cols"],
+    "traits":["Lucid\\Html\\Base\\Traits\\Disableable"]
+}

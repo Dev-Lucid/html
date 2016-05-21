@@ -1,15 +1,16 @@
 #!/usr/bin/env sh
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-php -f $DIR/makeTags.php
-if [ $? -ne 0 ]; then
-    echo "Failed to make tags"
-    exit
-fi
+
+$DIR/makeAllTags $DIR/../src/base/meta
+
 
 php -f $DIR/makeJsDist.php
 if [ $? -ne 0 ]; then
     echo "Failed to build distribution js"
+    exit
+fi
+if [ $? -ne 0 ]; then
     exit
 fi
 

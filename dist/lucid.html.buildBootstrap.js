@@ -95,7 +95,11 @@ lucid.html.tag.prototype.set=function(name, value) {
         if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
             throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + ((this.allowedAttributes.concat(this.parameters)).join(', '));
         }
-        this.attributes[name] = value;
+        if (typeof(this[name]) == 'undefined') {
+            this.attributes[name] = value;
+        } else {
+            this[name] = value;
+        }
     }
     return this;
 };
@@ -105,8 +109,12 @@ lucid.html.tag.prototype.get=function(name){
     if (typeof(this['get'+key]) == 'function') {
         return this['get'+key]();
     } else {
-        if (typeof(this.attributes[name]) !== 'undefined') {
-            return this.attributes[name];
+        if (typeof(this[name]) == 'undefined') {
+            if (typeof(this.attributes[name]) !== 'undefined') {
+                return this.attributes[name];
+            }
+        } else {
+            return this[name];
         }
         return null;
     }
@@ -959,6 +967,34 @@ lucid.html.builder.tags.nav = lucid.html.base.tags.nav;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/nav.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/option.js */
+lucid.html.base.tags.option = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'option';
+	this.parameters = ['value', 'child', 'selected'];
+};
+lucid.html.base.tags.option.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.option = lucid.html.base.tags.option;
+
+lucid.html.base.tags.option.prototype.setSelected=function(val) {
+    if (this.parent !== null) {
+        for(var i=0; i<this.parent.children.length; i++) {
+            if (typeof(this.parent.children[i].attributes.selected) != 'undefined') {
+                delete this.parent.children[i].attributes.selected;
+            }
+        }
+    }
+    if (val === true) {
+        this.attributes.selected = 'selected';
+    }
+};
+
+lucid.html.base.tags.option.prototype.getSelected=function(){
+    return (typeof(this.attributes.selected) == 'undefined')?false:true;
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/option.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/orderedList.js */
 lucid.html.base.tags.orderedList = function(){
 	lucid.html.tag.call(this);
@@ -1246,6 +1282,36 @@ lucid.html.base.tags.tableRow.prototype.checkValidChild=function(child){
 };
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/tableRow.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/textarea.js */
+lucid.html.base.tags.textarea = function(){
+	lucid.html.tag.call(this);
+	this.addTrait(lucid.html.base.traits.Disableable);
+
+	this.tag = 'textarea';
+	this.parameters = ['name', 'rows', 'cols'];
+};
+lucid.html.base.tags.textarea.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.textarea = lucid.html.base.tags.textarea;
+
+lucid.html.base.tags.textarea.prototype.setValue=function(newValue){
+    if (this.children.length === 0){
+        this.add(newValue);
+    } else {
+        this.children = [];
+        this.add(newValue);
+    }
+    return this;
+};
+
+lucid.html.base.tags.textarea.prototype.getValue=function(){
+    if (this.children.length === 0){
+        return '';
+    } else {
+        return this.renderChildren();
+    }
+};
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/textarea.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/time.js */
 lucid.html.base.tags.time = function(){

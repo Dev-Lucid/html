@@ -55,7 +55,11 @@ lucid.html.tag.prototype.set=function(name, value) {
         if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
             throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + ((this.allowedAttributes.concat(this.parameters)).join(', '));
         }
-        this.attributes[name] = value;
+        if (typeof(this[name]) == 'undefined') {
+            this.attributes[name] = value;
+        } else {
+            this[name] = value;
+        }
     }
     return this;
 };
@@ -65,8 +69,12 @@ lucid.html.tag.prototype.get=function(name){
     if (typeof(this['get'+key]) == 'function') {
         return this['get'+key]();
     } else {
-        if (typeof(this.attributes[name]) !== 'undefined') {
-            return this.attributes[name];
+        if (typeof(this[name]) == 'undefined') {
+            if (typeof(this.attributes[name]) !== 'undefined') {
+                return this.attributes[name];
+            }
+        } else {
+            return this[name];
         }
         return null;
     }

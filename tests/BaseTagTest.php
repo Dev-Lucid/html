@@ -87,6 +87,57 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('underline', 'u');
         $this->runTestWithoutParameters('unorderedList', 'ul');
     }
+    
+    public function test_textarea()
+    {
+        $this->runTestWithParameters('textarea', 'textarea', ['name'=>'textarea1', 'rows'=>4, 'cols'=>80,]);
+
+        $output = '<textarea cols="80">hiya</textarea>';
+        $code = "\Lucid\Html\Html::build('textarea')->set('cols', 80)->set('value', 'hiya')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+
+        $output = '<textarea cols="80">hiya2</textarea>';
+        $code = "\Lucid\Html\Html::build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = 'hiya2';
+        $code = "\Lucid\Html\Html::build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->get('value')";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+        
+        $output = '<textarea disabled="disabled"></textarea>';
+        $code = "\Lucid\Html\Html::build('textarea')->set('disabled', true)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+        
+        $output = '<textarea>hiya</textarea>';
+        $code = "\Lucid\Html\Html::build('textarea')->set('disabled', true)->set('disabled', false)->set('value', 'hiya')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
+    public function test_option()
+    {
+        /*
+        $output = '<option value="1">test1</option>';
+        $code = "\Lucid\Html\Html::build('option', 1, 'test1')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+        */
+
+        $output = '<option value="2" selected="selected">test2</option>';
+        $code = "\Lucid\Html\Html::build('option', 2, 'test2', true)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<option value="3">test3</option>';
+        $code = "\Lucid\Html\Html::build('option', 3, 'test3', false)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 
 
     public function test_br()

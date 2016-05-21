@@ -214,7 +214,11 @@ class Tag
         if (in_array($name, $this->allowedAttributes) === false && in_array($name, $this->parameters) === false) {
             throw new \Exception('Invalid attribute '.$name.'. Tag '.$this->tag.' only allows these attributes: ' . (implode(', ', $this->allowedAttributes) .', '. implode(', ', $this->parameters)));
         }
-        $this->attributes[$name] = $value;
+        if (property_exists($this, $name) === true) {
+            $this->$name = $value;
+        } else {
+            $this->attributes[$name] = $value;
+        }
         return $this;
     }
 
@@ -224,7 +228,9 @@ class Tag
         if (method_exists($this, $getter) === true) {
             return $this->$getter($name);
         }
-        if (isset($this->attributes[$name]) === true) {
+        if (property_exists($this, $name) === true) {
+            return $this->$name;
+        } elseif (isset($this->attributes[$name]) === true) {
             return $this->attributes[$name];
         }
         return null;

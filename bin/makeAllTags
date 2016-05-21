@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+
+for f in $1/*.json; do
+ $DIR/makeTagJavascript.php $f
+ if [ $? -ne 0 ]; then
+     echo "JS tag failed to build: $f"
+     exit 1
+ fi
+ $DIR/makeTagPHP.php $f
+ if [ $? -ne 0 ]; then
+     echo "PHP tag failed to build: $f"
+     exit 1
+ fi
+done

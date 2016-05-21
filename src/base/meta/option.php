@@ -1,10 +1,3 @@
-<?php
-namespace Lucid\Html\Base\Tags;
-
-class option extends \Lucid\Html\Tag
-{
-	public $tag = 'option';
-	public $parameters = ['value', 'child', 'selected'];
 
     public function setSelected($val)
     {
@@ -21,4 +14,3 @@ class option extends \Lucid\Html\Tag
     {
         return (isset($this->attributes['selected']) === true && $this->attributes['selected'] == 'selected');
     }
-}

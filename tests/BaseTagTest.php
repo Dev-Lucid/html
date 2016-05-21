@@ -7,12 +7,12 @@ class BaseTagTest extends BaseTest
     public function testClassFunctions()
     {
         $output = '<span class="testClass1 testClass3">testClassFunctions</span>';
-        $code = "\Lucid\Html\Html::build('span','testClassFunctions')->addClass('testClass1')->addClass('testClass2')->addClass('testClass3')->removeClass('testClass2')->render()";
+        $code = "@build('span','testClassFunctions')->addClass('testClass1')->addClass('testClass2')->addClass('testClass3')->removeClass('testClass2')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
         $output = '<span class="testClass1">testClassFunctions</span>';
-        $code = "\Lucid\Html\Html::build('span','testClassFunctions')->addClass('testClass1')->addClass('testClass2')->toggleClass('testClass2')->render()";
+        $code = "@build('span','testClassFunctions')->addClass('testClass1')->addClass('testClass2')->toggleClass('testClass2')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -95,28 +95,28 @@ class BaseTagTest extends BaseTest
         $this->runTestWithParameters('textarea', 'textarea', ['name'=>'textarea1', 'rows'=>4, 'cols'=>80,]);
 
         $output = '<textarea cols="80">hiya</textarea>';
-        $code = "\Lucid\Html\Html::build('textarea')->set('cols', 80)->set('value', 'hiya')->render()";
+        $code = "@build('textarea')->set('cols', 80)->set('value', 'hiya')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
 
         $output = '<textarea cols="80">hiya2</textarea>';
-        $code = "\Lucid\Html\Html::build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->render()";
+        $code = "@build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
         $output = 'hiya2';
-        $code = "\Lucid\Html\Html::build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->get('value')";
+        $code = "@build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->get('value')";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
         
         $output = '<textarea disabled="disabled"></textarea>';
-        $code = "\Lucid\Html\Html::build('textarea')->set('disabled', true)->render()";
+        $code = "@build('textarea')->set('disabled', true)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
         
         $output = '<textarea>hiya</textarea>';
-        $code = "\Lucid\Html\Html::build('textarea')->set('disabled', true)->set('disabled', false)->set('value', 'hiya')->render()";
+        $code = "@build('textarea')->set('disabled', true)->set('disabled', false)->set('value', 'hiya')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -125,18 +125,18 @@ class BaseTagTest extends BaseTest
     {
         /*
         $output = '<option value="1">test1</option>';
-        $code = "\Lucid\Html\Html::build('option', 1, 'test1')->render()";
+        $code = "@build('option', 1, 'test1')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
         */
 
         $output = '<option value="2" selected="selected">test2</option>';
-        $code = "\Lucid\Html\Html::build('option', 2, 'test2', true)->render()";
+        $code = "@build('option', 2, 'test2', true)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
         $output = '<option value="3">test3</option>';
-        $code = "\Lucid\Html\Html::build('option', 3, 'test3', false)->render()";
+        $code = "@build('option', 3, 'test3', false)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -144,14 +144,14 @@ class BaseTagTest extends BaseTest
     public function test_select()
     {
         $output = '<select name="myselect"><option value="1">test1</option><option value="2" selected="selected">test2</option></select>';
-        $code = "\Lucid\Html\Html::build('select', 'myselect', 2)->add(\Lucid\Html\Html::build('option', 1, 'test1'))->add(\Lucid\Html\Html::build('option', 2, 'test2'))->render()";
+        $code = "@build('select', 'myselect', 2)->add(@build('option', 1, 'test1'))->add(@build('option', 2, 'test2'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
         $output = '<select name="myselect"><option value="1">test1</option><option value="2" selected="selected">test2</option></select>';
-        $code = "\Lucid\Html\Html::build('select', 'myselect', 2)->set('data', [{'label'=>'test1','value'=>1},{'label'=>'test2','value'=>2}])->render()";
+        $code = "@build('select', 'myselect', 2)->set('data', #[@['label'=>'test1','value'=>1]@,@['label'=>'test2','value'=>2]@]#)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code, ['{'=>'[','}'=>']']));
+        $this->assertEquals($output, $this->runAsPHP($code));
 
     }
 
@@ -159,7 +159,7 @@ class BaseTagTest extends BaseTest
     public function test_br()
     {
         $output = '<br />';
-        $code = "\Lucid\Html\Html::build('br')->render()";
+        $code = "@build('br')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -167,7 +167,7 @@ class BaseTagTest extends BaseTest
     public function test_hr()
     {
         $output = '<hr />';
-        $code = "\Lucid\Html\Html::build('hr')->render()";
+        $code = "@build('hr')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -177,13 +177,13 @@ class BaseTagTest extends BaseTest
     {
 
         $output = '<table><thead><tr></tr></thead><tbody></tbody><tfoot><tr></tr></tfoot></table>';
-        $code = "\Lucid\Html\Html::build('table')->add(\Lucid\Html\Html::build('tableHead'))->add(\Lucid\Html\Html::build('tableBody'))->add(\Lucid\Html\Html::build('tableFoot'))->render()";
+        $code = "@build('table')->add(@build('tableHead'))->add(@build('tableBody'))->add(@build('tableFoot'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
 
         $output = '<thead><tr><th>col1</th><th>col2</th></tr></thead>';
-        $code = "\Lucid\Html\Html::build('tableHead')->add(\Lucid\Html\Html::build('tableHeader', 'col1'))->add(\Lucid\Html\Html::build('tableHeader', 'col2'))->render()";
+        $code = "@build('tableHead')->add(@build('tableHeader', 'col1'))->add(@build('tableHeader', 'col2'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -195,7 +195,7 @@ class BaseTagTest extends BaseTest
     {
         $output = '<dl><dt>term</dt><dd>description</dd></dl>';
 
-        $code = "\Lucid\Html\Html::build('definitionList', \Lucid\Html\Html::build('definitionTerm', 'term'), \Lucid\Html\Html::build('definitionDescription', 'description'))->render()";
+        $code = "@build('definitionList', @build('definitionTerm', 'term'), @build('definitionDescription', 'description'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }

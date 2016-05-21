@@ -2,36 +2,51 @@
 
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
-
-    public function runAsJs(string $php, array $searchReplace = [])
+    
+    public function translateMetaCode(string $metaCode, string $language) : string
     {
+        $translators = [
+            '$' => [ 'php'=>null, 'js'=>'', ],
+            '->' => [ 'php'=>null, 'js'=>'.', ],
+            '=>' => [ 'php'=>null, 'js'=>':', ],
+            '@[' => [ 'php'=>'[', 'js'=>'{', ],
+            ']@' => [ 'php'=>']', 'js'=>'}', ],
+            '#[' => [ 'php'=>'[', 'js'=>'[', ],
+            ']#' => [ 'php'=>']', 'js'=>']', ],
+            '@build'=> ['php'=>'\\Lucid\\Html\\Html::build', 'js'=>'lucid.html.build'],
+        ];
+        
+        foreach ($translators as $meta=>$final ){
+            $final = $final[$language];
+            
+            if (is_null($final) === false) {
+                $metaCode = str_replace($meta, $final, $metaCode);
+            }
+        }
+        return $metaCode;
+    }
+    
+    public function runAsJs(string $metaCode, array $searchReplace = [])
+    {
+        $metaCode = $this->translateMetaCode($metaCode, 'js');
         foreach ($searchReplace as $key=>$value) {
-            $php = str_replace($key, $value, $php);
+            $metaCode = str_replace($key, $value, $metaCode);
         }
         $finalSrc = '( cat '.__DIR__.'/../dist/lucid.html.buildBaseTagsOnly.js ;  echo "console.log(';
-        $finalSrc .= $this->convertFromPHPToJavascript($php);
+        $finalSrc .= $metaCode;
         $finalSrc .= ');") | node';
 
 
         return trim(shell_exec($finalSrc));
     }
 
-    public function runAsPHP(string $php, array $searchReplace = [])
+    public function runAsPHP(string $metaCode, array $searchReplace = [])
     {
+        $php = $this->translateMetaCode($metaCode, 'php');
         foreach ($searchReplace as $key=>$value) {
             $php = str_replace($key, $value, $php);
         }
         return trim(eval('return '.$php.';'));
-    }
-
-    public function convertFromPHPToJavascript(string $php) : string
-    {
-        $js = str_replace('$', '', $php);
-        $js = str_replace('->', '.', $js);
-        $js = str_replace('=>', ':', $js);
-        $js = str_replace('\\Lucid\\Html\\Html::build', 'lucid.html.build', $js);
-
-        return $js;
     }
 
     public function runTestWithoutParameters(string $className, string $tagName=null)
@@ -42,7 +57,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         $output = '<'.$tagName.'>hiya</'.$tagName.'>';
 
-        $code = "\Lucid\Html\Html::build('".$className."', 'hiya')->render()";
+        $code = "@build('".$className."', 'hiya')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -62,9 +77,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         $output = '<'.$tagName.$attrs.'>'.$className.'</'.$tagName.'>';
 
-        $code = "\Lucid\Html\Html::build('$className', $code '$className')->render()";
-        $this->assertEquals($output, $this->runAsJs($code));
-        $this->assertEquals($output, $this->runAsPHP($code));
+        $metaCode = "@build('$className', $code '$className')->render()";
+        $this->assertEquals($output, $this->runAsJs($metaCode));
+        $this->assertEquals($output, $this->runAsPHP($metaCode));
     }
 
     public function runTestWithSetCalls(string $className, string $tagName=null, array $setters=[])
@@ -82,7 +97,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         $output = '<'.$tagName.$attrs.'>'.$className.'</'.$tagName.'>';
 
-        $code = "\Lucid\Html\Html::build('$className')".$code."->add('$className')->render()";
+        $code = "@build('$className')".$code."->add('$className')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }

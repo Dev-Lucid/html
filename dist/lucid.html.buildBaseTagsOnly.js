@@ -805,6 +805,22 @@ lucid.html.builder.tags.h6 = lucid.html.base.tags.h6;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/h6.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/head.js */
+lucid.html.base.tags.head = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'head';
+};
+lucid.html.base.tags.head.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.head = lucid.html.base.tags.head;
+
+lucid.html.base.tags.head.prototype.checkValidChild=function(child){
+	if (['title', 'link', 'script', 'base', 'meta', 'style'].indexOf(child.tag) < 0) {
+		throw 'Invalid child. Tag head only allows these tags as children: title, link, script, base, meta, style';
+	}
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/head.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/header.js */
 lucid.html.base.tags.header = function(){
 	lucid.html.tag.call(this);
@@ -1165,6 +1181,19 @@ lucid.html.base.tags.strong.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.strong = lucid.html.base.tags.strong;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/strong.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/style.js */
+lucid.html.base.tags.style = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'style';
+	this.allowedAttributes.push('scoped');
+	this.allowedAttributes.push('type');
+	this.parameters = ['media'];
+};
+lucid.html.base.tags.style.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.style = lucid.html.base.tags.style;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/style.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/subscript.js */
 lucid.html.base.tags.subscript = function(){

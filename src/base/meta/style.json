@@ -1,0 +1,4 @@
+{
+    "parameters":["media"],
+    "allowedAttributes":["scoped", "type"]
+}

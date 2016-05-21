@@ -52,6 +52,7 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('h4');
         $this->runTestWithoutParameters('h5');
         $this->runTestWithoutParameters('h6');
+        $this->runTestWithoutParameters('head');
         $this->runTestWithoutParameters('header');
         $this->runTestWithoutParameters('insert', 'ins');
         $this->runTestWithoutParameters('italic', 'i');
@@ -73,6 +74,7 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('span');
         $this->runTestWithoutParameters('strikethrough', 's');
         $this->runTestWithoutParameters('strong');
+        $this->runTestWithParameters('style', 'style', ['media'=>'print']);
         $this->runTestWithoutParameters('subscript', 'sub');
         $this->runTestWithoutParameters('summary');
         $this->runTestWithoutParameters('superscript', 'sup');

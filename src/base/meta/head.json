@@ -1,0 +1,3 @@
+{
+    "allowChildTags":["title", "link", "script", "base", "meta", "style"]
+}

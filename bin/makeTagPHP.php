@@ -50,6 +50,12 @@ function generatePHP($config)
     if (isset($config['postChildrenHtml']) === true) {
         $src .= "\tpublic $"."postChildrenHtml = '".$config['postChildrenHtml']."';\n";
     }
+    
+    if (isset($config['properties']) === true) {
+        foreach ($config['properties'] as $name=>$value) {
+            $src .= "\tpublic \$$name = $value;\n";
+        }
+    }
 
     if (isset($config['allowedAttributes']) === true) {
         $src .= "\n\tpublic function init()\n\t{\n";

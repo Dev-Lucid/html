@@ -61,6 +61,11 @@ function generateJavascript($config)
     if (isset($config['postChildrenHtml']) === true) {
         $src .= "\tthis.postChildrenHtml = '".$config['postChildrenHtml']."';\n";
     }
+    if (isset($config['properties']) === true) {
+        foreach ($config['properties'] as $name=>$value) {
+            $src .= "\tthis.$name = $value;\n";
+        }
+    }
 
     $src .= "};\n";
 

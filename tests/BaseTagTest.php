@@ -138,6 +138,20 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
+    
+    public function test_select()
+    {
+        $output = '<select name="myselect"><option value="1">test1</option><option value="2" selected="selected">test2</option></select>';
+        $code = "\Lucid\Html\Html::build('select', 'myselect', 2)->add(\Lucid\Html\Html::build('option', 1, 'test1'))->add(\Lucid\Html\Html::build('option', 2, 'test2'))->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<select name="myselect"><option value="1">test1</option><option value="2" selected="selected">test2</option></select>';
+        $code = "\Lucid\Html\Html::build('select', 'myselect', 2)->set('data', [{'label'=>'test1','value'=>1},{'label'=>'test2','value'=>2}])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code, ['{'=>'[','}'=>']']));
+
+    }
 
 
     public function test_br()

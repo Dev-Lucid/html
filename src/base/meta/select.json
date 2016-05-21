@@ -1,0 +1,8 @@
+{
+    "parameters":["name", "value", "data", "onchange"],
+    "allowChildTags":["option", "optgroup"],
+    "properties":{
+        "data":"null",
+        "value":"null"
+    }
+}

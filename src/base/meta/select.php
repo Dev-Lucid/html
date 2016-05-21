@@ -1,20 +1,3 @@
-<?php
-namespace Lucid\Html\Base\Tags;
-
-class select extends \Lucid\Html\Tag
-{
-	public $tag = 'select';
-	public $parameters = ['name', 'value', 'data', 'onchange'];
-	public $data = null;
-	public $value = null;
-
-	public function checkValidChild($child) : bool
-	{
-		if (in_array($child->tag, ['option', 'optgroup']) !== true) {
-			throw new \Exception('Invalid child. Tag select only allows these tags as children: option, optgroup');
-		}
-		return true;
-	}
     
     public function preRender()
     {
@@ -53,4 +36,4 @@ class select extends \Lucid\Html\Tag
         }
         return $this;
     }
-    }
+    

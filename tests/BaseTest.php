@@ -3,9 +3,11 @@
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
 
-    public function runAsJs(string $php)
+    public function runAsJs(string $php, array $searchReplace = [])
     {
-
+        foreach ($searchReplace as $key=>$value) {
+            $php = str_replace($key, $value, $php);
+        }
         $finalSrc = '( cat '.__DIR__.'/../dist/lucid.html.buildBaseTagsOnly.js ;  echo "console.log(';
         $finalSrc .= $this->convertFromPHPToJavascript($php);
         $finalSrc .= ');") | node';
@@ -14,8 +16,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         return trim(shell_exec($finalSrc));
     }
 
-    public function runAsPHP(string $php)
+    public function runAsPHP(string $php, array $searchReplace = [])
     {
+        foreach ($searchReplace as $key=>$value) {
+            $php = str_replace($key, $value, $php);
+        }
         return trim(eval('return '.$php.';'));
     }
 
@@ -23,6 +28,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         $js = str_replace('$', '', $php);
         $js = str_replace('->', '.', $js);
+        $js = str_replace('=>', ':', $js);
         $js = str_replace('\\Lucid\\Html\\Html::build', 'lucid.html.build', $js);
 
         return $js;

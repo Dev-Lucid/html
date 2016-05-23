@@ -15,6 +15,11 @@ $config['additionalJs'] = (file_exists($additionalJs) === true)?file_get_content
 $config['outputFile'] = $dir.'/'.$config['name'];
 $config['namespace'] = "Lucid\Html\Base\Tags";
 
+if (isset($config['inheritFrom']) === false) {
+    $config['inheritFrom'] = 'Lucid\\Html\\Tag';
+}
+$config['inheritFrom'] = strtolower($config['inheritFrom']);
+$config['inheritFrom'] = str_replace('\\', '.', $config['inheritFrom']);
 
 $files = glob(__DIR__.'/../src/base/meta/*.json');
 echo("\tBuilding JS for ".str_pad($config['name'], 27, ".", STR_PAD_RIGHT));
@@ -24,7 +29,7 @@ echo("★\n");
 function generateJavascript($config)
 {
     $src = "lucid.html.base.tags.".$config['name']." = function(){\n";
-    $src .= "\tlucid.html.tag.call(this);\n";
+    $src .= "\t".$config['inheritFrom'].".call(this);\n";
     
     if (isset($config['traits']) === true) {
         foreach ($config['traits'] as $trait) {
@@ -66,10 +71,19 @@ function generateJavascript($config)
             $src .= "\tthis.$name = $value;\n";
         }
     }
+    
+    if (isset($config['attributes']) === true) {
+        foreach ($config['attributes'] as $name=>$value) {
+            $src .= "\tthis.attributes['$name'] = $value;\n";
+        }
+    }
+
 
     $src .= "};\n";
 
-    $src .= "lucid.html.base.tags.".$config['name'].".prototype = Object.create(lucid.html.tag.prototype);\n";
+
+    
+    $src .= "lucid.html.base.tags.".$config['name'].".prototype = Object.create(".$config['inheritFrom'].".prototype);\n";
     #$src .= "lucid.html.base.tags.".$config['name'].".prototype.constructor = lucid.html.base.tags.".$config['name'].";\n";
     $src .= "lucid.html.builder.tags.".$config['name']." = lucid.html.base.tags.".$config['name'].";\n";
     #$src .= "lucid.html.builder.tags.".$config['name'].".prototype = new lucid.html.tag();\n";

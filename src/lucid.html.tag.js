@@ -16,6 +16,10 @@ lucid.html.tag = function(){
     this.postChildrenHtml = '';
 };
 
+lucid.html.tag.prototype.checkValidChild=function(child){
+    return true;
+};
+
 
 // sort of a compatibility hack for php traits
 lucid.html.tag.prototype.addTrait=function(newTrait){

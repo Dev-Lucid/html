@@ -1,12 +1,12 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class textarea extends \Lucid\Html\Tag
+class textarea extends \Lucid\Html\Base\Tags\input
 {
-	use \Lucid\Html\Base\Traits\Disableable;
-
 	public $tag = 'textarea';
 	public $parameters = ['name', 'rows', 'cols'];
+	public $allowQuickClose = false;
+	public $allowChildren = true;
 
     public function setValue($newValue) 
     {

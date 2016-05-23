@@ -1,0 +1,5 @@
+{
+    "traits":["Lucid\\Html\\Base\\Traits\\Disableable"],
+    "allowQuickClose":true,
+    "allowChildren":false
+}

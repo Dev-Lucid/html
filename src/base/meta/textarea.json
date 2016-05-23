@@ -1,4 +1,6 @@
 {
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\input",
     "parameters":["name", "rows", "cols"],
-    "traits":["Lucid\\Html\\Base\\Traits\\Disableable"]
+    "allowChildren":true,
+    "allowQuickClose":false
 }

@@ -154,6 +154,22 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
 
     }
+    
+    public function test_inputCheckbox()
+    {
+        $output = '<input type="checkbox" name="testCheck" checked="checked" value="on" />hiya';
+        $code = "@build('inputCheckbox', 'testCheck', true, 'hiya')->set('value', 'on')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
+    public function test_inputRadio()
+    {
+        $output = '<input type="radio" name="testRadio" value="1" checked="checked" />hiya';
+        $code = "@build('inputRadio', 'testRadio', 1, true, 'hiya')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 
 
     public function test_br()

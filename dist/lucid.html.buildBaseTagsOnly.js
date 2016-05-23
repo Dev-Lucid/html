@@ -56,6 +56,10 @@ lucid.html.tag = function(){
     this.postChildrenHtml = '';
 };
 
+lucid.html.tag.prototype.checkValidChild=function(child){
+    return true;
+};
+
 
 // sort of a compatibility hack for php traits
 lucid.html.tag.prototype.addTrait=function(newTrait){
@@ -856,6 +860,49 @@ lucid.html.builder.tags.image = lucid.html.base.tags.image;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/image.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/input.js */
+lucid.html.base.tags.input = function(){
+	lucid.html.tag.call(this);
+	this.addTrait(lucid.html.base.traits.Disableable);
+
+	this.tag = 'input';
+	this.allowQuickClose = true;
+	this.allowChildren = false;
+};
+lucid.html.base.tags.input.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.input = lucid.html.base.tags.input;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/input.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputCheckbox.js */
+lucid.html.base.tags.inputCheckbox = function(){
+	lucid.html.base.tags.input.call(this);
+	this.addTrait(lucid.html.base.traits.Checkable);
+
+	this.tag = 'input';
+	this.allowedAttributes.push('value');
+	this.parameters = ['name', 'checked', 'postHtml'];
+	this.attributes['type'] = 'checkbox';
+};
+lucid.html.base.tags.inputCheckbox.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputCheckbox = lucid.html.base.tags.inputCheckbox;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputCheckbox.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputRadio.js */
+lucid.html.base.tags.inputRadio = function(){
+	lucid.html.base.tags.input.call(this);
+	this.addTrait(lucid.html.base.traits.Checkable);
+
+	this.tag = 'input';
+	this.parameters = ['name', 'value', 'checked', 'postHtml'];
+	this.attributes['type'] = 'radio';
+};
+lucid.html.base.tags.inputRadio.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputRadio = lucid.html.base.tags.inputRadio;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputRadio.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/insert.js */
 lucid.html.base.tags.insert = function(){
 	lucid.html.tag.call(this);
@@ -1278,7 +1325,7 @@ lucid.html.base.tags.tableData.prototype.checkValidChild=function(child){
 	}
 };
 
-lucid.html.builder.tags.tableData.prototype.render_colspan=function(child){
+lucid.html.builder.tags.tableData.prototype.renderColspan=function(child){
     var value = parseInt(this.attributes.colspan);
 	if (value == 1) {
         return null;
@@ -1368,13 +1415,13 @@ lucid.html.base.tags.tableRow.prototype.checkValidChild=function(child){
 
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/textarea.js */
 lucid.html.base.tags.textarea = function(){
-	lucid.html.tag.call(this);
-	this.addTrait(lucid.html.base.traits.Disableable);
-
+	lucid.html.base.tags.input.call(this);
 	this.tag = 'textarea';
 	this.parameters = ['name', 'rows', 'cols'];
+	this.allowQuickClose = false;
+	this.allowChildren = true;
 };
-lucid.html.base.tags.textarea.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.base.tags.textarea.prototype = Object.create(lucid.html.base.tags.input.prototype);
 lucid.html.builder.tags.textarea = lucid.html.base.tags.textarea;
 
 lucid.html.base.tags.textarea.prototype.setValue=function(newValue){

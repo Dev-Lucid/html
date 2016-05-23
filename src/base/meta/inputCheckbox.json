@@ -1,0 +1,10 @@
+{
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\input",
+    "tag":"input",
+    "traits":["Lucid\\Html\\Base\\Traits\\Checkable"],
+    "parameters":["name", "checked", "postHtml"],
+    "allowedAttributes":["value"],
+    "attributes":{
+        "type":"'checkbox'"
+    }
+}

@@ -16,6 +16,10 @@ $config['additionalPHP'] = (file_exists($additionalPHP) === true)?file_get_conte
 $config['outputFile'] = $dir.'/'.$config['name'];
 $config['namespace'] = "Lucid\Html\Base\Tags";
 
+if (isset($config['inheritFrom']) === false) {
+    $config['inheritFrom'] = 'Lucid\\Html\\Tag';
+}
+
 echo("\tBuilding PHP for ".str_pad($config['name'], 26, ".", STR_PAD_RIGHT));
 generatePHP($config);
 echo("★\n");
@@ -23,7 +27,7 @@ echo("★\n");
 function generatePHP($config)
 {
     $src = '<'."?php\nnamespace ".$config['namespace'].";\n\n";
-    $src .= "class ".$config['name']." extends \Lucid\Html\Tag\n{\n";
+    $src .= "class ".$config['name']." extends \\".$config['inheritFrom']."\n{\n";
         
     if (isset($config['traits']) === true) {
         foreach ($config['traits'] as $trait) {
@@ -56,6 +60,15 @@ function generatePHP($config)
             $src .= "\tpublic \$$name = $value;\n";
         }
     }
+    
+    if (isset($config['attributes']) === true) {
+        $src .= "\tpublic \$attributes = [\n";
+        foreach ($config['attributes'] as $name=>$value) {
+            $src .= "\t\t'$name'=>$value,\n";
+        }
+        $src .= "\t];\n";
+    }
+
 
     if (isset($config['allowedAttributes']) === true) {
         $src .= "\n\tpublic function init()\n\t{\n";

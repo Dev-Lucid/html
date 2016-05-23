@@ -1,0 +1,9 @@
+{
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\input",
+    "tag":"input",
+    "traits":["Lucid\\Html\\Base\\Traits\\Checkable"],
+    "parameters":["name", "value", "checked", "postHtml"],
+    "attributes":{
+        "type":"'radio'"
+    }
+}

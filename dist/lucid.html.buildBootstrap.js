@@ -764,6 +764,29 @@ lucid.html.builder.tags.details = lucid.html.base.tags.details;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/details.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/dialog.js */
+lucid.html.base.tags.dialog = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'dialog';
+	this.allowedAttributes.push('open');
+};
+lucid.html.base.tags.dialog.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.dialog = lucid.html.base.tags.dialog;
+
+lucid.html.base.tags.dialog.prototype.setOpen=function(val){
+    if (val !== true && val !== false) {
+        throw 'Attribute open only accepts values true or false.';
+    }
+    this.attributes.open = val;
+    return this;
+};
+
+lucid.html.base.tags.dialog.prototype.renderOpen=function(){
+    var val = (this.attributes.open === true)?'open':null;
+    return val;
+};
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/dialog.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/div.js */
 lucid.html.base.tags.div = function(){
 	lucid.html.tag.call(this);

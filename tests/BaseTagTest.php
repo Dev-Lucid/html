@@ -17,7 +17,7 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
     }
 
-    public function test_tags()
+    public function test_tags1()
     {
         $this->runTestWithParameters('abbreviation', 'abbr', ['title'=>'titleAbbr']);
         $this->runTestWithoutParameters('address');
@@ -25,9 +25,14 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('aside');
         $this->runTestWithParameters('base', 'base', ['href'=>'google.com', 'target'=>'something']);
         $this->runTestWithParameters('blockquote', 'blockquote', ['cite'=>'testcite']);
+        $this->runTestWithoutParameters('dialog');
         $this->runTestWithoutParameters('body');
         $this->runTestWithoutParameters('bold', 'b');
         $this->runTestWithParameters('canvas', 'canvas', ['height'=>80, 'width'=>60]);
+    }
+    
+    public function test_tags2()
+    {
         $this->runTestWithSetCalls('caption', 'caption', ['align'=>'center']);
         $this->runTestWithSetCalls('progress', 'progress', ['value'=>15, 'max'=>100]);
         $this->runTestWithSetCalls('meter', 'meter', ['value'=>15, 'min'=>0, 'max'=>100]);
@@ -38,6 +43,10 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('listItem', 'li');
         $this->runTestWithoutParameters('details');
         $this->runTestWithoutParameters('div');
+    }
+    
+    public function test_tags3()
+    {
         $this->runTestWithoutParameters('emphasis', 'em');
         $this->runTestWithoutParameters('definitionTerm', 'dt');
         $this->runTestWithoutParameters('definitionDescription', 'dd');
@@ -47,6 +56,10 @@ class BaseTagTest extends BaseTest
         $this->runTestWithParameters('form', 'form', ['name'=>'testForm', 'action'=>'action.php']);
         $this->runTestWithSetCalls('form', 'form', ['name'=>'testForm', 'action'=>'action.php', 'method'=>'post']);
         $this->runTestWithoutParameters('h1');
+    }
+    
+    public function test_tags4()
+    {
         $this->runTestWithoutParameters('h2');
         $this->runTestWithoutParameters('h3');
         $this->runTestWithoutParameters('h4');
@@ -56,6 +69,10 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('header');
         $this->runTestWithoutParameters('insert', 'ins');
         $this->runTestWithoutParameters('italic', 'i');
+    }
+    
+    public function test_tags5()
+    {
         $this->runTestWithParameters('label', 'label', ['for'=>'testfor']);
         $this->runTestWithoutParameters('legend');
         $this->runTestWithoutParameters('listItem', 'li');
@@ -65,6 +82,10 @@ class BaseTagTest extends BaseTest
         #$this->runTestWithSetCalls('menuitem', 'menuitem');
         $this->runTestWithoutParameters('nav');
         $this->runTestWithoutParameters('orderedList', 'ol');
+    }
+    
+    public function test_tags6()
+    {
         $this->runTestWithoutParameters('paragraph', 'p');
         $this->runTestWithoutParameters('preformatted', 'pre');
         $this->runTestWithoutParameters('quote', 'q');
@@ -74,6 +95,10 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('span');
         $this->runTestWithoutParameters('strikethrough', 's');
         $this->runTestWithoutParameters('strong');
+    }
+    
+    public function test_tags7()
+    {
         $this->runTestWithParameters('style', 'style', ['media'=>'print']);
         $this->runTestWithoutParameters('subscript', 'sub');
         $this->runTestWithoutParameters('summary');
@@ -83,6 +108,10 @@ class BaseTagTest extends BaseTest
         #$this->runTestWithoutParameters('tableData', 'td');
         #$this->runTestWithoutParameters('tableFoot', 'tfoot');
         #$this->runTestWithoutParameters('tableHead', 'thead');
+    }
+    
+    public function test_tags8()
+    {
         $this->runTestWithoutParameters('tableHeader', 'th');
         $this->runTestWithoutParameters('tableRow', 'tr');
         $this->runTestWithoutParameters('time', 'time');

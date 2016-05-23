@@ -427,6 +427,52 @@ lucid.html.base.traits.Disableable = {
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/traits/Disableable.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/traits/Readonlyable.js */
+lucid.html.base.traits.Readonlyable = {
+
+    traitInit:function() {
+        this.allowedAttributes.push('readonly');
+    },
+
+    setReadonly:function(val) {
+        if (val !== true && val !== false) {
+            throw 'Attribute readonly only accepts values true or false.';
+        }
+        this.attributes.readonly = val;
+        return this;
+    },
+
+    renderReadonly:function(){
+        var val = (this.attributes.readonly === true)?'readonly':null;
+        return val;
+    }
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/traits/Readonlyable.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/traits/Requireable.js */
+lucid.html.base.traits.Requireable = {
+
+    traitInit:function() {
+        this.allowedAttributes.push('required');
+    },
+
+    setRequired:function(val) {
+        if (val !== true && val !== false) {
+            throw 'Attribute required only accepts values true or false.';
+        }
+        this.attributes.required = val;
+        return this;
+    },
+
+    renderRequired:function(){
+        var val = (this.attributes.required === true)?'required':null;
+        return val;
+    }
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/traits/Requireable.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/abbreviation.js */
 lucid.html.base.tags.abbreviation = function(){
 	lucid.html.tag.call(this);
@@ -864,6 +910,8 @@ lucid.html.builder.tags.image = lucid.html.base.tags.image;
 lucid.html.base.tags.input = function(){
 	lucid.html.tag.call(this);
 	this.addTrait(lucid.html.base.traits.Disableable);
+	this.addTrait(lucid.html.base.traits.Readonlyable);
+	this.addTrait(lucid.html.base.traits.Requireable);
 
 	this.tag = 'input';
 	this.allowQuickClose = true;
@@ -889,6 +937,48 @@ lucid.html.builder.tags.inputCheckbox = lucid.html.base.tags.inputCheckbox;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputCheckbox.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputEmail.js */
+lucid.html.base.tags.inputEmail = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'input';
+	this.allowedAttributes.push('autocomplete');
+	this.allowedAttributes.push('size');
+	this.parameters = ['name', 'value', 'required', 'placeholder'];
+	this.attributes['type'] = 'email';
+};
+lucid.html.base.tags.inputEmail.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputEmail = lucid.html.base.tags.inputEmail;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputEmail.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputNumber.js */
+lucid.html.base.tags.inputNumber = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'input';
+	this.allowedAttributes.push('autocomplete');
+	this.allowedAttributes.push('size');
+	this.parameters = ['name', 'value', 'required', 'placeholder'];
+	this.attributes['type'] = 'number';
+};
+lucid.html.base.tags.inputNumber.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputNumber = lucid.html.base.tags.inputNumber;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputNumber.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputPassword.js */
+lucid.html.base.tags.inputPassword = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'input';
+	this.allowedAttributes.push('autocomplete');
+	this.allowedAttributes.push('size');
+	this.parameters = ['name', 'value', 'required'];
+	this.attributes['type'] = 'password';
+};
+lucid.html.base.tags.inputPassword.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputPassword = lucid.html.base.tags.inputPassword;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputPassword.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputRadio.js */
 lucid.html.base.tags.inputRadio = function(){
 	lucid.html.base.tags.input.call(this);
@@ -902,6 +992,48 @@ lucid.html.base.tags.inputRadio.prototype = Object.create(lucid.html.base.tags.i
 lucid.html.builder.tags.inputRadio = lucid.html.base.tags.inputRadio;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputRadio.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputTelephone.js */
+lucid.html.base.tags.inputTelephone = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'input';
+	this.allowedAttributes.push('autocomplete');
+	this.allowedAttributes.push('size');
+	this.parameters = ['name', 'value', 'required', 'placeholder'];
+	this.attributes['type'] = 'tel';
+};
+lucid.html.base.tags.inputTelephone.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputTelephone = lucid.html.base.tags.inputTelephone;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputTelephone.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputText.js */
+lucid.html.base.tags.inputText = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'input';
+	this.allowedAttributes.push('autocomplete');
+	this.allowedAttributes.push('size');
+	this.parameters = ['name', 'value', 'required', 'placeholder'];
+	this.attributes['type'] = 'text';
+};
+lucid.html.base.tags.inputText.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputText = lucid.html.base.tags.inputText;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputText.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/inputUrl.js */
+lucid.html.base.tags.inputUrl = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'input';
+	this.allowedAttributes.push('autocomplete');
+	this.allowedAttributes.push('size');
+	this.parameters = ['name', 'value', 'required', 'placeholder'];
+	this.attributes['type'] = 'url';
+};
+lucid.html.base.tags.inputUrl.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputUrl = lucid.html.base.tags.inputUrl;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/inputUrl.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/insert.js */
 lucid.html.base.tags.insert = function(){

@@ -1,0 +1,9 @@
+{
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\input",
+    "tag":"input",
+    "parameters":["name", "value", "required", "placeholder"],
+    "allowedAttributes":["autocomplete", "size"],
+    "attributes":{
+        "type":"'text'"
+    }
+}

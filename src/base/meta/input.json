@@ -1,5 +1,5 @@
 {
-    "traits":["Lucid\\Html\\Base\\Traits\\Disableable"],
+    "traits":["Lucid\\Html\\Base\\Traits\\Disableable", "Lucid\\Html\\Base\\Traits\\Readonlyable", "Lucid\\Html\\Base\\Traits\\Requireable"],
     "allowQuickClose":true,
     "allowChildren":false
 }

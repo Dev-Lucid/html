@@ -170,6 +170,38 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
+    
+    public function test_inputText()
+    {
+        $output = '<input type="text" name="testText" value="hiya" required="required" />';
+        $code = "@build('inputText', 'testText', 'hiya', true)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
+    public function test_inputPassword()
+    {
+        $output = '<input type="password" name="testText" value="password1" required="required" />';
+        $code = "@build('inputPassword', 'testText', 'password1', true)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
+    public function test_inputEmail()
+    {
+        $output = '<input type="email" name="testEmail" value="hiya@hiya.com" required="required" />';
+        $code = "@build('inputEmail', 'testEmail', 'hiya@hiya.com', true)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
+    public function test_inputTelephone()
+    {
+        $output = '<input type="tel" name="testPhone" value="1111111" required="required" />';
+        $code = "@build('inputTelephone', 'testPhone', '1111111', true)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 
 
     public function test_br()

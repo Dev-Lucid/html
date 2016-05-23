@@ -3,6 +3,7 @@ lucid.html.base.tags.input = function(){
 	this.addTrait(lucid.html.base.traits.Disableable);
 	this.addTrait(lucid.html.base.traits.Readonlyable);
 	this.addTrait(lucid.html.base.traits.Requireable);
+	this.addTrait(lucid.html.base.traits.Autofocusable);
 
 	this.tag = 'input';
 	this.allowQuickClose = true;

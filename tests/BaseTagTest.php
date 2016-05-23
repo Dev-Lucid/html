@@ -202,6 +202,14 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
+    
+    public function test_button()
+    {
+        $output = '<button type="button" onclick="this.form.submit();">mybutton</button>';
+        $code = "@build('button', 'mybutton', 'this.form.submit();')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 
 
     public function test_br()

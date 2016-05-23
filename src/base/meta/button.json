@@ -1,0 +1,8 @@
+{
+    "traits":["Lucid\\Html\\Base\\Traits\\Disableable", "Lucid\\Html\\Base\\Traits\\Autofocusable"],
+    "parameters":["child", "onclick"],
+    "allowedAttributes":["type", "name"],
+    "attributes":{
+        "type":"'button'"
+    }
+}

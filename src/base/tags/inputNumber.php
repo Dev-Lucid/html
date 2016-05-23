@@ -4,7 +4,7 @@ namespace Lucid\Html\Base\Tags;
 class inputNumber extends \Lucid\Html\Base\Tags\input
 {
 	public $tag = 'input';
-	public $parameters = ['name', 'value', 'required', 'placeholder'];
+	public $parameters = ['name', 'value', 'required', 'placeholder', 'min', 'max'];
 	public $attributes = [
 		'type'=>'number',
 	];
@@ -13,6 +13,8 @@ class inputNumber extends \Lucid\Html\Base\Tags\input
 	{
 		$this->allowedAttributes[] = 'autocomplete';
 		$this->allowedAttributes[] = 'size';
+		$this->allowedAttributes[] = 'min';
+		$this->allowedAttributes[] = 'max';
 		parent::init();
 	}
 }

@@ -3,7 +3,9 @@ lucid.html.base.tags.inputNumber = function(){
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
-	this.parameters = ['name', 'value', 'required', 'placeholder'];
+	this.allowedAttributes.push('min');
+	this.allowedAttributes.push('max');
+	this.parameters = ['name', 'value', 'required', 'placeholder', 'min', 'max'];
 	this.attributes['type'] = 'number';
 };
 lucid.html.base.tags.inputNumber.prototype = Object.create(lucid.html.base.tags.input.prototype);

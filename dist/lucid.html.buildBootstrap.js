@@ -363,6 +363,29 @@ lucid.html.base={
 };
 /* File end: /Users/mike/projects/components/html/bin/../src/base/js/lucid.html.base.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/base/traits/Autofocusable.js */
+lucid.html.base.traits.Autofocusable = {
+
+    traitInit:function() {
+        this.allowedAttributes.push('autofocus');
+    },
+
+    setAutofocus:function(val) {
+        if (val !== true && val !== false) {
+            throw 'Attribute autofocus only accepts values true or false.';
+        }
+        this.attributes.autofocus = val;
+        return this;
+    },
+
+    renderAutofocus:function(){
+        var val = (this.attributes.autofocus === true)?'autofocus':null;
+        return val;
+    }
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/traits/Autofocusable.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/base/traits/Checkable.js */
 lucid.html.base.traits.Checkable = {
 
@@ -587,6 +610,23 @@ lucid.html.base.tags.br.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.br = lucid.html.base.tags.br;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/base/tags/br.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/base/tags/button.js */
+lucid.html.base.tags.button = function(){
+	lucid.html.tag.call(this);
+	this.addTrait(lucid.html.base.traits.Disableable);
+	this.addTrait(lucid.html.base.traits.Autofocusable);
+
+	this.tag = 'button';
+	this.allowedAttributes.push('type');
+	this.allowedAttributes.push('name');
+	this.parameters = ['child', 'onclick'];
+	this.attributes['type'] = 'button';
+};
+lucid.html.base.tags.button.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.button = lucid.html.base.tags.button;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/base/tags/button.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/base/tags/canvas.js */
 lucid.html.base.tags.canvas = function(){
@@ -912,6 +952,7 @@ lucid.html.base.tags.input = function(){
 	this.addTrait(lucid.html.base.traits.Disableable);
 	this.addTrait(lucid.html.base.traits.Readonlyable);
 	this.addTrait(lucid.html.base.traits.Requireable);
+	this.addTrait(lucid.html.base.traits.Autofocusable);
 
 	this.tag = 'input';
 	this.allowQuickClose = true;
@@ -957,7 +998,9 @@ lucid.html.base.tags.inputNumber = function(){
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
-	this.parameters = ['name', 'value', 'required', 'placeholder'];
+	this.allowedAttributes.push('min');
+	this.allowedAttributes.push('max');
+	this.parameters = ['name', 'value', 'required', 'placeholder', 'min', 'max'];
 	this.attributes['type'] = 'number';
 };
 lucid.html.base.tags.inputNumber.prototype = Object.create(lucid.html.base.tags.input.prototype);

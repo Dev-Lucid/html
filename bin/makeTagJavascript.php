@@ -13,7 +13,11 @@ $additionalJs  = str_replace('.json', '.js', $file);
 $config['additionalJs'] = (file_exists($additionalJs) === true)?file_get_contents($additionalJs):'';
 
 $config['outputFile'] = $dir.'/'.$config['name'];
-$config['namespace'] = "Lucid\Html\Base\Tags";
+if (isset($config['namespace']) === false) {
+    $config['namespace'] = "Lucid\Html\Base\Tags";
+}
+$config['namespace'] = strtolower($config['namespace']);
+$config['namespace'] = str_replace('\\', '.', $config['namespace']);
 
 if (isset($config['inheritFrom']) === false) {
     $config['inheritFrom'] = 'Lucid\\Html\\Tag';
@@ -28,7 +32,7 @@ echo("★\n");
 
 function generateJavascript($config)
 {
-    $src = "lucid.html.base.tags.".$config['name']." = function(){\n";
+    $src = $config['namespace'].".".$config['name']." = function(){\n";
     $src .= "\t".$config['inheritFrom'].".call(this);\n";
     
     if (isset($config['traits']) === true) {
@@ -47,7 +51,7 @@ function generateJavascript($config)
         $src .= "\tthis.tag = '".$config['tag']."';\n";
     }
     if (isset($config['allowedAttributes']) === true) {
-        foreach($config['allowedAttributes'] as $attribute) {
+        foreach ($config['allowedAttributes'] as $attribute) {
             $src .= "\tthis.allowedAttributes.push('$attribute');\n";
         }
     }
@@ -77,15 +81,23 @@ function generateJavascript($config)
             $src .= "\tthis.attributes['$name'] = $value;\n";
         }
     }
+    
+    if (isset($config['classes']) === true) {
+        foreach ($config['classes'] as $classToAdd) {
+            $src .= "\tthis.addClass('$classToAdd');\n";
+        }
+    }
+    
+    
 
 
     $src .= "};\n";
 
 
     
-    $src .= "lucid.html.base.tags.".$config['name'].".prototype = Object.create(".$config['inheritFrom'].".prototype);\n";
+    $src .= $config['namespace'].".".$config['name'].".prototype = Object.create(".$config['inheritFrom'].".prototype);\n";
     #$src .= "lucid.html.base.tags.".$config['name'].".prototype.constructor = lucid.html.base.tags.".$config['name'].";\n";
-    $src .= "lucid.html.builder.tags.".$config['name']." = lucid.html.base.tags.".$config['name'].";\n";
+    $src .= "lucid.html.builder.tags.".$config['name']." = ".$config['namespace'].".".$config['name'].";\n";
     #$src .= "lucid.html.builder.tags.".$config['name'].".prototype = new lucid.html.tag();\n";
 
     /*

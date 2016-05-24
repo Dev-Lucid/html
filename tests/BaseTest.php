@@ -2,7 +2,7 @@
 
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
-    
+    public static $jsLibrary = 'buildBaseTagsOnly';
     public function translateMetaCode(string $metaCode, string $language) : string
     {
         $translators = [
@@ -32,7 +32,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         foreach ($searchReplace as $key=>$value) {
             $metaCode = str_replace($key, $value, $metaCode);
         }
-        $finalSrc = '( cat '.__DIR__.'/../dist/lucid.html.buildBaseTagsOnly.js ;  echo "console.log(';
+        $finalSrc = '( cat '.__DIR__.'/../dist/lucid.html.'.(static::$jsLibrary).'.js ;  echo "console.log(';
         $finalSrc .= $metaCode;
         $finalSrc .= ');") | node';
 

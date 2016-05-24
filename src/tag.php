@@ -34,9 +34,11 @@ class Tag
             $allTraits = array_merge($allTraits, class_uses($class));
         }
 
+    
         foreach($allTraits as $trait)
         {
-            $traitInitFunc = $trait.'Init';
+            $trait = explode('\\', $trait);
+            $traitInitFunc = (array_pop($trait)).'Init';
             if (method_exists($this, $traitInitFunc) === true) {
                 $this->$traitInitFunc();
             }

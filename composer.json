@@ -15,10 +15,22 @@
       }
   ],
   "autoload": {
-      "psr-4": {"Lucid\\Html\\": "/"}
+      "psr-4": {
+          "Lucid\\Html\\": "/", 
+          "Lucid\\Html\\Base\\Tags\\":"/src/Base/tags/", 
+          "Lucid\\Html\\Base\\Traits\\":"/src/Base/traits/",
+          "Lucid\\Html\\Bootstrap\\Tags\\":"/src/Bootstrap/tags/", 
+          "Lucid\\Html\\Bootstrap\\Traits\\":"/src/Bootstrap/traits/"
+      }
   },
   "autoload-dev": {
-      "psr-4": {"Lucid\\Html\\": ""}
+      "psr-4": {
+        "Lucid\\Html\\": "", 
+        "Lucid\\Html\\Base\\Tags\\":"src/Base/tags/", 
+        "Lucid\\Html\\Base\\Traits\\":"src/Base/traits/",
+        "Lucid\\Html\\Bootstrap\\Tags\\":"src/Bootstrap/tags/", 
+        "Lucid\\Html\\Bootstrap\\Traits\\":"src/Bootstrap/traits/"
+      }
   },
   "require":{
       "php": "^7.0",

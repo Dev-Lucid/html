@@ -18,6 +18,7 @@ lucid.html.builder.build=function(tag){
         obj = new lucid.html.tag();
         obj.tag = tag;
     }
+    obj.instantiatorName = tag;
     return obj;
 };
 

@@ -10,11 +10,20 @@ if (isset($config['tag']) === false) {
 }
 
 $additionalPHP = str_replace('.json', '.php', $file);
-$config['additionalPHP'] = (file_exists($additionalPHP) === true)?file_get_contents($additionalPHP):'';
 
+if (file_exists($additionalPHP) === true) {
+    $config['additionalPHP'] = file_get_contents($additionalPHP);
+    $config['additionalPHP'] = str_replace('<'.'?php', '', $config['additionalPHP']);
+    $config['additionalPHP'] = str_replace('?'.'>', '', $config['additionalPHP']);
+} else {
+    $config['additionalPHP'] = '';
+}
 
 $config['outputFile'] = $dir.'/'.$config['name'];
-$config['namespace'] = "Lucid\Html\Base\Tags";
+
+if (isset($config['namespace']) === false) {
+    $config['namespace'] = "Lucid\Html\Base\Tags";
+}
 
 if (isset($config['inheritFrom']) === false) {
     $config['inheritFrom'] = 'Lucid\\Html\\Tag';
@@ -69,10 +78,14 @@ function generatePHP($config)
         $src .= "\t];\n";
     }
 
-
-    if (isset($config['allowedAttributes']) === true) {
+    if (isset($config['allowedAttributes']) === true || isset($config['classes']) === true) {
         $src .= "\n\tpublic function init()\n\t{\n";
 
+        if (isset($config['classes']) === true) {
+            foreach ($config['classes'] as $newClass) {
+                $src .= "\t\t\$this->addClass('$newClass');\n";
+            }
+        }
         if (isset($config['allowedAttributes']) === true) {
             foreach($config['allowedAttributes'] as $attribute) {
                 $src .= "\t\t$"."this->allowedAttributes[] = '$attribute';\n";

@@ -1,17 +1,3 @@
-lucid.html.bootstrap.tags.alert = function(){
-	lucid.html.tag.call(this);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-
-	this.tag = 'div';
-	this.parameters = ['modifier', 'title'];
-	this.title = null;
-	this.bootstrapModifierPrefix = 'alert';
-	this.bootstrapModifiersAllowed = ['success', 'warning','danger', 'info'];
-	this.attributes['role'] = 'alert';
-	this.addClass('alert');
-};
-lucid.html.bootstrap.tags.alert.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.alert = lucid.html.bootstrap.tags.alert;
 
 lucid.html.bootstrap.tags.alert.prototype.getTitle=function(){
     if (this.title === null) {

@@ -7,12 +7,14 @@ $files = [
         '/lucid.html.js',
         '/lucid.html.builder.js',
         '/lucid.html.tag.js',
-        '/base/js/*.js',
-        '/base/traits/*.js',
-        '/base/tags/*.js',
+        '/Base/js/*.js',
+        '/Base/traits/*.js',
+        '/Base/tags/*.js',
     ],
     'bootstrap'=>[
-        '/bootstrap/tags/alert.js',
+        '/Bootstrap/js/*.js',
+        '/Bootstrap/traits/*.js',
+        '/Bootstrap/tags/alert.js',
     ],
     'foundation'=>[
     ],
@@ -22,7 +24,7 @@ $basejs       ='';
 $bootstrapjs  ='';
 $foundationjs ='';
 
-echo("Building Distribution JS files...\n");
+echo("Building base javascript...\n");
 foreach($files['base'] as $filePattern) {
     $fileList = glob(__DIR__.'/../src'.$filePattern);
     foreach ($fileList as $file) {
@@ -34,9 +36,18 @@ foreach($files['base'] as $filePattern) {
     }
 }
 
+echo("Building bootstrap javascript...\n");
+
 $bootstrapjs .= $basejs;
-foreach($files['bootstrap'] as $file) {
-    $bootstrapjs .= file_get_contents(__DIR__.'/../src'.$file);
+foreach($files['bootstrap'] as $filePattern) {
+    $fileList = glob(__DIR__.'/../src'.$filePattern);
+    foreach ($fileList as $file) {
+        echo("\tIncluding ".str_pad(basename($file), 25, ".", STR_PAD_RIGHT));
+        $bootstrapjs .= "\n/* File start: $file */\n";
+        $bootstrapjs .= file_get_contents($file);
+        $bootstrapjs .= "\n/* File end: $file */\n";
+        echo("★\n");
+    }
 }
 
 

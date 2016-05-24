@@ -1,25 +1,4 @@
 <?php
-namespace Lucid\Html\Bootstrap\Tags;
-
-class alert extends \Lucid\Html\Tag
-{
-	use \Lucid\Html\Bootstrap\Traits\Modifiable;
-
-	public $tag = 'div';
-	public $parameters = ['modifier', 'title'];
-	public $title = null;
-	public $bootstrapModifierPrefix = 'alert';
-	public $bootstrapModifiersAllowed = ['success', 'warning','danger', 'info'];
-	public $attributes = [
-		'role'=>'alert',
-	];
-
-	public function init()
-	{
-		$this->addClass('alert');
-		parent::init();
-	}
-
     public function getTitle()
     {
         if (is_null($this->title) === true) {
@@ -43,4 +22,4 @@ class alert extends \Lucid\Html\Tag
         }
         return parent::preChildren();
     }
-}
+?>

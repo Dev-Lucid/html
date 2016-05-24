@@ -2,8 +2,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 
-$DIR/makeAllTags $DIR/../src/base/meta
-
+$DIR/makeAllTags $DIR/../src/Base/meta
+$DIR/makeAllTags $DIR/../src/Bootstrap/meta
 
 php -f $DIR/makeJsDist.php
 if [ $? -ne 0 ]; then

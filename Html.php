@@ -3,7 +3,7 @@ namespace Lucid\Html;
 
 class Html
 {
-    public static $config = null;
+    public static $config = [];
 
     public static function init($flavor = null, ArrayAccess $config = null)
     {
@@ -30,68 +30,45 @@ class Html
         ];
 
         static::$config['autoloadMap'] = [];
-        static::$config['autoloadMap']['Lucid\\Html\\base'] = __DIR__.'/src/base/';
+        static::$config['autoloadMap']['Lucid\\Html\\Base'] = __DIR__.'/src/Base/';
 
         if (is_null($flavor) === false) {
             static::$config['autoloadMap']['Lucid\\Html\\'.$flavor] = __DIR__.'/src/'.$flavor.'/';
         }
 
-        include(__DIR__.'/src/tag.php');
-
-        spl_autoload_register('\\Lucid\\Html\\Html::autoLoader');
+        if (class_exists("Lucid\Html\Tag") === false) {
+            include(__DIR__.'/src/tag.php');
+        }
     }
 
-    public static function addFlavor($namespacePrefix, $path)
+    public static function addFlavor(string $namespacePrefix, string $path)
     {
-
         static::$config['autoloadMap'][$namespacePrefix] = $path;
     }
 
-    private static function autoLoader(string $name)
+    private static function findClass(string $name) : string
     {
-        # this can be called one of two ways:
-        #   1) via autoload, which means the path will be fully qualified. This is in the case where
-        #      it is being used for inheritance purposes
-        #   2) from DevLucid\html::__callStatic, in which case only the final class name is known, and all possible paths
-        #      need to be checked.
-
-        if (isset(static::$config['loadedClassCache'][$name]) === true) {
-            return static::$config['loadedClassCache'][$name];
-        }
-
-        # Check if we're in condition 1 and build a map of possible file names and equivalent class names.
         if (strpos($name, '\\') === false) {
+            if (isset(static::$config['loadedClassCache'][$name]) === true) {
+                return static::$config['loadedClassCache'][$name];
+            }
+
             foreach (static::$config['autoloadMap'] as $prefix=>$path) {
+                
                 $filePath = $path.'tags/'.$name.'.php';
                 $class = $prefix.'\\Tags\\'.$name;
-                if (file_exists($filePath) === true) {
-
+            
+                if (class_exists($class, true) === true) {
                     static::$config['loadedClassCache'][$name] = $class;
-                    if (class_exists($class) === false) {
-                        include($filePath);
-
-                        if (class_exists($class) === false) {
-                            throw new \Exception('File did not contain correctly namespaced class definition for html tag');
-                        }
-                    }
-                }
-            }
-            return static::$config['loadedClassCache'][$name] ?? null;
-        } else {
-            $nameParts = explode('\\', strtolower($name));
-            if (strtolower($nameParts[0]) == 'lucid' && in_array('Lucid\\Html\\'.$nameParts[2], array_keys(static::$config['autoloadMap'])) === true) {
-                $tagOrTrait = $name[3];
-                $finalName  = $name[4];
-                $finalPath = static::$config['autoloadMap']['Lucid\\Html\\'.$nameParts[2]].$nameParts[3].'/'.$nameParts[4].'.php';
-                include($finalPath);
-                return true;
+                    return static::$config['loadedClassCache'][$name];
+                } 
             }
         }
     }
 
-    public static function build($name, ...$params)
+    public static function build(string $name, ...$params)
     {
-        $finalClass = static::autoLoader($name);
+        $finalClass = static::findClass($name);
         if (is_null($finalClass) === true){
             $obj = new Tag();
         } else {

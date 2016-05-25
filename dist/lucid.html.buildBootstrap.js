@@ -1897,6 +1897,74 @@ lucid.html.builder.tags.button = lucid.html.bootstrap.tags.button;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/button.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/card.js */
+lucid.html.bootstrap.tags.card = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'div';
+	this.addClass('card');
+};
+lucid.html.bootstrap.tags.card.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.card = lucid.html.bootstrap.tags.card;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/card.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardBlock.js */
+lucid.html.bootstrap.tags.cardBlock = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'div';
+	this.addClass('card-block');
+};
+lucid.html.bootstrap.tags.cardBlock.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.cardBlock = lucid.html.bootstrap.tags.cardBlock;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardBlock.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardFooter.js */
+lucid.html.bootstrap.tags.cardFooter = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'div';
+	this.addClass('card-footer');
+	this.addClass('text-muted');
+};
+lucid.html.bootstrap.tags.cardFooter.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.cardFooter = lucid.html.bootstrap.tags.cardFooter;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardFooter.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardHeader.js */
+lucid.html.bootstrap.tags.cardHeader = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'div';
+	this.addClass('card-header');
+};
+lucid.html.bootstrap.tags.cardHeader.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.cardHeader = lucid.html.bootstrap.tags.cardHeader;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardHeader.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardSubtitle.js */
+lucid.html.bootstrap.tags.cardSubtitle = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'h6';
+	this.addClass('card-subtitle');
+	this.addClass('text-muted');
+};
+lucid.html.bootstrap.tags.cardSubtitle.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.cardSubtitle = lucid.html.bootstrap.tags.cardSubtitle;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardSubtitle.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardTitle.js */
+lucid.html.bootstrap.tags.cardTitle = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'h4';
+	this.addClass('card-title');
+};
+lucid.html.bootstrap.tags.cardTitle.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.cardTitle = lucid.html.bootstrap.tags.cardTitle;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardTitle.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/div.js */
 lucid.html.bootstrap.tags.div = function(){
 	lucid.html.base.tags.span.call(this);

@@ -1,0 +1,5 @@
+{
+    "tag":"div",
+    "classes":["card-footer", "text-muted"],
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags"
+}

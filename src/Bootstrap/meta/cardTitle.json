@@ -1,0 +1,5 @@
+{
+    "tag":"h4",
+    "classes":["card-title"],
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags"
+}

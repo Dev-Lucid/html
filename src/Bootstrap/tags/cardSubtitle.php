@@ -1,13 +1,13 @@
 <?php
 namespace Lucid\Html\Bootstrap\Tags;
 
-class cardFooter extends \Lucid\Html\Tag
+class cardSubtitle extends \Lucid\Html\Tag
 {
-	public $tag = 'div';
+	public $tag = 'h6';
 
 	public function init()
 	{
-		$this->addClass('card-footer');
+		$this->addClass('card-subtitle');
 		$this->addClass('text-muted');
 		parent::init();
 	}

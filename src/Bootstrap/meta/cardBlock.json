@@ -1,0 +1,5 @@
+{
+    "tag":"div",
+    "classes":["card-block"],
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags"
+}

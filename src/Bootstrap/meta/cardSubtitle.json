@@ -1,0 +1,5 @@
+{
+    "tag":"h6",
+    "classes":["card-subtitle", "text-muted"],
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags"
+}

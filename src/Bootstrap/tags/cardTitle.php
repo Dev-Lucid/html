@@ -1,13 +1,13 @@
 <?php
 namespace Lucid\Html\Bootstrap\Tags;
 
-class cardHeader extends \Lucid\Html\Tag
+class cardTitle extends \Lucid\Html\Tag
 {
-	public $tag = 'div';
+	public $tag = 'h4';
 
 	public function init()
 	{
-		$this->addClass('card-header');
+		$this->addClass('card-title');
 		parent::init();
 	}
 }

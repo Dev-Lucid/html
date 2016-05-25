@@ -1,7 +1,7 @@
 {
     "tag":"a",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
-    "inheritFrom":"Lucid\\Html\\Base\\Tags\\Button",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\button",
     "classes":["btn"],
     "parameters":["modifier", "onclick"],
     "attributes":{"role":"'button'","type":"null"},

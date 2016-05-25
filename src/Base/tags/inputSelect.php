@@ -1,7 +1,7 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class select extends \Lucid\Html\Tag
+class inputSelect extends \Lucid\Html\Tag
 {
 	public $tag = 'select';
 	public $parameters = ['name', 'value', 'data', 'onchange'];

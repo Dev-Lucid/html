@@ -1,6 +1,6 @@
 {
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
-    "inheritFrom":"Lucid\\Html\\Base\\Tags\\Span",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\span",
     "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"],
     "properties":{
         "bootstrapModifierPrefix":"'text'", 

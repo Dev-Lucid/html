@@ -22,8 +22,17 @@ $config['namespace'] = str_replace('\\', '.', $config['namespace']);
 if (isset($config['inheritFrom']) === false) {
     $config['inheritFrom'] = 'Lucid\\Html\\Tag';
 }
-$config['inheritFrom'] = strtolower($config['inheritFrom']);
-$config['inheritFrom'] = str_replace('\\', '.', $config['inheritFrom']);
+
+if ($config['inheritFrom'] == 'Lucid\\Html\\Tag') {
+    $config['inheritFrom'] = str_replace('\\', '.', strtolower($config['inheritFrom']));
+} else {
+    $config['inheritFrom'] = explode('\\', $config['inheritFrom']);
+    for($i=0; $i < (count($config['inheritFrom']) - 1); $i++) {
+        $config['inheritFrom'][$i] = strtolower($config['inheritFrom'][$i]);
+    }
+    $config['inheritFrom'] = implode('.', $config['inheritFrom']);
+}
+
 
 $files = glob(__DIR__.'/../src/base/meta/*.json');
 echo("\tBuilding JS for ".str_pad($config['name'], 27, ".", STR_PAD_RIGHT));

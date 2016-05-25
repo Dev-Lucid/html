@@ -1,5 +1,5 @@
 lucid.html.bootstrap.tags.div = function(){
-	lucid.html.base.tags.span.call(this);
+	lucid.html.base.tags.div.call(this);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
@@ -7,5 +7,5 @@ lucid.html.bootstrap.tags.div = function(){
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
 };
-lucid.html.bootstrap.tags.div.prototype = Object.create(lucid.html.base.tags.span.prototype);
+lucid.html.bootstrap.tags.div.prototype = Object.create(lucid.html.base.tags.div.prototype);
 lucid.html.builder.tags.div = lucid.html.bootstrap.tags.div;

@@ -1,14 +1,12 @@
 {
+    "tag":"input",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
-    "inheritFrom":"Lucid\\Html\\Base\\Tags\\button",
-    "classes":["btn"],
-    "parameters":["modifier", "onclick"],
-    "attributes":{"type":"'button'"},
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\inputEmail",
+    "classes":["form-control"],
     "properties":{
-        "title":"null", 
-        "bootstrapModifierPrefix":"'btn'", 
+        "bootstrapModifierPrefix":"'form-control'", 
         "bootstrapModifiersAllowed":"['primary', 'secondary', 'success', 'warning','danger', 'info', 'link']",
-        "bootstrapSizePrefix":"'btn'", 
+        "bootstrapSizePrefix":"'form-control'", 
         "bootstrapSizesAllowed":"['sm', 'lg']"
     },
     "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]

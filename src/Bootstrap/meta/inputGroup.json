@@ -1,0 +1,5 @@
+{
+    "tag":"div",
+    "classes":["input-group"],
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags"
+}

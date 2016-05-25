@@ -134,31 +134,31 @@ class BaseTagTest extends BaseTest
     
     public function test_textarea()
     {
-        $this->runTestWithParameters('textarea', 'textarea', ['name'=>'textarea1', 'rows'=>4, 'cols'=>80,]);
+        $this->runTestWithParameters('inputTextarea', 'textarea', ['name'=>'textarea1', 'rows'=>4, 'cols'=>80,]);
 
         $output = '<textarea cols="80">hiya</textarea>';
-        $code = "@build('textarea')->set('cols', 80)->set('value', 'hiya')->render()";
+        $code = "@build('inputTextarea')->set('cols', 80)->set('value', 'hiya')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
 
         $output = '<textarea cols="80">hiya2</textarea>';
-        $code = "@build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->render()";
+        $code = "@build('inputTextarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
         $output = 'hiya2';
-        $code = "@build('textarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->get('value')";
+        $code = "@build('inputTextarea')->set('cols', 80)->set('value', 'hiya')->set('value', 'hiya2')->get('value')";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
         
         $output = '<textarea disabled="disabled"></textarea>';
-        $code = "@build('textarea')->set('disabled', true)->render()";
+        $code = "@build('inputTextarea')->set('disabled', true)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
         
         $output = '<textarea>hiya</textarea>';
-        $code = "@build('textarea')->set('disabled', true)->set('disabled', false)->set('value', 'hiya')->render()";
+        $code = "@build('inputTextarea')->set('disabled', true)->set('disabled', false)->set('value', 'hiya')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
@@ -186,12 +186,12 @@ class BaseTagTest extends BaseTest
     public function test_select()
     {
         $output = '<select name="myselect"><option value="1">test1</option><option value="2" selected="selected">test2</option></select>';
-        $code = "@build('select', 'myselect', 2)->add(@build('option', 1, 'test1'))->add(@build('option', 2, 'test2'))->render()";
+        $code = "@build('inputSelect', 'myselect', 2)->add(@build('option', 1, 'test1'))->add(@build('option', 2, 'test2'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
         $output = '<select name="myselect"><option value="1">test1</option><option value="2" selected="selected">test2</option></select>';
-        $code = "@build('select', 'myselect', 2)->set('data', #[@['label'=>'test1','value'=>1]@,@['label'=>'test2','value'=>2]@]#)->render()";
+        $code = "@build('inputSelect', 'myselect', 2)->set('data', #[@['label'=>'test1','value'=>1]@,@['label'=>'test2','value'=>2]@]#)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 

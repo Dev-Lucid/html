@@ -1,7 +1,7 @@
 <?php
 namespace Lucid\Html\Bootstrap\Tags;
 
-class div extends \Lucid\Html\Base\Tags\Span
+class div extends \Lucid\Html\Base\Tags\div
 {
 	use \Lucid\Html\Bootstrap\Traits\Modifiable;
 	use \Lucid\Html\Bootstrap\Traits\Pullable;

@@ -1,7 +1,7 @@
 <?php
 namespace Lucid\Html\Bootstrap\Tags;
 
-class anchorButton extends \Lucid\Html\Base\Tags\Button
+class anchorButton extends \Lucid\Html\Base\Tags\button
 {
 	use \Lucid\Html\Bootstrap\Traits\Modifiable;
 	use \Lucid\Html\Bootstrap\Traits\Sizeable;

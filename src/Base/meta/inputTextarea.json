@@ -1,4 +1,5 @@
 {
+    "tag":"textarea",
     "inheritFrom":"Lucid\\Html\\Base\\Tags\\input",
     "parameters":["name", "rows", "cols"],
     "allowChildren":true,

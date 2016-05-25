@@ -1,4 +1,5 @@
 {
+    "tag":"select",
     "parameters":["name", "value", "data", "onchange"],
     "allowChildTags":["option", "optgroup"],
     "properties":{

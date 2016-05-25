@@ -1,7 +1,7 @@
 {
     "tag":"a",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
-    "inheritFrom":"Lucid\\Html\\Base\\Tags\\Anchor",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\anchor",
     "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"],
     "properties":{
         "bootstrapModifierPrefix":"'text'", 

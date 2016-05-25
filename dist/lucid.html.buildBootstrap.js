@@ -1097,6 +1097,60 @@ lucid.html.builder.tags.inputRadio = lucid.html.base.tags.inputRadio;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/inputRadio.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/inputSelect.js */
+lucid.html.base.tags.inputSelect = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'select';
+	this.parameters = ['name', 'value', 'data', 'onchange'];
+	this.data = null;
+	this.value = null;
+};
+lucid.html.base.tags.inputSelect.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.inputSelect = lucid.html.base.tags.inputSelect;
+
+lucid.html.base.tags.inputSelect.prototype.checkValidChild=function(child){
+	if (['option', 'optgroup'].indexOf(child.tag) < 0) {
+		throw 'Invalid child. Tag select only allows these tags as children: option, optgroup';
+	}
+};
+    
+lucid.html.base.tags.inputSelect.prototype.preRender=function(){
+    if (this.children.length > 0) {
+        for (var i=0; i<this.children.length; i++) {
+            this.children[i].setSelected((this.children[i].get('value') == this.value));
+        }
+    }
+    if (this.data !== null) {
+        for (var i=0; i<this.data.length; i++) {
+            var value = '';
+            var label = '';
+            if (typeof(this.data[i].label) != 'undefined') {
+                value = this.data[i].value;
+                label = this.data[i].label;
+            } else if (typeof(this.data[i][1]) != 'undefined') {
+                value = this.data[i][0];
+                label = this.data[i][1];
+            }
+            
+            this.add(lucid.html.build('option', value, label, (this.value == value)));
+        }
+        
+    }
+    return lucid.html.tag.prototype.preRender.call(this);
+};
+
+lucid.html.base.tags.inputSelect.prototype.setValue=function(newValue) {
+    this.value = newValue;
+    if (this.children.length > 0) {
+        for(var i=0; i<this.children.length; i++) {
+            this.children[i].setSelected((this.children[i].getValue() == this.value));
+        }
+    }
+    return this;
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/inputSelect.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/inputTelephone.js */
 lucid.html.base.tags.inputTelephone = function(){
 	lucid.html.base.tags.input.call(this);
@@ -1124,6 +1178,36 @@ lucid.html.base.tags.inputText.prototype = Object.create(lucid.html.base.tags.in
 lucid.html.builder.tags.inputText = lucid.html.base.tags.inputText;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/inputText.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/inputTextarea.js */
+lucid.html.base.tags.inputTextarea = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'textarea';
+	this.parameters = ['name', 'rows', 'cols'];
+	this.allowQuickClose = false;
+	this.allowChildren = true;
+};
+lucid.html.base.tags.inputTextarea.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputTextarea = lucid.html.base.tags.inputTextarea;
+
+lucid.html.base.tags.inputTextarea.prototype.setValue=function(newValue){
+    if (this.children.length === 0){
+        this.add(newValue);
+    } else {
+        this.children = [];
+        this.add(newValue);
+    }
+    return this;
+};
+
+lucid.html.base.tags.inputTextarea.prototype.getValue=function(){
+    if (this.children.length === 0){
+        return '';
+    } else {
+        return this.renderChildren();
+    }
+};
+/* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/inputTextarea.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/inputUrl.js */
 lucid.html.base.tags.inputUrl = function(){
@@ -1371,60 +1455,6 @@ lucid.html.builder.tags.section = lucid.html.base.tags.section;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/section.js */
 
-/* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/select.js */
-lucid.html.base.tags.select = function(){
-	lucid.html.tag.call(this);
-	this.tag = 'select';
-	this.parameters = ['name', 'value', 'data', 'onchange'];
-	this.data = null;
-	this.value = null;
-};
-lucid.html.base.tags.select.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.select = lucid.html.base.tags.select;
-
-lucid.html.base.tags.select.prototype.checkValidChild=function(child){
-	if (['option', 'optgroup'].indexOf(child.tag) < 0) {
-		throw 'Invalid child. Tag select only allows these tags as children: option, optgroup';
-	}
-};
-    
-lucid.html.base.tags.select.prototype.preRender=function(){
-    if (this.children.length > 0) {
-        for (var i=0; i<this.children.length; i++) {
-            this.children[i].setSelected((this.children[i].get('value') == this.value));
-        }
-    }
-    if (this.data !== null) {
-        for (var i=0; i<this.data.length; i++) {
-            var value = '';
-            var label = '';
-            if (typeof(this.data[i].label) != 'undefined') {
-                value = this.data[i].value;
-                label = this.data[i].label;
-            } else if (typeof(this.data[i][1]) != 'undefined') {
-                value = this.data[i][0];
-                label = this.data[i][1];
-            }
-            
-            this.add(lucid.html.build('option', value, label, (this.value == value)));
-        }
-        
-    }
-    return lucid.html.tag.prototype.preRender.call(this);
-};
-
-lucid.html.base.tags.select.prototype.setValue=function(newValue) {
-    this.value = newValue;
-    if (this.children.length > 0) {
-        for(var i=0; i<this.children.length; i++) {
-            this.children[i].setSelected((this.children[i].getValue() == this.value));
-        }
-    }
-    return this;
-};
-
-/* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/select.js */
-
 /* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/small.js */
 lucid.html.base.tags.small = function(){
 	lucid.html.tag.call(this);
@@ -1648,36 +1678,6 @@ lucid.html.base.tags.tableRow.prototype.checkValidChild=function(child){
 };
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/tableRow.js */
-
-/* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/textarea.js */
-lucid.html.base.tags.textarea = function(){
-	lucid.html.base.tags.input.call(this);
-	this.tag = 'textarea';
-	this.parameters = ['name', 'rows', 'cols'];
-	this.allowQuickClose = false;
-	this.allowChildren = true;
-};
-lucid.html.base.tags.textarea.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.textarea = lucid.html.base.tags.textarea;
-
-lucid.html.base.tags.textarea.prototype.setValue=function(newValue){
-    if (this.children.length === 0){
-        this.add(newValue);
-    } else {
-        this.children = [];
-        this.add(newValue);
-    }
-    return this;
-};
-
-lucid.html.base.tags.textarea.prototype.getValue=function(){
-    if (this.children.length === 0){
-        return '';
-    } else {
-        return this.renderChildren();
-    }
-};
-/* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/textarea.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/time.js */
 lucid.html.base.tags.time = function(){
@@ -2186,7 +2186,7 @@ lucid.html.builder.tags.cardTitle = lucid.html.bootstrap.tags.cardTitle;
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/div.js */
 lucid.html.bootstrap.tags.div = function(){
-	lucid.html.base.tags.span.call(this);
+	lucid.html.base.tags.div.call(this);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
@@ -2194,10 +2194,215 @@ lucid.html.bootstrap.tags.div = function(){
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
 };
-lucid.html.bootstrap.tags.div.prototype = Object.create(lucid.html.base.tags.span.prototype);
+lucid.html.bootstrap.tags.div.prototype = Object.create(lucid.html.base.tags.div.prototype);
 lucid.html.builder.tags.div = lucid.html.bootstrap.tags.div;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/div.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/formGroup.js */
+lucid.html.bootstrap.tags.formGroup = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'fieldset';
+	this.addClass('form-group');
+};
+lucid.html.bootstrap.tags.formGroup.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.formGroup = lucid.html.bootstrap.tags.formGroup;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/formGroup.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputEmail.js */
+lucid.html.bootstrap.tags.inputEmail = function(){
+	lucid.html.base.tags.inputEmail.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputEmail.prototype = Object.create(lucid.html.base.tags.inputEmail.prototype);
+lucid.html.builder.tags.inputEmail = lucid.html.bootstrap.tags.inputEmail;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputEmail.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputGroup.js */
+lucid.html.bootstrap.tags.inputGroup = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'div';
+	this.addClass('input-group');
+};
+lucid.html.bootstrap.tags.inputGroup.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.inputGroup = lucid.html.bootstrap.tags.inputGroup;
+
+lucid.html.bootstrap.tags.inputGroup.prototype.add=function(child){
+    if (typeof(child) == 'object') {
+        if (child.tag == 'input' || child.tag == 'select' || child.tag == 'textarea') {
+            lucid.html.tag.prototype.add.call(this, child);
+        } else if (child.tag == 'button' || (child.tag == 'a' && child.hasClass('btn') === true)) {
+            lucid.html.tag.prototype.add.call(this, '<span class="input-group-btn">');
+            lucid.html.tag.prototype.add.call(this, child);
+            lucid.html.tag.prototype.add.call(this, '</span>');
+        } else {
+            lucid.html.tag.prototype.add.call(this, '<span class="input-group-addon">');
+            lucid.html.tag.prototype.add.call(this, child);
+            lucid.html.tag.prototype.add.call(this, '</span>');
+        }
+    } else {
+        lucid.html.tag.prototype.add.call(this, '<span class="input-group-addon">');
+        lucid.html.tag.prototype.add.call(this, child);
+        lucid.html.tag.prototype.add.call(this, '</span>');
+    }
+    return this;
+};
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputGroup.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputHelp.js */
+lucid.html.base.tags.inputHelp = function(){
+	lucid.html.tag.call(this);
+	this.tag = 'small';
+	this.addClass('text-muted');
+};
+lucid.html.base.tags.inputHelp.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.inputHelp = lucid.html.base.tags.inputHelp;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputHelp.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputNumber.js */
+lucid.html.bootstrap.tags.inputNumber = function(){
+	lucid.html.base.tags.inputNumber.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputNumber.prototype = Object.create(lucid.html.base.tags.inputNumber.prototype);
+lucid.html.builder.tags.inputNumber = lucid.html.bootstrap.tags.inputNumber;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputNumber.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputPassword.js */
+lucid.html.bootstrap.tags.inputPassword = function(){
+	lucid.html.base.tags.inputPassword.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputPassword.prototype = Object.create(lucid.html.base.tags.inputPassword.prototype);
+lucid.html.builder.tags.inputPassword = lucid.html.bootstrap.tags.inputPassword;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputPassword.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputSelect.js */
+lucid.html.bootstrap.tags.inputSelect = function(){
+	lucid.html.base.tags.inputSelect.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'select';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputSelect.prototype = Object.create(lucid.html.base.tags.inputSelect.prototype);
+lucid.html.builder.tags.inputSelect = lucid.html.bootstrap.tags.inputSelect;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputSelect.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputTelephone.js */
+lucid.html.bootstrap.tags.inputTelephone = function(){
+	lucid.html.base.tags.inputTelephone.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputTelephone.prototype = Object.create(lucid.html.base.tags.inputTelephone.prototype);
+lucid.html.builder.tags.inputTelephone = lucid.html.bootstrap.tags.inputTelephone;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputTelephone.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputText.js */
+lucid.html.bootstrap.tags.inputText = function(){
+	lucid.html.base.tags.inputText.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputText.prototype = Object.create(lucid.html.base.tags.inputText.prototype);
+lucid.html.builder.tags.inputText = lucid.html.bootstrap.tags.inputText;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputText.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputTextarea.js */
+lucid.html.bootstrap.tags.inputTextarea = function(){
+	lucid.html.base.tags.inputTextarea.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'inputTextarea';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputTextarea.prototype = Object.create(lucid.html.base.tags.inputTextarea.prototype);
+lucid.html.builder.tags.inputTextarea = lucid.html.bootstrap.tags.inputTextarea;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputTextarea.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputUrl.js */
+lucid.html.bootstrap.tags.inputUrl = function(){
+	lucid.html.base.tags.inputUrl.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control');
+};
+lucid.html.bootstrap.tags.inputUrl.prototype = Object.create(lucid.html.base.tags.inputUrl.prototype);
+lucid.html.builder.tags.inputUrl = lucid.html.bootstrap.tags.inputUrl;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputUrl.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/paragraph.js */
 lucid.html.bootstrap.tags.paragraph = function(){

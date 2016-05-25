@@ -1,5 +1,5 @@
     
-lucid.html.base.tags.select.prototype.preRender=function(){
+lucid.html.base.tags.inputSelect.prototype.preRender=function(){
     if (this.children.length > 0) {
         for (var i=0; i<this.children.length; i++) {
             this.children[i].setSelected((this.children[i].get('value') == this.value));
@@ -24,7 +24,7 @@ lucid.html.base.tags.select.prototype.preRender=function(){
     return lucid.html.tag.prototype.preRender.call(this);
 };
 
-lucid.html.base.tags.select.prototype.setValue=function(newValue) {
+lucid.html.base.tags.inputSelect.prototype.setValue=function(newValue) {
     this.value = newValue;
     if (this.children.length > 0) {
         for(var i=0; i<this.children.length; i++) {

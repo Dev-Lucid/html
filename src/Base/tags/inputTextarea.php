@@ -1,7 +1,7 @@
 <?php
 namespace Lucid\Html\Base\Tags;
 
-class textarea extends \Lucid\Html\Base\Tags\input
+class inputTextarea extends \Lucid\Html\Base\Tags\input
 {
 	public $tag = 'textarea';
 	public $parameters = ['name', 'rows', 'cols'];

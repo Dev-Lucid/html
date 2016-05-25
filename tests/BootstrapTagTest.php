@@ -64,4 +64,12 @@ class BootstrapTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
+    
+    public function test_inputGroup()
+    {
+        $output = '<div class="input-group"><span class="input-group-addon">@</span><input type="text" class="form-control" name="test" /></div>';
+        $code = "@build('inputGroup')->add('@')->add(@build('inputText', 'test'))->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 }

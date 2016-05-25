@@ -1735,14 +1735,33 @@ lucid.html.bootstrap.traits.Modifiable = {
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Pullable.js */
 lucid.html.bootstrap.traits.Pullable = {
     setPull:function(val) {
-        val = String(val);
-        this.removeClass(['pull-left', 'pull-right']);
-        if (val == 'left') {
-            this.addClass('pull-left');
+        if (typeof(this.attributes.class) == 'undefined') {
+            this.attributes.class = [];
         }
-        if (val == 'right') {
-            this.addClass('pull-right');
-        } 
+        
+        var newClasses = [];
+        for (var i=0; i<this.attributes.class.length; i++) {
+            var testClass = String(this.attributes.class[i]);
+            if (testClass.indexOf('pull-') !== 0) {
+                newClasses.push(testClass);
+            }
+        }
+        
+        var sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
+
+        if (typeof(val) == 'object') {
+            for (var j=0; j < val.length; j++) {
+                if (val[j] !== null) {
+                    newClasses.push('pull-'+sizes[j]+'-'+val[j]);
+                }
+            }
+
+        } else {
+            for (var k=0; k < sizes.length; k++) {
+                newClasses.push('pull-'+sizes[k]+'-'+val);
+            }
+        }
+        this.attributes.class = newClasses;
         return this;
     }
 };
@@ -1818,6 +1837,21 @@ lucid.html.bootstrap.tags.alert.prototype.preChildren=function(){
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/alert.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/anchor.js */
+lucid.html.bootstrap.tags.anchor = function(){
+	lucid.html.base.tags.anchor.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'a';
+	this.bootstrapModifierPrefix = 'text';
+	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+};
+lucid.html.bootstrap.tags.anchor.prototype = Object.create(lucid.html.base.tags.anchor.prototype);
+lucid.html.builder.tags.anchor = lucid.html.bootstrap.tags.anchor;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/anchor.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/button.js */
 lucid.html.bootstrap.tags.button = function(){
 	lucid.html.base.tags.button.call(this);
@@ -1839,3 +1873,18 @@ lucid.html.bootstrap.tags.button.prototype = Object.create(lucid.html.base.tags.
 lucid.html.builder.tags.button = lucid.html.bootstrap.tags.button;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/button.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/paragraph.js */
+lucid.html.bootstrap.tags.paragraph = function(){
+	lucid.html.base.tags.paragraph.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'p';
+	this.bootstrapModifierPrefix = 'text';
+	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+};
+lucid.html.bootstrap.tags.paragraph.prototype = Object.create(lucid.html.base.tags.paragraph.prototype);
+lucid.html.builder.tags.paragraph = lucid.html.bootstrap.tags.paragraph;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/paragraph.js */

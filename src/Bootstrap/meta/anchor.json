@@ -1,0 +1,10 @@
+{
+    "tag":"a",
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\Anchor",
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"],
+    "properties":{
+        "bootstrapModifierPrefix":"'text'", 
+        "bootstrapModifiersAllowed":"['primary', 'success', 'warning','danger', 'info', 'muted']"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\input",
+    "tag":"input",
+    "parameters":["name"],
+    "attributes":{
+        "type":"'file'"
+    }
+}

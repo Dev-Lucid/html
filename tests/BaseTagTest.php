@@ -221,6 +221,14 @@ class BaseTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
     }
     
+    public function test_inputFile()
+    {
+        $output = '<input type="file" name="testFile" />';
+        $code = "@build('inputFile', 'testFile')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
     public function test_inputPassword()
     {
         $output = '<input type="password" name="testText" value="password1" required="required" />';

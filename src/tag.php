@@ -184,6 +184,10 @@ class Tag implements TagInterface, BuildInterface
     {
         return $this->children[count($this->children) - 1];
     }
+    
+    public function findChild($selector)
+    {
+    }
 
     protected function renderTagStart() : string
     {

@@ -1053,6 +1053,18 @@ lucid.html.builder.tags.inputEmail = lucid.html.base.tags.inputEmail;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/inputEmail.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/inputFile.js */
+lucid.html.base.tags.inputFile = function(){
+	lucid.html.base.tags.input.call(this);
+	this.tag = 'input';
+	this.parameters = ['name'];
+	this.attributes['type'] = 'file';
+};
+lucid.html.base.tags.inputFile.prototype = Object.create(lucid.html.base.tags.input.prototype);
+lucid.html.builder.tags.inputFile = lucid.html.base.tags.inputFile;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Base/tags/inputFile.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Base/tags/inputNumber.js */
 lucid.html.base.tags.inputNumber = function(){
 	lucid.html.base.tags.input.call(this);
@@ -2228,6 +2240,22 @@ lucid.html.bootstrap.tags.inputEmail.prototype = Object.create(lucid.html.base.t
 lucid.html.builder.tags.inputEmail = lucid.html.bootstrap.tags.inputEmail;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputEmail.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputFile.js */
+lucid.html.bootstrap.tags.inputFile = function(){
+	lucid.html.base.tags.inputFile.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'input';
+	this.bootstrapSizePrefix = 'form-control';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.addClass('form-control-file');
+};
+lucid.html.bootstrap.tags.inputFile.prototype = Object.create(lucid.html.base.tags.inputFile.prototype);
+lucid.html.builder.tags.inputFile = lucid.html.bootstrap.tags.inputFile;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputFile.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputGroup.js */
 lucid.html.bootstrap.tags.inputGroup = function(){

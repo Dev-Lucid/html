@@ -16,7 +16,7 @@
   ],
   "autoload": {
       "psr-4": {
-          "Lucid\\Html\\": "/", 
+          "Lucid\\Html\\": "/src", 
           "Lucid\\Html\\Base\\Tags\\":"/src/Base/tags/", 
           "Lucid\\Html\\Base\\Traits\\":"/src/Base/traits/",
           "Lucid\\Html\\Bootstrap\\Tags\\":"/src/Bootstrap/tags/", 
@@ -25,7 +25,7 @@
   },
   "autoload-dev": {
       "psr-4": {
-        "Lucid\\Html\\": "", 
+        "Lucid\\Html\\": "src", 
         "Lucid\\Html\\Base\\Tags\\":"src/Base/tags/", 
         "Lucid\\Html\\Base\\Traits\\":"src/Base/traits/",
         "Lucid\\Html\\Bootstrap\\Tags\\":"src/Bootstrap/tags/", 

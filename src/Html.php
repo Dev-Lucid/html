@@ -37,7 +37,7 @@ class Html implements BuildInterface
         }
 
         if (class_exists("Lucid\Html\Tag") === false) {
-            include(__DIR__.'/src/tag.php');
+            include(__DIR__.'/tag.php');
         }
     }
 

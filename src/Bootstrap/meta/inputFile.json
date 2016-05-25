@@ -1,0 +1,11 @@
+{
+    "tag":"input",
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\inputFile",
+    "classes":["form-control-file"],
+    "properties":{
+        "bootstrapSizePrefix":"'form-control'", 
+        "bootstrapSizesAllowed":"['sm', 'lg']"
+    },
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
+}

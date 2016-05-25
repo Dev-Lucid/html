@@ -89,6 +89,13 @@ lucid.html.bootstrap.tags.card.prototype.preChildren=function(){
                     this.children[i].children[j].addClass('list-group-item');
                 }
             }
+            if (this.children[i].tag == 'img') {
+                if (i === 0 && this.header === null) {
+                    this.children[i].addClass('card-img-top');
+                } else if (i == (this.children.length - 1) && this.footer === null) {
+                    this.children[i].addClass('card-img-bottom');
+                }
+            }
         }
     }
     return lucid.html.tag.prototype.preChildren.call(this);
@@ -101,7 +108,8 @@ lucid.html.bootstrap.tags.card.prototype.add=function(child){
             child.hasClass('card-header') === true || 
             child.hasClass('card-block') === true || 
             child.hasClass('card-footer')  === true || 
-            child.tag == 'ul'
+            child.tag == 'ul' || 
+            child.tag == 'img'
         ) {
             if (child.tag == 'ul') {
                 child.addClass('list-group').addClass('list-group-flush');

@@ -88,4 +88,22 @@ class BootstrapCardTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
     }
     
+    public function test_card_img()
+    {
+        $output = '<div class="card"><img class="card-img-top" /></div>';
+        $code = "@build('card')->add(@build('image'))->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+        
+        $output = '<div class="card"><div class="card-header">header</div><img class="card-img-bottom" /></div>';
+        $code = "@build('card', 'header')->add(@build('image'))->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<div class="card"><img class="card-img-top" /><div class="card-footer text-muted">footer</div></div>';
+        $code = "@build('card')->set('footer', 'footer')->add(@build('image'))->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
 }

@@ -97,12 +97,23 @@ class card extends \Lucid\Html\Tag
             $this->postChildrenHtml .= $this->footer->render();
         }
         
+        $i = 0;
         foreach ($this->children as $child) {
-            if (is_object($child) === true && $child->tag == 'ul') {
-                foreach ($child->children as $listItem) {
-                    $listItem->addClass('list-group-item');
+            if (is_object($child) === true) {
+                if ($child->tag == 'ul') {
+                    foreach ($child->children as $listItem) {
+                        $listItem->addClass('list-group-item');
+                    }
+                }
+                if ($child->tag == 'img') {
+                    if ($i == 0 && is_null($this->header) === true) {
+                        $child->addClass('card-img-top');
+                    } elseif ($i == (count($this->children) - 1) && is_null($this->footer) === true) {
+                        $child->addClass('card-img-bottom');
+                    }
                 }
             }
+            $i++;
         }
         return parent::preChildren();
     }
@@ -114,7 +125,8 @@ class card extends \Lucid\Html\Tag
                 $child->hasClass('card-header') === true || 
                 $child->hasClass('card-block') === true || 
                 $child->hasClass('card-footer')  === true || 
-                $child->tag == 'ul'
+                $child->tag == 'ul' || 
+                $child->tag == 'img'
             ) {
                 if ($child->tag == 'ul') {
                     $child->addClass('list-group')->addClass('list-group-flush');

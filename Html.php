@@ -1,7 +1,7 @@
 <?php
 namespace Lucid\Html;
 
-class Html
+class Html implements BuildInterface
 {
     public static $config = [];
 
@@ -67,8 +67,8 @@ class Html
         }
         return null;
     }
-
-    public static function build(string $name, ...$params)
+    
+    public static function build(string $name, ...$params) : TagInterface
     {
         $finalClass = static::findClass($name);
         if (is_null($finalClass) === true){
@@ -89,31 +89,6 @@ class Html
         }
 
         return $obj;
-    }
-
-    public static function errorBoolean($obj, $property, $bad_value)
-    {
-        if ($bad_value !== true && $bad_value !== false && is_null($value) === false) {
-            throw new \Exception('Class '.get_class($obj).' property '.$property.' must be set to true, false, or null.');
-        }
-    }
-
-    public static function errorValues($obj, $property, $bad_value, $good_values)
-    {
-        if (in_array($bad_value, $good_values) === false) {
-            throw new \Exception('Class '.get_class($obj).' property '.$property.' must be one of the following values: '.implode(', ',$good_values));
-        }
-    }
-
-    public static function errorChildTag($obj, $badTag, $allowedTags=null, $disallowedTags=null)
-    {
-        if (is_null($allowedTags) === false && in_array($badTag, $allowedTags) === false) {
-            throw new \Exception('Class '.get_class($obj).' can only have children with tag '.implode(', ',$allowedTags));
-        }
-
-        if (is_null($disallowedTags) === false && in_array($badTag, $disallowedTags) === true) {
-            throw new \Exception('Class '.get_class($obj).' can not have children with tag '.implode(', ',$disallowedTags));
-        }
     }
 }
 

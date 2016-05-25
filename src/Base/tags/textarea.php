@@ -7,8 +7,8 @@ class textarea extends \Lucid\Html\Base\Tags\input
 	public $parameters = ['name', 'rows', 'cols'];
 	public $allowQuickClose = false;
 	public $allowChildren = true;
-
-    public function setValue($newValue) 
+ 
+    public function setValue($newValue) : \Lucid\Html\TagInterface
     {
         if (count($this->children) === 0) {
             $this->add($newValue);

@@ -1,5 +1,5 @@
 <?php
-    public function getTitle()
+    public function getTitle() : \Lucid\Html\TagInterface
     {
         if (is_null($this->title) === true) {
             $this->title = $this->build('cardTitle');
@@ -7,7 +7,7 @@
         return $this->title;
     }
 
-    public function setTitle($newValue)
+    public function setTitle($newValue) : \Lucid\Html\TagInterface
     {
         $title = $this->get('title');
         $title->children = [];
@@ -15,7 +15,7 @@
         return $this;
     }
     
-    public function getSubtitle()
+    public function getSubtitle() : \Lucid\Html\TagInterface
     {
         if (is_null($this->subtitle) === true) {
             $this->subtitle = $this->build('cardSubtitle');
@@ -23,7 +23,7 @@
         return $this->subtitle;
     }
     
-    public function setSubtitle($newValue)
+    public function setSubtitle($newValue) : \Lucid\Html\TagInterface
     {
         $subtitle = $this->get('subtitle');
         $subtitle->children = [];
@@ -31,7 +31,7 @@
         return $this;
     }
     
-    public function preChildren() 
+    public function preChildren() : string
     {
         if (is_null($this->title) === false) {
             $this->preChildrenHtml .= $this->title->render();
@@ -43,7 +43,7 @@
         return parent::preChildren();
     }
     
-    public function add($child)
+    public function add($child) : \Lucid\Html\TagInterface
     {
         if (is_object($child) === false) {
             parent::add($this->build('paragraph')->addClass('card-text')->add($child));

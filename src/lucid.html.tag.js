@@ -169,6 +169,10 @@ lucid.html.tag.prototype.setupChild=function(child, action){
     return true;
 };
 
+lucid.html.tag.prototype.parent = function() {
+    return this.parent;
+};
+
 lucid.html.tag.prototype.firstChild = function() {
     return (this.children.length === 0)?null:this.children[0];
 };

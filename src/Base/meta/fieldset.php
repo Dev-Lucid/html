@@ -1,13 +1,13 @@
 <?php
-    public function getLegend()
+    public function getLegend() : \Lucid\Html\TagInterface
     {
         if (is_null($this->legend) === true) {
-            $this->legend = $this->build('legend');
+            $this->legend = static::build('legend');
         }
         return $this->legend;
     }
     
-    public function setLegend($newValue)
+    public function setLegend($newValue) : \Lucid\Html\TagInterface
     {
         $legend = $this->get('legend');
         $legend->children = [];
@@ -15,7 +15,7 @@
         return $this;
     }
     
-    public function preChildren() 
+    public function preChildren() : string
     {
         if (is_null($this->legend) === false) {
             $this->preChildrenHtml .= $this->legend->render();

@@ -15,7 +15,7 @@ class card extends \Lucid\Html\Tag
 		parent::init();
 	}
 
-    public function getHeader()
+    public function getHeader() : \Lucid\Html\TagInterface
     {
         if (is_null($this->header) === true) {
             $this->header = $this->build('cardHeader');
@@ -23,7 +23,7 @@ class card extends \Lucid\Html\Tag
         return $this->header;
     }
 
-    public function setHeader($newValue)
+    public function setHeader($newValue) : \Lucid\Html\TagInterface
     {
         $header = $this->get('header');
         $header->children = [];
@@ -31,7 +31,7 @@ class card extends \Lucid\Html\Tag
         return $this;
     }
     
-    public function getBlock()
+    public function getBlock() : \Lucid\Html\TagInterface
     {
         if (is_null($this->block) === true) {
             $this->block = $this->build('cardBlock');
@@ -40,7 +40,7 @@ class card extends \Lucid\Html\Tag
         return $this->block;
     }
 
-    public function setBlock($newValue)
+    public function setBlock($newValue) : \Lucid\Html\TagInterface
     {
         $block = $this->get('block');
         $block->children = [];
@@ -48,7 +48,7 @@ class card extends \Lucid\Html\Tag
         return $this;
     }
     
-    public function getFooter()
+    public function getFooter() : \Lucid\Html\TagInterface
     {
         if (is_null($this->footer) === true) {
             $this->footer = $this->build('cardFooter');
@@ -56,7 +56,7 @@ class card extends \Lucid\Html\Tag
         return $this->footer;
     }
     
-    public function setFooter($newValue)
+    public function setFooter($newValue) : \Lucid\Html\TagInterface
     {
         $footer = $this->get('footer');
         $footer->children = [];
@@ -64,31 +64,31 @@ class card extends \Lucid\Html\Tag
         return $this;
     }
     
-    public function getTitle()
+    public function getTitle() : \Lucid\Html\TagInterface
     {
         return $this->get('block')->get('title');
     }
     
-    public function setTitle($newValue)
+    public function setTitle($newValue) : \Lucid\Html\TagInterface
     {
         $block = $this->get('block');
         $block->set('title', $newValue);
         return $this;
     }
     
-    public function getSubtitle()
+    public function getSubtitle() : \Lucid\Html\TagInterface
     {
         return $this->get('block')->get('subtitle');
     }
     
-    public function setSubtitle($newValue)
+    public function setSubtitle($newValue) : \Lucid\Html\TagInterface
     {
         $block = $this->get('block');
         $block->set('subtitle', $newValue);
         return $this;
     }
     
-    public function preChildren() 
+    public function preChildren() : string
     {
         if (is_null($this->header) === false) {
             $this->preChildrenHtml .= $this->header->render();
@@ -118,7 +118,7 @@ class card extends \Lucid\Html\Tag
         return parent::preChildren();
     }
     
-    public function add($child)
+    public function add($child) : \Lucid\Html\TagInterface
     {
         if (is_object($child) === true) {
             if (

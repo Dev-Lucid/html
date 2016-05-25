@@ -1,5 +1,5 @@
-    
-    public function preRender()
+<?php
+    public function preRender() : string
     {
         if (count($this->children) > 0) {
             foreach ($this->children as $child) {
@@ -26,7 +26,7 @@
         return parent::preRender();
     }
     
-    public function setValue($newValue)
+    public function setValue($newValue) : \Lucid\Html\TagInterface
     {
         $this->value = $newValue;
         if (count($this->children) > 0) {
@@ -36,4 +36,4 @@
         }
         return $this;
     }
-    
+?>

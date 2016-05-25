@@ -11,7 +11,7 @@ class dialog extends \Lucid\Html\Tag
 		parent::init();
 	}
 
-    public function setOpen($newValue) 
+    public function setOpen($newValue) : \Lucid\Html\TagInterface
     {
         if ($val !== true && $val !== false) {
             throw new \Exception('Attribute open only accepts values true or false.');
@@ -20,7 +20,7 @@ class dialog extends \Lucid\Html\Tag
         return $this;
     }
 
-    public function renderOpen()
+    public function renderOpen() : string
     {
         $val = ($this->attributes['open'] === true)?'open':null;
         return $val;

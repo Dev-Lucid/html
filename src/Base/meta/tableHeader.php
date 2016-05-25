@@ -1,5 +1,5 @@
-
-    public function render_colspan()
+<?php
+    public function renderColspan()
     {
         $val = intval($this->attributes['colspan']);
         if ($val == 1) {
@@ -7,3 +7,4 @@
         }
         return $val;
     }
+?>

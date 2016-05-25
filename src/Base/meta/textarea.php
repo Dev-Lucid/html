@@ -1,5 +1,5 @@
-
-    public function setValue($newValue) 
+<?php 
+    public function setValue($newValue) : \Lucid\Html\TagInterface
     {
         if (count($this->children) === 0) {
             $this->add($newValue);
@@ -18,3 +18,4 @@
             return $this->renderChildren();
         }
     }
+?>

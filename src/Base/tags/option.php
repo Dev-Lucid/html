@@ -6,7 +6,7 @@ class option extends \Lucid\Html\Tag
 	public $tag = 'option';
 	public $parameters = ['value', 'child', 'selected'];
 
-    public function setSelected($val)
+    public function setSelected($val) : \Lucid\Html\TagInterface
     {
         if (is_null($this->parent) === false) {
             foreach ($this->parent->children as $child) {
@@ -17,7 +17,7 @@ class option extends \Lucid\Html\Tag
         return $this;
     }
 
-    public function getSelected()
+    public function getSelected() : bool
     {
         return (isset($this->attributes['selected']) === true && $this->attributes['selected'] == 'selected');
     }

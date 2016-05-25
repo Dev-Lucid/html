@@ -1,5 +1,5 @@
-
-    public function setSelected($val)
+<?php
+    public function setSelected($val) : \Lucid\Html\TagInterface
     {
         if (is_null($this->parent) === false) {
             foreach ($this->parent->children as $child) {
@@ -10,7 +10,8 @@
         return $this;
     }
 
-    public function getSelected()
+    public function getSelected() : bool
     {
         return (isset($this->attributes['selected']) === true && $this->attributes['selected'] == 'selected');
     }
+?>

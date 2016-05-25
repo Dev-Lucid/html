@@ -2,7 +2,7 @@
 namespace Lucid\Html;
 use Lucid\Html\html;
 
-class Tag
+class Tag implements TagInterface, BuildInterface
 {
     public $tag  = null;
     public $instantiatorName = null;
@@ -46,12 +46,12 @@ class Tag
         $this->init();
     }
 
-    public function build(...$parameters)
+    public static function build(string $name, ...$parameters) : TagInterface
     {
-        return \Lucid\Html\Html::build(...$parameters);
+        return \Lucid\Html\Html::build($name, ...$parameters);
     }
 
-    public function setProperties($params)
+    public function setProperties(array $params = []) : TagInterface
     {
         for ($i=0; $i<count($params); $i++) {
             $property = ($i < count($this->parameters))?$this->parameters[$i]:'child';
@@ -92,27 +92,27 @@ class Tag
         return $html;
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return $this->render();
     }
 
-    public function preRender()
+    public function preRender() : string
     {
         return '';
     }
 
-    public function postRender()
+    public function postRender() : string
     {
         return '';
     }
 
-    public function preChildren()
+    public function preChildren() : string
     {
         return '';
     }
 
-    public function postChildren()
+    public function postChildren() : string
     {
         return '';
     }
@@ -130,7 +130,7 @@ class Tag
         return $html;
     }
 
-    public function add($child)
+    public function add($child) : TagInterface
     {
         if ($this->setupChild($child, 'add') === true) {
             $this->children[] = $child;
@@ -138,7 +138,7 @@ class Tag
         return $this;
     }
 
-    public function prepend($child)
+    public function prepend($child) : TagInterface
     {
         if ($this->setupChild($child, 'prepend') === true) {
             array_unshift($this->children, $child);
@@ -164,6 +164,11 @@ class Tag
         return true;
     }
 
+    public function parent()
+    {
+        return $this->parent;
+    }
+    
     public function firstChild()
     {
         return (count($this->children) == 0)?null:$this->children[0];
@@ -206,7 +211,7 @@ class Tag
         return '</'.$this->tag.'>';
     }
 
-    public function set($name, $value)
+    public function set(string $name, $value) : TagInterface
     {
         #echo("calling set on $name = $value\n");
         $setter = 'set'.$name;
@@ -225,7 +230,7 @@ class Tag
         return $this;
     }
 
-    public function get($name)
+    public function get(string $name)
     {
         $getter = 'get'.$name;
         if (method_exists($this, $getter) === true) {
@@ -239,7 +244,7 @@ class Tag
         return null;
     }
 
-    public function paragraph($text)
+    public function paragraph($text) : TagInterface
     {
         if ($this->allowChildren === false) {
             throw new \Exception('Class '.get_class($this).' does not support ->paragraph because this class does not support having children.');
@@ -248,29 +253,29 @@ class Tag
         return $this;
     }
 
-    public function setClass($new_class)
+    public function setClass(string $newClass) : TagInterface
     {
         if (isset($this->attributes['class']) === false || is_array($this->attributes['class']) === false) {
             $this->attributes['class'] = [];
         }
-        $this->attributes['class'][] = $new_class;
+        $this->attributes['class'][] = $newClass;
         return $this;
     }
 
-    public function renderClass()
+    public function renderClass() : string
     {
         return implode(' ',$this->attributes['class']);
     }
 
-    public function hasClass($class)
+    public function hasClass(string $testClass) : bool
     {
         if (isset($this->attributes['class']) === false || is_array($this->attributes['class']) === false) {
             return false;
         }
-        return in_array($class, $this->attributes['class']);
+        return in_array($testClass, $this->attributes['class']);
     }
 
-    public function addClass($class)
+    public function addClass(string $class) : TagInterface
     {
         if($this->hasClass($class) === false) {
             if (isset($this->attributes['class']) === false ){
@@ -281,7 +286,7 @@ class Tag
         return $this;
     }
 
-    public function removeClass($class)
+    public function removeClass($class) : TagInterface
     {
         if (isset($this->attributes['class']) === true && is_array($this->attributes['class']) === true) {
             if(is_array($class) === false) {
@@ -292,12 +297,12 @@ class Tag
         return $this;
     }
 
-    public function toggleClass($class, $new_state = null)
+    public function toggleClass(string $class, $newState = null) : TagInterface
     {
-        if (is_null($new_state) === false) {
-            if($new_state === true) {
+        if (is_null($newState) === false) {
+            if($newState === true) {
                 $this->addClass($class);
-            } else if ($new_state === false) {
+            } else if ($newState === false) {
                 $this->removeClass($class);
             }
             return $this;
@@ -311,16 +316,16 @@ class Tag
         return $this;
     }
 
-    public function setStyle($new_style)
+    public function setStyle(string $newStyle) : TagInterface
     {
         if (isset($this->attributes['style']) === false || is_array($this->attributes['style']) === false) {
             $this->attributes['style'] = [];
         }
 
-        $new_style_list = explode(';', trim($new_style));
-        foreach ($new_style_list as $new_style_pair) {
-            if($new_style_pair != '') {
-                list($key, $value) = explode(':', $new_style_pair);
+        $newStyleList = explode(';', trim($newStyle));
+        foreach ($newStyleList as $newStylePair) {
+            if($newStylePair != '') {
+                list($key, $value) = explode(':', $newStylePair);
                 $key = strtolower(trim($key));
                 $value = trim($value);
                 $this->attributes['style'][$key] = $value;
@@ -329,7 +334,7 @@ class Tag
         return $this;
     }
 
-    public function renderStyle()
+    public function renderStyle() : string
     {
         $css = '';
         foreach ($this->attributes['style'] as $key=>$value) {
@@ -340,7 +345,7 @@ class Tag
         return $css;
     }
 
-    public function setHidden($val)
+    public function setHidden($val) : TagInterface
     {
         if ($val !== true && $val !== false){
             throw new \Exception('Attribute hidden only accepts values true or false.');
@@ -349,7 +354,7 @@ class Tag
         return $this;
     }
 
-    public function renderHidden()
+    public function renderHidden() : string
     {
         $val = ($this->attributes['hidden'] === true)?'hidden':null;
         return $val;

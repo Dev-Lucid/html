@@ -210,6 +210,10 @@ lucid.html.tag.prototype.setupChild=function(child, action){
     return true;
 };
 
+lucid.html.tag.prototype.parent = function() {
+    return this.parent;
+};
+
 lucid.html.tag.prototype.firstChild = function() {
     return (this.children.length === 0)?null:this.children[0];
 };
@@ -1619,7 +1623,7 @@ lucid.html.base.tags.tableHeader.prototype.checkValidChild=function(child){
 	}
 };
 
-lucid.html.builder.tags.tableHeader.prototype.render_colspan=function(child){
+lucid.html.builder.tags.tableHeader.prototype.renderColspan=function(child){
     var value = parseInt(this.attributes.colspan);
 	if (value == 1) {
         return null;

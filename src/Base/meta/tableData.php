@@ -1,4 +1,4 @@
-
+<?php
     public function renderColspan()
     {
         $val = intval($this->attributes['colspan']);
@@ -7,3 +7,4 @@
         }
         return $val;
     }
+?>

@@ -15,8 +15,8 @@ class select extends \Lucid\Html\Tag
 		}
 		return true;
 	}
-    
-    public function preRender()
+
+    public function preRender() : string
     {
         if (count($this->children) > 0) {
             foreach ($this->children as $child) {
@@ -43,7 +43,7 @@ class select extends \Lucid\Html\Tag
         return parent::preRender();
     }
     
-    public function setValue($newValue)
+    public function setValue($newValue) : \Lucid\Html\TagInterface
     {
         $this->value = $newValue;
         if (count($this->children) > 0) {
@@ -53,4 +53,4 @@ class select extends \Lucid\Html\Tag
         }
         return $this;
     }
-    }
+}

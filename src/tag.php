@@ -51,7 +51,7 @@ class Tag implements TagInterface, BuildInterface
         return \Lucid\Html\Html::build($name, ...$parameters);
     }
 
-    protected function setProperties(array $params = []) : TagInterface
+    public function setProperties(array $params = []) : TagInterface
     {
         for ($i=0; $i<count($params); $i++) {
             $property = ($i < count($this->parameters))?$this->parameters[$i]:'child';
@@ -255,7 +255,8 @@ class Tag implements TagInterface, BuildInterface
 
     public function setClass(string $newClass) : TagInterface
     {
-        return $this->addClass($newClass);
+        $this->addClass($newClass);
+        return $this;
     }
 
     protected function renderClass() : string

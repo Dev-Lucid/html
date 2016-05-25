@@ -40,4 +40,28 @@ class BootstrapTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
+    
+    public function test_span()
+    {
+        $output = '<span class="text-info pull-xs-right pull-sm-left pull-md-right pull-lg-left pull-xl-right">mytag</span>';
+        $code = "@build('span', 'mytag')->set('modifier', 'info')->set('pull', ['right', 'left', 'right', 'left', 'right'])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+
+    public function test_div()
+    {
+        $output = '<div class="text-info pull-xs-right pull-sm-left pull-md-right pull-lg-left pull-xl-right">mytag</div>';
+        $code = "@build('div', 'mytag')->set('modifier', 'info')->set('pull', ['right', 'left', 'right', 'left', 'right'])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+
+    public function test_anchorButton()
+    {
+        $output = '<a role="button" class="btn btn-primary pull-xs-right pull-sm-left pull-md-right pull-lg-left pull-xl-right" onclick="console.log(this);">mybutton</a>';
+        $code = "@build('anchorButton', 'primary', 'console.log(this);', 'mybutton')->set('modifier', 'primary')->set('pull', ['right', 'left', 'right', 'left', 'right'])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 }

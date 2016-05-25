@@ -1852,6 +1852,29 @@ lucid.html.builder.tags.anchor = lucid.html.bootstrap.tags.anchor;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/anchor.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/anchorButton.js */
+lucid.html.bootstrap.tags.anchorButton = function(){
+	lucid.html.base.tags.button.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'a';
+	this.parameters = ['modifier', 'onclick'];
+	this.title = null;
+	this.bootstrapModifierPrefix = 'btn';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info'];
+	this.bootstrapSizePrefix = 'btn';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.attributes['role'] = 'button';
+	this.attributes['type'] = null;
+	this.addClass('btn');
+};
+lucid.html.bootstrap.tags.anchorButton.prototype = Object.create(lucid.html.base.tags.button.prototype);
+lucid.html.builder.tags.anchorButton = lucid.html.bootstrap.tags.anchorButton;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/anchorButton.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/button.js */
 lucid.html.bootstrap.tags.button = function(){
 	lucid.html.base.tags.button.call(this);
@@ -1874,6 +1897,21 @@ lucid.html.builder.tags.button = lucid.html.bootstrap.tags.button;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/button.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/div.js */
+lucid.html.bootstrap.tags.div = function(){
+	lucid.html.base.tags.span.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'div';
+	this.bootstrapModifierPrefix = 'text';
+	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+};
+lucid.html.bootstrap.tags.div.prototype = Object.create(lucid.html.base.tags.span.prototype);
+lucid.html.builder.tags.div = lucid.html.bootstrap.tags.div;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/div.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/paragraph.js */
 lucid.html.bootstrap.tags.paragraph = function(){
 	lucid.html.base.tags.paragraph.call(this);
@@ -1888,3 +1926,18 @@ lucid.html.bootstrap.tags.paragraph.prototype = Object.create(lucid.html.base.ta
 lucid.html.builder.tags.paragraph = lucid.html.bootstrap.tags.paragraph;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/paragraph.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/span.js */
+lucid.html.bootstrap.tags.span = function(){
+	lucid.html.base.tags.span.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'span';
+	this.bootstrapModifierPrefix = 'text';
+	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+};
+lucid.html.bootstrap.tags.span.prototype = Object.create(lucid.html.base.tags.span.prototype);
+lucid.html.builder.tags.span = lucid.html.bootstrap.tags.span;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/span.js */

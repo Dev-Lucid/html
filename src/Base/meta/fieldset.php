@@ -1,12 +1,4 @@
 <?php
-namespace Lucid\Html\Base\Tags;
-
-class fieldset extends \Lucid\Html\Tag
-{
-	public $tag = 'fieldset';
-	public $parameters = ['legend'];
-	public $legend = null;
-
     public function getLegend()
     {
         if (is_null($this->legend) === true) {
@@ -30,4 +22,4 @@ class fieldset extends \Lucid\Html\Tag
         }
         return parent::preChildren();
     }
-}
+?>

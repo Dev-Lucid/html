@@ -124,6 +124,14 @@ class BaseTagTest extends BaseTest
         $this->runTestWithoutParameters('unorderedList', 'ul');
     }
     
+    public function test_fieldset()
+    {
+        $output = '<fieldset><legend>legend</legend>content</fieldset>';
+        $code = "@build('fieldset', 'legend', 'content')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
     public function test_textarea()
     {
         $this->runTestWithParameters('textarea', 'textarea', ['name'=>'textarea1', 'rows'=>4, 'cols'=>80,]);

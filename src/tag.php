@@ -51,7 +51,7 @@ class Tag implements TagInterface, BuildInterface
         return \Lucid\Html\Html::build($name, ...$parameters);
     }
 
-    public function setProperties(array $params = []) : TagInterface
+    protected function setProperties(array $params = []) : TagInterface
     {
         for ($i=0; $i<count($params); $i++) {
             $property = ($i < count($this->parameters))?$this->parameters[$i]:'child';
@@ -65,12 +65,12 @@ class Tag implements TagInterface, BuildInterface
         return $this;
     }
 
-    public function init()
+    protected function init()
     {
         # empty, implement in inherited classes
     }
 
-    public function checkValidChild($child) : bool
+    protected function checkValidChild($child) : bool
     {
         return true;
     }
@@ -97,27 +97,27 @@ class Tag implements TagInterface, BuildInterface
         return $this->render();
     }
 
-    public function preRender() : string
+    protected function preRender() : string
     {
         return '';
     }
 
-    public function postRender() : string
+    protected function postRender() : string
     {
         return '';
     }
 
-    public function preChildren() : string
+    protected function preChildren() : string
     {
         return '';
     }
 
-    public function postChildren() : string
+    protected function postChildren() : string
     {
         return '';
     }
 
-    public function renderChildren($list = 'children') : string
+    protected function renderChildren($list = 'children') : string
     {
         $html = '';
         foreach ($this->$list as $child) {
@@ -255,14 +255,10 @@ class Tag implements TagInterface, BuildInterface
 
     public function setClass(string $newClass) : TagInterface
     {
-        if (isset($this->attributes['class']) === false || is_array($this->attributes['class']) === false) {
-            $this->attributes['class'] = [];
-        }
-        $this->attributes['class'][] = $newClass;
-        return $this;
+        return $this->addClass($newClass);
     }
 
-    public function renderClass() : string
+    protected function renderClass() : string
     {
         return implode(' ',$this->attributes['class']);
     }
@@ -334,7 +330,7 @@ class Tag implements TagInterface, BuildInterface
         return $this;
     }
 
-    public function renderStyle() : string
+    protected function renderStyle() : string
     {
         $css = '';
         foreach ($this->attributes['style'] as $key=>$value) {

@@ -3,6 +3,7 @@ namespace Lucid\Html;
 
 Interface TagInterface
 {
+    public function __toString() : string
     public function render() : string;
     
     public function add($child) : TagInterface;

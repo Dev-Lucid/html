@@ -1,6 +1,7 @@
 {
     "tag":"div",
     "classes":["card-block"],
+    "parameters":["title", "subtitle"],
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
     "properties":{"title":"null","subtitle":"null"}
 }

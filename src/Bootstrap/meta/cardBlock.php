@@ -39,6 +39,29 @@
         if (is_null($this->subtitle) === false) {
             $this->preChildrenHtml .= $this->subtitle->render();
         }
+        
         return parent::preChildren();
+    }
+    
+    public function add($child)
+    {
+        if (is_object($child) === false) {
+            parent::add($this->build('paragraph')->addClass('card-text')->add($child));
+        } else {
+            if (
+                ($child->tag == 'h3' && $child->hasClass('card-title') === true) || 
+                ($child->tag == 'h4' && $child->hasClass('card-title') === true) || 
+                ($child->tag == 'h6' && $child->hasClass('card-subtitle') === true) || 
+                ($child->tag == 'a' && $child->hasClass('btn') === true) || 
+                ($child->tag == 'a' && $child->hasClass('card-link') === true) || 
+                ($child->tag == 'p' && $child->hasClass('card-text') === true) || 
+                ($child->tag == 'ul')
+            ) {
+                parent::add($child);
+            } else {
+                parent::add($this->build('paragraph')->addClass('card-text')->add($child));
+            }
+        }
+        return $this;
     }
 ?>

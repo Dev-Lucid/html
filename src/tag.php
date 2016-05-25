@@ -208,6 +208,7 @@ class Tag
 
     public function set($name, $value)
     {
+        #echo("calling set on $name = $value\n");
         $setter = 'set'.$name;
         if (method_exists($this, $setter) === true) {
             $this->$setter($value);

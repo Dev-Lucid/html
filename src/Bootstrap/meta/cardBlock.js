@@ -36,3 +36,23 @@ lucid.html.bootstrap.tags.cardBlock.prototype.preChildren=function(){
     }
     return lucid.html.tag.prototype.preChildren.call(this);
 };
+
+lucid.html.bootstrap.tags.cardBlock.prototype.add=function(child){
+    if (typeof(child) == 'string') {
+        lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
+    } else {
+        if (
+            (child.tag == 'h3' && child.hasClass('card-title') === true) || 
+            (child.tag == 'h4' && child.hasClass('card-title') === true) || 
+            (child.tag == 'h6' && child.hasClass('card-subtitle') === true) || 
+            (child.tag == 'a' && child.hasClass('btn') === true) || 
+            (child.tag == 'a' && child.hasClass('card-link') === true) || 
+            (child.tag == 'p' && child.hasClass('card-text') === true)
+        ) {
+            lucid.html.tag.prototype.add.call(this, child);
+        } else {
+            lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
+        }
+    }
+    return this;
+};

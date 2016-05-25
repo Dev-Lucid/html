@@ -16,12 +16,19 @@ fi
 
 node $DIR/../dist/lucid.html.buildBaseTagsOnly.js
 if [ $? -ne 0 ]; then
-    echo "JS Build will not load in Node."
+    echo "Base JS Build will not load in Node."
     exit
 fi
-echo "Successfully loaded dist js in node."
+echo "Successfully loaded base js in node."
 
-$DIR/../vendor/bin/phpunit $DIR/../tests/BaseTagTest.php
+node $DIR/../dist/lucid.html.buildBootstrap.js
+if [ $? -ne 0 ]; then
+    echo "Bootstrap JS Build will not load in Node."
+    exit
+fi
+echo "Successfully loaded bootstrap js in node."
+
+$DIR/../vendor/bin/phpunit $DIR/../tests/
 if [ $? -ne 0 ]; then
     exit
 fi

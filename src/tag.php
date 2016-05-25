@@ -132,6 +132,9 @@ class Tag implements TagInterface, BuildInterface
 
     public function add($child) : TagInterface
     {
+        if (is_object($child) === true && in_array('Lucid\\Html\\TagInterface', class_implements($child)) === false) {
+            throw new \Exception('Any child added to this object must implement Lucid\\Html\\TagInterface');
+        }
         if ($this->setupChild($child, 'add') === true) {
             $this->children[] = $child;
         }
@@ -140,6 +143,9 @@ class Tag implements TagInterface, BuildInterface
 
     public function prepend($child) : TagInterface
     {
+        if (is_object($child) === true && in_array('Lucid\\Html\\TagInterface', class_implements($child)) === false) {
+            throw new \Exception('Any child prepended to this object must implement Lucid\\Html\\TagInterface');
+        }
         if ($this->setupChild($child, 'prepend') === true) {
             array_unshift($this->children, $child);
         }

@@ -1,18 +1,4 @@
 <?php
-namespace Lucid\Html\Bootstrap\Tags;
-
-class card extends \Lucid\Html\Tag
-{
-	public $tag = 'div';
-	public $header = null;
-	public $footer = null;
-
-	public function init()
-	{
-		$this->addClass('card');
-		parent::init();
-	}
-
     public function getHeader()
     {
         if (is_null($this->header) === true) {
@@ -55,4 +41,4 @@ class card extends \Lucid\Html\Tag
         }
         return parent::preChildren();
     }
-}
+?>

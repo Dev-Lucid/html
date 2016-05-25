@@ -1,5 +1,6 @@
 {
     "tag":"div",
     "classes":["card"],
-    "namespace":"Lucid\\Html\\Bootstrap\\Tags"
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "properties":{"header":"null","footer":"null"}
 }

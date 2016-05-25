@@ -104,4 +104,20 @@ class BootstrapTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
 
     }
+    
+    public function test_cardHeaderFooterFunctionality()
+    {
+        $output = '<div class="card"><div class="card-header">header</div><div class="card-block"></div><div class="card-footer text-muted">footer</div></div>';
+        $code = "@build('card')->add(@build('cardBlock'))->set('header', 'header')->set('footer', 'footer')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
+    
+    public function test_cardBlockTitleSubtitleFunctionality()
+    {
+        $output = '<div class="card-block"><h4 class="card-title">title</h4><h6 class="card-subtitle text-muted">subtitle</h6></div>';
+        $code = "@build('cardBlock')->set('title', 'title')->set('subtitle', 'subtitle')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 }

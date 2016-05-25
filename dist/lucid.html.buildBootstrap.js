@@ -1901,10 +1901,50 @@ lucid.html.builder.tags.button = lucid.html.bootstrap.tags.button;
 lucid.html.bootstrap.tags.card = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'div';
+	this.header = null;
+	this.footer = null;
 	this.addClass('card');
 };
 lucid.html.bootstrap.tags.card.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.card = lucid.html.bootstrap.tags.card;
+
+lucid.html.bootstrap.tags.card.prototype.getHeader=function(){
+    if (this.header === null) {
+        this.header = this.build('cardHeader');
+    }
+    return this.header;
+};
+
+lucid.html.bootstrap.tags.card.prototype.setHeader=function(newValue){
+    var header = this.get('header');
+    header.children = [];
+    header.add(newValue);
+    return this;
+};
+
+lucid.html.bootstrap.tags.card.prototype.getFooter=function(){
+    if (this.footer === null) {
+        this.footer = this.build('cardFooter');
+    }
+    return this.footer;
+};
+
+lucid.html.bootstrap.tags.card.prototype.setFooter=function(newValue){
+    var footer = this.get('footer');
+    footer.children = [];
+    footer.add(newValue);
+    return this;
+};
+
+lucid.html.bootstrap.tags.card.prototype.preChildren=function(){
+    if (this.header !== null) {
+        this.preChildrenHtml += String(this.header.render());
+    }
+    if (this.footer !== null) {
+        this.postChildrenHtml += String(this.footer.render());
+    }
+    return lucid.html.tag.prototype.preChildren.call(this);
+};
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/card.js */
 
@@ -1912,10 +1952,50 @@ lucid.html.builder.tags.card = lucid.html.bootstrap.tags.card;
 lucid.html.bootstrap.tags.cardBlock = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'div';
+	this.title = null;
+	this.subtitle = null;
 	this.addClass('card-block');
 };
 lucid.html.bootstrap.tags.cardBlock.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.cardBlock = lucid.html.bootstrap.tags.cardBlock;
+
+lucid.html.bootstrap.tags.cardBlock.prototype.getTitle=function(){
+    if (this.title === null) {
+        this.title = this.build('cardTitle');
+    }
+    return this.title;
+};
+
+lucid.html.bootstrap.tags.cardBlock.prototype.setTitle=function(newValue){
+    var title = this.get('title');
+    title.children = [];
+    title.add(newValue);
+    return this;
+};
+
+lucid.html.bootstrap.tags.cardBlock.prototype.getSubtitle=function(){
+    if (this.subtitle === null) {
+        this.subtitle = this.build('cardSubtitle');
+    }
+    return this.subtitle;
+};
+
+lucid.html.bootstrap.tags.cardBlock.prototype.setSubtitle=function(newValue){
+    var subtitle = this.get('subtitle');
+    subtitle.children = [];
+    subtitle.add(newValue);
+    return this;
+};
+
+lucid.html.bootstrap.tags.cardBlock.prototype.preChildren=function(){
+    if (this.title !== null) {
+        this.preChildrenHtml += String(this.title.render());
+    }
+    if (this.subtitle !== null) {
+        this.preChildrenHtml += String(this.subtitle.render());
+    }
+    return lucid.html.tag.prototype.preChildren.call(this);
+};
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/cardBlock.js */
 

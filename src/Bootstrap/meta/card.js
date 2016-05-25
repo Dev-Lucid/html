@@ -1,12 +1,3 @@
-lucid.html.bootstrap.tags.card = function(){
-	lucid.html.tag.call(this);
-	this.tag = 'div';
-	this.header = null;
-	this.footer = null;
-	this.addClass('card');
-};
-lucid.html.bootstrap.tags.card.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.card = lucid.html.bootstrap.tags.card;
 
 lucid.html.bootstrap.tags.card.prototype.getHeader=function(){
     if (this.header === null) {

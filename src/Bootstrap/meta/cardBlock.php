@@ -1,18 +1,4 @@
 <?php
-namespace Lucid\Html\Bootstrap\Tags;
-
-class cardBlock extends \Lucid\Html\Tag
-{
-	public $tag = 'div';
-	public $title = null;
-	public $subtitle = null;
-
-	public function init()
-	{
-		$this->addClass('card-block');
-		parent::init();
-	}
-
     public function getTitle()
     {
         if (is_null($this->title) === true) {
@@ -55,4 +41,4 @@ class cardBlock extends \Lucid\Html\Tag
         }
         return parent::preChildren();
     }
-}
+?>

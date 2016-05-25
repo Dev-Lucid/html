@@ -3,31 +3,14 @@ namespace Lucid\Html\Bootstrap\Traits;
 
 trait Pullable
 {
-    public function getPull()
+    public function setPull($val)
     {
-        $pull = null;
-        if($this->hasClass('pull-left') === true)
-        {
-            $pull = 'left';
-        }
-        if($this->hasClass('pull-right') === true)
-        {
-            $pull = 'right';
-        }
-        return $pull;
-    }
-
-    public function setPull($newPull)
-    {
-        if ($newPull !== 'left' && $newPull !== 'right' && is_null($newPull) === false) {
-            throw new \Exception('->pull may only be set to left, right, or null');
-        }
-
-        if (is_null($newPull) === true) {
-            $this->removeClass('pull-left')->removeClass('pull-right');
-        } else {
-            $this->addClass('pull-'.$newPull);
-        }
+        $this->removeClass(['pull-left', 'pull-right']);
+        if ($val == 'left') {
+            $this->addClass('pull-left');
+        } elseif ($val == 'right') {
+            $this->addClass('pull-right');
+        } 
         return $this;
     }
 }

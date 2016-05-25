@@ -272,6 +272,9 @@ class Tag
     public function addClass($class)
     {
         if($this->hasClass($class) === false) {
+            if (isset($this->attributes['class']) === false ){
+                $this->attributes['class'] = [];
+            }
             $this->attributes['class'][] = $class;
         }
         return $this;

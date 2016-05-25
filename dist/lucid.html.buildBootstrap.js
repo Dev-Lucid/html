@@ -1686,6 +1686,23 @@ lucid.html.bootstrap={
 };
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/js/lucid.html.bootstrap.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Activable.js */
+lucid.html.bootstrap.traits.Activable = {
+
+    setActive:function(val) {
+        if (val === true) {
+            this.addClass('active');
+        } else if (val === false) {
+            this.removeClass('active');
+        } else {
+            throw 'Tag '+String(this.tag)+' active property may only be set to true or false';
+        }
+        return this;
+    }
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Activable.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Modifiable.js */
 lucid.html.bootstrap.traits.Modifiable = {
 
@@ -1715,10 +1732,57 @@ lucid.html.bootstrap.traits.Modifiable = {
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Modifiable.js */
 
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Pullable.js */
+lucid.html.bootstrap.traits.Pullable = {
+    setPull:function(val) {
+        val = String(val);
+        this.removeClass(['pull-left', 'pull-right']);
+        if (val == 'left') {
+            this.addClass('pull-left');
+        }
+        if (val == 'right') {
+            this.addClass('pull-right');
+        } 
+        return this;
+    }
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Pullable.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Sizeable.js */
+lucid.html.bootstrap.traits.Sizeable = {
+
+    traitInit:function() {
+        // check for
+    },
+
+    setSize:function(val) {
+        if (this.bootstrapSizesAllowed.indexOf(val) < 0) {
+            throw 'Tag '+this.instantiatorName+' does not support size '+String(val)+'. The only supported modifiers are: '+(this.bootstrapSizesAllowed.join(', '));
+        }
+
+        var classesToRemove = [];
+        for (var i=0; i<this.bootstrapSizesAllowed.length; i++) {
+            classesToRemove.push(this.bootstrapSizePrefix + '-' + this.bootstrapSizesAllowed[i]);
+        }
+        this.removeClass(classesToRemove);
+        
+        if (val === null) {
+            return this;
+        } else {
+            this.addClass(this.bootstrapSizePrefix+'-'+val);
+            return this;
+        }
+    }
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/traits/Sizeable.js */
+
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/alert.js */
 lucid.html.bootstrap.tags.alert = function(){
 	lucid.html.tag.call(this);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
 	this.tag = 'div';
 	this.parameters = ['modifier', 'title'];
@@ -1753,3 +1817,25 @@ lucid.html.bootstrap.tags.alert.prototype.preChildren=function(){
 };
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/alert.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/button.js */
+lucid.html.bootstrap.tags.button = function(){
+	lucid.html.base.tags.button.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+	this.tag = 'button';
+	this.parameters = ['modifier', 'onclick'];
+	this.title = null;
+	this.bootstrapModifierPrefix = 'btn';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.bootstrapSizePrefix = 'btn';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
+	this.attributes['type'] = 'button';
+	this.addClass('btn');
+};
+lucid.html.bootstrap.tags.button.prototype = Object.create(lucid.html.base.tags.button.prototype);
+lucid.html.builder.tags.button = lucid.html.bootstrap.tags.button;
+
+/* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/button.js */

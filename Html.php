@@ -48,22 +48,24 @@ class Html
 
     private static function findClass(string $name) : string
     {
-        if (strpos($name, '\\') === false) {
-            if (isset(static::$config['loadedClassCache'][$name]) === true) {
-                return static::$config['loadedClassCache'][$name];
-            }
-
-            foreach (static::$config['autoloadMap'] as $prefix=>$path) {
-                
-                $filePath = $path.'tags/'.$name.'.php';
-                $class = $prefix.'\\Tags\\'.$name;
-            
-                if (class_exists($class, true) === true) {
-                    static::$config['loadedClassCache'][$name] = $class;
-                    return static::$config['loadedClassCache'][$name];
-                } 
-            }
+        if (isset(static::$config['loadedClassCache'][$name]) === true) {
+            return static::$config['loadedClassCache'][$name];
         }
+
+        foreach (static::$config['autoloadMap'] as $prefix=>$path) {
+            
+            $filePath = $path.'tags/'.$name.'.php';
+            $class = $prefix.'\\Tags\\'.$name;
+        
+            if (class_exists($class, true) === true) {
+                static::$config['loadedClassCache'][$name] = $class;
+            } 
+        }
+        
+        if (isset(static::$config['loadedClassCache'][$name]) === true) {
+            return static::$config['loadedClassCache'][$name];
+        }
+        return null;
     }
 
     public static function build(string $name, ...$params)

@@ -1,6 +1,7 @@
 lucid.html.bootstrap.tags.alert = function(){
 	lucid.html.tag.call(this);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
 	this.tag = 'div';
 	this.parameters = ['modifier', 'title'];

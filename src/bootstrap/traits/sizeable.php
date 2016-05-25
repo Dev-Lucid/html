@@ -3,6 +3,13 @@ namespace Lucid\Html\Bootstrap\Traits;
 
 trait Sizeable
 {
+    public function SizeableInit()
+    {
+        if (property_exists($this, 'bootstrapSizesAllowed') === false || property_exists($this, 'bootstrapSizePrefix') === false) {
+            throw new \Exception('Class '.get_class($this).' cannot use trait Sizeable. In order to use this trait, it must have two properties: string ->bootstrapSizePrefix and array ->bootstrapSizesAllowed');
+        }
+    }
+    
     # to use this trait, you must define two properties on your class. Below are examples:
     # public $bootstrapSizePrefix  = 'btn';
     # public $bootstrapSizesAllowed = ['xs', 'sm', 'md', 'lg', 'xl',];

@@ -1,22 +1,26 @@
 <?php
 namespace Lucid\Html\Bootstrap\Tags;
-use \Lucid\html\html;
 
-class Button extends \Lucid\Html\Tag
+class button extends \Lucid\Html\Base\Tags\Button
 {
-    use \Lucid\Html\Bootstrap\Traits\Pullable, \Lucid\Html\Bootstrap\Traits\Modifiable, \Lucid\Html\Bootstrap\Traits\Sizeable, \Lucid\Html\Bootstrap\Traits\Activable;
+	use \Lucid\Html\Bootstrap\Traits\Modifiable;
+	use \Lucid\Html\Bootstrap\Traits\Sizeable;
+	use \Lucid\Html\Bootstrap\Traits\Pullable;
 
-    public $bootstrapModifierPrefix   = 'btn';
-    public $bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'info', 'danger', 'warning', 'link', 'primary-outline', 'secondary-outline', 'success-outline', 'info-outline', 'danger-outline', 'warning-outline', ];
-    public $bootstrapSizePrefix       = 'btn';
-    public $bootstrapSizesAllowed     = ['sm', 'lg', ];
+	public $tag = 'button';
+	public $parameters = ['modifier', 'onclick'];
+	public $title = null;
+	public $bootstrapModifierPrefix = 'btn';
+	public $bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	public $bootstrapSizePrefix = 'btn';
+	public $bootstrapSizesAllowed = ['sm', 'lg'];
+	public $attributes = [
+		'type'=>'button',
+	];
 
-    public $parameters = ['child','modifier', 'onclick', 'type'];
-
-    public function init()
-    {
-        $this->addClass('btn');
-        $this->type = 'button';
-        parent::init();
-    }
+	public function init()
+	{
+		$this->addClass('btn');
+		parent::init();
+	}
 }

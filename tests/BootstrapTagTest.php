@@ -16,4 +16,12 @@ class BootstrapTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code, [], 'buildBootstrap'));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
+    
+    public function test_button()
+    {
+        $output = '<button type="button" class="btn btn-warning btn-lg pull-right" onclick="console.log(this);">testbutton</button>';
+        $code = "@build('button', 'warning', 'console.log(this);', 'testbutton')->set('size', 'lg')->set('pull', 'right')->render()";
+        #$this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 }

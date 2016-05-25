@@ -15,6 +15,7 @@ $files = [
         '/Bootstrap/js/*.js',
         '/Bootstrap/traits/*.js',
         '/Bootstrap/tags/alert.js',
+        '/Bootstrap/tags/button.js',
     ],
     'foundation'=>[
     ],

@@ -5,5 +5,5 @@
     "parameters":["modifier", "title"],
     "attributes":{"role":"'alert'"},
     "properties":{"title":"null", "bootstrapModifierPrefix":"'alert'", "bootstrapModifiersAllowed":"['success', 'warning','danger', 'info']"},
-    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable"]
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
 }

@@ -4,6 +4,7 @@ namespace Lucid\Html\Bootstrap\Tags;
 class alert extends \Lucid\Html\Tag
 {
 	use \Lucid\Html\Bootstrap\Traits\Modifiable;
+	use \Lucid\Html\Bootstrap\Traits\Pullable;
 
 	public $tag = 'div';
 	public $parameters = ['modifier', 'title'];

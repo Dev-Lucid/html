@@ -13,9 +13,12 @@ Interface TagInterface
     public function firstChild();
     public function lastChild();
     
+    public function getTag() : string;
     public function get(string $name);
     public function set(string $name, $value) : TagInterface;
     public function setProperties(array $params = []) : TagInterface;
+    
+    public function findChildren(SelectorInterface $selector, bool $recurse = false) : array;
     
     public function setClass(string $newClass) : TagInterface;
     public function hasClass(string $testClass) : bool;

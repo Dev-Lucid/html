@@ -1,4 +1,5 @@
 {
     "tag":"small",
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
     "classes":["text-muted"]
 }

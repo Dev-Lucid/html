@@ -64,6 +64,24 @@ class Tag implements TagInterface, BuildInterface
         }
         return $this;
     }
+    
+    public function findChildren(SelectorInterface $selector, bool $recurse = false, TagInterface $tag = null, array $results = []) : array
+    {
+        if (is_null($tag) === true) {
+            $tag = $this;
+        }
+        foreach ($tag->children as $child) {
+            if (is_object($child) === true) {
+                if($selector->test($child) === true) {
+                    $results[] = $child;
+                }
+                if ($recurse === true) {
+                    $results = $this->findChildren($selector, $recurse, $child, $results);
+                }
+            }
+        }
+        return $results;
+    }
 
     protected function init()
     {
@@ -219,6 +237,11 @@ class Tag implements TagInterface, BuildInterface
             return '';
         }
         return '</'.$this->tag.'>';
+    }
+    
+    public function getTag() : string
+    {
+        return $this->tag;
     }
 
     public function set(string $name, $value) : TagInterface

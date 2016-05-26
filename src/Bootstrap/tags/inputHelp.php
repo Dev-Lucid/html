@@ -1,5 +1,5 @@
 <?php
-namespace Lucid\Html\Base\Tags;
+namespace Lucid\Html\Bootstrap\Tags;
 
 class inputHelp extends \Lucid\Html\Tag
 {

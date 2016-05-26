@@ -7,6 +7,7 @@ $files = [
         '/lucid.html.js',
         '/lucid.html.builder.js',
         '/lucid.html.tag.js',
+        '/lucid.html.Selector.js',
         '/Base/js/*.js',
         '/Base/traits/*.js',
         '/Base/tags/*.js',

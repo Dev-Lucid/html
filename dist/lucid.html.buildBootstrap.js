@@ -79,6 +79,29 @@ lucid.html.tag.prototype.build=function(){
     return lucid.html.build.apply(null, arguments);
 };
 
+lucid.html.tag.prototype.findChildren=function(selector, recurse, tag, results) {
+    if (typeof(recurse) == 'undefined') {
+        recurse = false;
+    }
+    if (typeof(tag) == 'undefined') {
+        tag = this;
+    }
+    if (typeof(results) == 'undefined') {
+        results = [];
+    }
+    for (var i=0; i<tag.children.length; i++) {
+        if (typeof(tag.children[i]) == 'object') {
+            if (selector.test(tag.children[i]) === true) {
+                results.push(tag.children[i]);
+            }
+            if (recurse === true) {
+                results = this.findChildren(selector, recurse, tag.children[i], results);
+            }
+        }
+    }
+    return results;
+};
+
 lucid.html.tag.prototype.setProperties=function(params) {
     for (var i=0;  i<params.length; i++) {
         var property = (i < this.parameters.length)?this.parameters[i]:'child';
@@ -107,6 +130,10 @@ lucid.html.tag.prototype.set=function(name, value) {
         }
     }
     return this;
+};
+
+lucid.html.tag.prototype.getTag=function(){
+    return this.tag;
 };
 
 lucid.html.tag.prototype.get=function(name){
@@ -360,6 +387,68 @@ lucid.html.tag.prototype.renderHidden=function() {
     return val;
 };
 /* File end: /Users/mike/projects/components/html/bin/../src/lucid.html.tag.js */
+
+/* File start: /Users/mike/projects/components/html/bin/../src/lucid.html.Selector.js */
+lucid.html.Selector=function(pattern){
+    this.class = null;
+    this.tag   = null;
+    this.attributeName  = null;
+    this.attributeValue = null;
+    
+    if (typeof(pattern) == 'string') {
+        pattern = pattern.split('.');
+        if (pattern.length > 1) {
+            this.class = pattern.pop();
+        } 
+        pattern = pattern[0];
+        
+        pattern = pattern.split('[');
+        if (pattern.length > 1) {
+            var attr = String(pattern[1]).replace(']', '').split('=');
+            this.attributeName  = attr[0];
+            this.attributeValue = attr[1];
+        }
+        this.tag = pattern[0];
+    }
+};
+
+lucid.html.Selector.prototype.matchTag=function(tagToMatch){
+    this.tag = tagToMatch;
+    return this;
+};
+
+lucid.html.Selector.prototype.matchClass=function(classToMatch){
+    this.class = classToMatch;
+    return this;
+};
+
+lucid.html.Selector.prototype.matchAttribute=function(attributeName, attributeValue){
+    this.attributeName  = attributeName;
+    this.attributeValue = attributeValue;
+    return this;
+};
+
+lucid.html.Selector.prototype.test=function(tagToTest) {
+    var matches = true;
+    if (this.tag !== null) {
+        if (this.tag != tagToTest.getTag()) {
+            matches = false;
+        }
+    }
+    if (this.class !== null) {
+        if (tagToTest.hasClass(this.class) === false) {
+            matches = false;
+        }
+    }
+    if (this.attributeName !== null) {
+        if (this.attributeValue != tagToTest.get(this.attributeName)) {
+            matches = false;
+        }
+    }
+    return matches;    
+};
+
+/* File end: /Users/mike/projects/components/html/bin/../src/lucid.html.Selector.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Base/js/lucid.html.base.js */
 lucid.html.base={
@@ -2220,6 +2309,29 @@ lucid.html.bootstrap.tags.formGroup = function(){
 lucid.html.bootstrap.tags.formGroup.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.builder.tags.formGroup = lucid.html.bootstrap.tags.formGroup;
 
+lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
+    var checkboxSelector = new lucid.html.Selector('input[type=checkbox]');
+    var checkboxes = this.findChildren(checkboxSelector, true);
+
+    var radioSelector = new lucid.html.Selector('input[type=radio]');
+    var radios = this.findChildren(radioSelector, true);
+
+    if (checkboxes.length > 0) {
+        this.tag = 'div';
+        this.removeClass('form-group');
+        this.addClass('checkbox');
+		this.preChildrenHtml  += '<label>';
+		this.postChildrenHtml += '</label>';
+    }
+    if (radios.length > 0) {
+        this.tag = 'div';
+        this.removeClass('form-group');
+        this.addClass('radio');
+		this.preChildrenHtml  += '<label>';
+		this.postChildrenHtml += '</label>';
+    }
+    return lucid.html.tag.prototype.preRender.call(this);
+};
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/formGroup.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputEmail.js */
@@ -2289,13 +2401,13 @@ lucid.html.bootstrap.tags.inputGroup.prototype.add=function(child){
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputGroup.js */
 
 /* File start: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputHelp.js */
-lucid.html.base.tags.inputHelp = function(){
+lucid.html.bootstrap.tags.inputHelp = function(){
 	lucid.html.tag.call(this);
 	this.tag = 'small';
 	this.addClass('text-muted');
 };
-lucid.html.base.tags.inputHelp.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.inputHelp = lucid.html.base.tags.inputHelp;
+lucid.html.bootstrap.tags.inputHelp.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.inputHelp = lucid.html.bootstrap.tags.inputHelp;
 
 /* File end: /Users/mike/projects/components/html/bin/../src/Bootstrap/tags/inputHelp.js */
 

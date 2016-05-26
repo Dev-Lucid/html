@@ -38,6 +38,29 @@ lucid.html.tag.prototype.build=function(){
     return lucid.html.build.apply(null, arguments);
 };
 
+lucid.html.tag.prototype.findChildren=function(selector, recurse, tag, results) {
+    if (typeof(recurse) == 'undefined') {
+        recurse = false;
+    }
+    if (typeof(tag) == 'undefined') {
+        tag = this;
+    }
+    if (typeof(results) == 'undefined') {
+        results = [];
+    }
+    for (var i=0; i<tag.children.length; i++) {
+        if (typeof(tag.children[i]) == 'object') {
+            if (selector.test(tag.children[i]) === true) {
+                results.push(tag.children[i]);
+            }
+            if (recurse === true) {
+                results = this.findChildren(selector, recurse, tag.children[i], results);
+            }
+        }
+    }
+    return results;
+};
+
 lucid.html.tag.prototype.setProperties=function(params) {
     for (var i=0;  i<params.length; i++) {
         var property = (i < this.parameters.length)?this.parameters[i]:'child';
@@ -66,6 +89,10 @@ lucid.html.tag.prototype.set=function(name, value) {
         }
     }
     return this;
+};
+
+lucid.html.tag.prototype.getTag=function(){
+    return this.tag;
 };
 
 lucid.html.tag.prototype.get=function(name){

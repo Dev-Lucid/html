@@ -65,13 +65,13 @@ class Html implements BuildInterface
         if (isset(static::$config['loadedClassCache'][$name]) === true) {
             return static::$config['loadedClassCache'][$name];
         }
-        return null;
+        return '';
     }
     
     public static function build(string $name, ...$params) : TagInterface
     {
         $finalClass = static::findClass($name);
-        if (is_null($finalClass) === true){
+        if ($finalClass == ''){
             $obj = new Tag();
         } else {
             $obj = new $finalClass();

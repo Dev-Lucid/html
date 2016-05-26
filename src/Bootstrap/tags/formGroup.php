@@ -14,10 +14,10 @@ class formGroup extends \Lucid\Html\Tag
     public function preRender() : string
     {
         $checkboxSelector = new \Lucid\Html\Selector('input[type=checkbox]');
-        $checkboxes = $this->findChildren($checkboxSelector, true);
+        $checkboxes = $this->queryChildren($checkboxSelector, true);
 
         $radioSelector = new \Lucid\Html\Selector('input[type=radio]');
-        $radios = $this->findChildren($radioSelector, true);
+        $radios = $this->queryChildren($radioSelector, true);
 
         if (count($checkboxes) > 0) {
             $this->tag = 'div';

@@ -38,9 +38,9 @@ lucid.html.tag.prototype.build=function(){
     return lucid.html.build.apply(null, arguments);
 };
 
-lucid.html.tag.prototype.findChildren=function(selector, recurse, tag, results) {
+lucid.html.tag.prototype.queryChildren=function(selector, recurse, tag, results) {
     if (typeof(recurse) == 'undefined') {
-        recurse = false;
+        recurse = true;
     }
     if (typeof(tag) == 'undefined') {
         tag = this;
@@ -54,8 +54,30 @@ lucid.html.tag.prototype.findChildren=function(selector, recurse, tag, results) 
                 results.push(tag.children[i]);
             }
             if (recurse === true) {
-                results = this.findChildren(selector, recurse, tag.children[i], results);
+                results = this.queryChildren(selector, recurse, tag.children[i], results);
             }
+        }
+    }
+    return results;
+};
+
+lucid.html.tag.prototype.queryParents=function(selector, recurse, tag, results) {
+    if (typeof(recurse) == 'undefined') {
+        recurse = true;
+    }
+    if (typeof(tag) == 'undefined') {
+        tag = this;
+    }
+    if (typeof(results) == 'undefined') {
+        results = [];
+    }
+    var parent = tag.getParent();
+    if (parent !== null) {
+        if (selector.test(parent) === true) {
+            results.push(parent);
+        }
+        if (recurse === true) {
+            results = this.queryParents(selector, recurse, parent, results);
         }
     }
     return results;
@@ -89,6 +111,10 @@ lucid.html.tag.prototype.set=function(name, value) {
         }
     }
     return this;
+};
+
+lucid.html.tag.prototype.getParent=function(){
+    return this.parent;
 };
 
 lucid.html.tag.prototype.getTag=function(){

@@ -18,7 +18,8 @@ Interface TagInterface
     public function set(string $name, $value) : TagInterface;
     public function setProperties(array $params = []) : TagInterface;
     
-    public function findChildren(SelectorInterface $selector, bool $recurse = false) : array;
+    public function queryChildren(SelectorInterface $selector, bool $recurse = true) : array;
+    public function queryParents(SelectorInterface $selector, bool $recurse = true) : array;
     
     public function setClass(string $newClass) : TagInterface;
     public function hasClass(string $testClass) : bool;

@@ -8,10 +8,10 @@ lucid.html.builder.tags.formGroup = lucid.html.bootstrap.tags.formGroup;
 
 lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
     var checkboxSelector = new lucid.html.Selector('input[type=checkbox]');
-    var checkboxes = this.findChildren(checkboxSelector, true);
+    var checkboxes = this.queryChildren(checkboxSelector, true);
 
     var radioSelector = new lucid.html.Selector('input[type=radio]');
-    var radios = this.findChildren(radioSelector, true);
+    var radios = this.queryChildren(radioSelector, true);
 
     if (checkboxes.length > 0) {
         this.tag = 'div';

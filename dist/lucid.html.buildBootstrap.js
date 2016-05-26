@@ -1896,6 +1896,23 @@ lucid.html.bootstrap.traits.Modifiable = {
 
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/traits/Modifiable.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/traits/Pillable.js */
+lucid.html.bootstrap.traits.Pillable = {
+
+    setPill:function(val) {
+        if (val === true) {
+            this.addClass('label-pill');
+        } else if (val === false) {
+            this.removeClass('label-pill');
+        } else {
+            throw 'Tag '+String(this.tag)+' pill property may only be set to true or false';
+        }
+        return this;
+    }
+};
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/traits/Pillable.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/traits/Pullable.js */
 lucid.html.bootstrap.traits.Pullable = {
     setPull:function(val) {
@@ -2038,6 +2055,24 @@ lucid.html.bootstrap.tags.anchorButton.prototype = Object.create(lucid.html.base
 lucid.html.builder.tags.anchorButton = lucid.html.bootstrap.tags.anchorButton;
 
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/tags/anchorButton.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/tags/badge.js */
+lucid.html.bootstrap.tags.badge = function(){
+	lucid.html.tag.call(this);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+	this.addTrait(lucid.html.bootstrap.traits.Pillable);
+
+	this.tag = 'span';
+	this.parameters = ['modifier'];
+	this.bootstrapModifierPrefix = 'label';
+	this.bootstrapModifiersAllowed = ['default', 'primary', 'secondary', 'success', 'warning','danger', 'info'];
+	this.addClass('label');
+};
+lucid.html.bootstrap.tags.badge.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.builder.tags.badge = lucid.html.bootstrap.tags.badge;
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/tags/badge.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/tags/button.js */
 lucid.html.bootstrap.tags.button = function(){

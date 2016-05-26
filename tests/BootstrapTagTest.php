@@ -16,4 +16,17 @@ class BootstrapTagTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
     }
+    
+    public function test_badge()
+    {
+        $output = '<span class="label label-primary">test</span>';
+        $code = "@build('badge', 'primary', 'test')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<span class="label label-primary label-pill">test</span>';
+        $code = "@build('badge', 'primary', 'test')->set('pill', true)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }    
 }

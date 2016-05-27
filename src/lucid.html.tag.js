@@ -1,7 +1,8 @@
-lucid.html.tag = function(factory){
+lucid.html.tag = function(factory, instantiatorName){
     this.factory = factory;
+    this.instantiatorName = instantiatorName;
+
     this.tag = null;
-    this.instantiatorName = null;
     this.attributes = {};
 
     // From here: http://www.w3schools.com/tags/ref_standardattributes.asp
@@ -24,14 +25,17 @@ lucid.html.tag.prototype.checkValidChild=function(child){
 
 // sort of a compatibility hack for php traits
 lucid.html.tag.prototype.addTrait=function(newTrait){
-    for(var key in newTrait) {
-        if (key != 'traitInit') {
-            this[key] = newTrait[key];
-        }
-    }
+    var callTraitInit = false;
     if (typeof(newTrait.traitInit) == 'function') {
-        newTrait.traitInit.call(this);
+        callTraitInit = true;
     }
+    for(var key in newTrait) {
+        this[key] = newTrait[key];
+    }
+    if (callTraitInit === true) {
+        this.traitInit();
+    }
+    
     return this;
 };
 
@@ -100,6 +104,22 @@ lucid.html.tag.prototype.setProperties=function(params) {
         }
     }
     return this;
+};
+
+lucid.html.tag.prototype.requireProperties=function(traitName, names) {
+    for(var name in names) {
+        // http://stackoverflow.com/questions/9716468/is-there-any-function-like-isnumeric-in-javascript-to-validate-numbers
+        if (Number(parseFloat(name)) == name) {
+            name = names[name];
+            var description = '';
+        } else {
+            var description = names[name];
+        }
+        //console.log('checking for property '+name+': '+typeof(this[name]));
+        if (typeof(this[name]) == 'undefined') {
+            throw new lucid.html.exception.MissingRequiredProperty(this.instantiatorName, traitName, name, description);
+        }
+    }
 };
 
 lucid.html.tag.prototype.set=function(name, value) {

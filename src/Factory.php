@@ -70,9 +70,9 @@ class Factory implements FactoryInterface
     {
         $finalClass = $this->findClass($name);
         if ($finalClass == ''){
-            $obj = new Tag($this);
+            $obj = new Tag($this, $name);
         } else {
-            $obj = new $finalClass($this);
+            $obj = new $finalClass($this, $name);
         }
 
         if (is_null($obj->tag) === true) {

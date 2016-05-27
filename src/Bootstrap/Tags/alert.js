@@ -1,9 +1,6 @@
 lucid.html.bootstrap.tags.alert = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'div';
 	this.parameters = ['modifier', 'title'];
 	this.title = null;
@@ -11,6 +8,9 @@ lucid.html.bootstrap.tags.alert = function(factory){
 	this.bootstrapModifiersAllowed = ['success', 'warning','danger', 'info'];
 	this.attributes['role'] = 'alert';
 	this.addClass('alert');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.alert.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.alert = lucid.html.bootstrap.tags.alert;

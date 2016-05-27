@@ -44,17 +44,6 @@ function generateJavascript($config)
     $src .= "\tthis.factory = factory;\n";
     $src .= "\t".$config['inheritFrom'].".apply(this, arguments);\n";
     
-    if (isset($config['traits']) === true) {
-        foreach ($config['traits'] as $trait) {
-            $trait = explode('\\', $trait);
-            $trait[0] = strtolower($trait[0]);
-            $trait[1] = strtolower($trait[1]);
-            $trait[2] = strtolower($trait[2]);
-            $trait[3] = strtolower($trait[3]);
-            $src .= "\tthis.addTrait(".implode('.', $trait).");\n";
-        }
-        $src .= "\n";
-    }
 
     if (isset($config['tag']) === true) {
         $src .= "\tthis.tag = '".$config['tag']."';\n";
@@ -97,8 +86,17 @@ function generateJavascript($config)
         }
     }
     
-    
-
+    if (isset($config['traits']) === true) {
+        foreach ($config['traits'] as $trait) {
+            $trait = explode('\\', $trait);
+            $trait[0] = strtolower($trait[0]);
+            $trait[1] = strtolower($trait[1]);
+            $trait[2] = strtolower($trait[2]);
+            $trait[3] = strtolower($trait[3]);
+            $src .= "\tthis.addTrait(".implode('.', $trait).");\n";
+        }
+        $src .= "\n";
+    }
 
     $src .= "};\n";
 

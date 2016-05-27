@@ -4,6 +4,7 @@ if (typeof lucid == 'undefined') {
     var lucid = {};
 }
 lucid.html = {};
+lucid.html.exception = {};
 
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.js */
 
@@ -15,7 +16,7 @@ lucid.html.factory=function(){
 lucid.html.factory.prototype.build=function(tag){
     var obj;
     if (typeof(lucid.html.factory.tags[tag]) == 'function'){
-        obj = new lucid.html.factory.tags[tag](this);
+        obj = new lucid.html.factory.tags[tag](this, tag);
         
         var newArgs = [];
         for (var i=1; i<arguments.length; i++) {
@@ -23,10 +24,10 @@ lucid.html.factory.prototype.build=function(tag){
         }
         obj.setProperties(newArgs);
     } else {
-        obj = new lucid.html.tag(this);
+        obj = new lucid.html.tag(this, tag);
         obj.tag = tag;
     }
-    obj.instantiatorName = tag;
+    
     return obj;
 };
 
@@ -35,10 +36,11 @@ lucid.html.factory.tags = {};
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.factory.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/lucid.html.tag.js */
-lucid.html.tag = function(factory){
+lucid.html.tag = function(factory, instantiatorName){
     this.factory = factory;
+    this.instantiatorName = instantiatorName;
+
     this.tag = null;
-    this.instantiatorName = null;
     this.attributes = {};
 
     // From here: http://www.w3schools.com/tags/ref_standardattributes.asp
@@ -61,14 +63,17 @@ lucid.html.tag.prototype.checkValidChild=function(child){
 
 // sort of a compatibility hack for php traits
 lucid.html.tag.prototype.addTrait=function(newTrait){
-    for(var key in newTrait) {
-        if (key != 'traitInit') {
-            this[key] = newTrait[key];
-        }
-    }
+    var callTraitInit = false;
     if (typeof(newTrait.traitInit) == 'function') {
-        newTrait.traitInit.call(this);
+        callTraitInit = true;
     }
+    for(var key in newTrait) {
+        this[key] = newTrait[key];
+    }
+    if (callTraitInit === true) {
+        this.traitInit();
+    }
+    
     return this;
 };
 
@@ -137,6 +142,22 @@ lucid.html.tag.prototype.setProperties=function(params) {
         }
     }
     return this;
+};
+
+lucid.html.tag.prototype.requireProperties=function(traitName, names) {
+    for(var name in names) {
+        // http://stackoverflow.com/questions/9716468/is-there-any-function-like-isnumeric-in-javascript-to-validate-numbers
+        if (Number(parseFloat(name)) == name) {
+            name = names[name];
+            var description = '';
+        } else {
+            var description = names[name];
+        }
+        //console.log('checking for property '+name+': '+typeof(this[name]));
+        if (typeof(this[name]) == 'undefined') {
+            throw new lucid.html.exception.MissingRequiredProperty(this.instantiatorName, traitName, name, description);
+        }
+    }
 };
 
 lucid.html.tag.prototype.set=function(name, value) {
@@ -478,6 +499,17 @@ lucid.html.Selector.prototype.test=function(tagToTest) {
 
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.Selector.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Exception/MissingRequiredProperty.js */
+lucid.html.exception.MissingRequiredProperty=function(className, traitName, propertyName, description){
+    this.message = 'Class '+String(className)+' cannot use trait '+String(traitName)+' until it has a property named '+String(propertyName);
+    if (typeof(description) == 'string' && description !== '') {
+        this.message += String(description);
+    }
+};
+lucid.html.exception.MissingRequiredProperty.prototype = Object.create(Error.prototype);
+
+/* File end: /Volumes/Lucid/html/bin/../src/Exception/MissingRequiredProperty.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Base/js/lucid.html.base.js */
 lucid.html.base={
     tags:{},
@@ -747,14 +779,14 @@ lucid.html.factory.tags.br = lucid.html.base.tags.br;
 lucid.html.base.tags.button = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
-	this.addTrait(lucid.html.base.traits.Disableable);
-	this.addTrait(lucid.html.base.traits.Autofocusable);
-
 	this.tag = 'button';
 	this.allowedAttributes.push('type');
 	this.allowedAttributes.push('name');
 	this.parameters = ['child', 'onclick'];
 	this.attributes['type'] = 'button';
+	this.addTrait(lucid.html.base.traits.Disableable);
+	this.addTrait(lucid.html.base.traits.Autofocusable);
+
 };
 lucid.html.base.tags.button.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.button = lucid.html.base.tags.button;
@@ -1169,14 +1201,14 @@ lucid.html.factory.tags.image = lucid.html.base.tags.image;
 lucid.html.base.tags.input = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
+	this.tag = 'input';
+	this.allowQuickClose = true;
+	this.allowChildren = false;
 	this.addTrait(lucid.html.base.traits.Disableable);
 	this.addTrait(lucid.html.base.traits.Readonlyable);
 	this.addTrait(lucid.html.base.traits.Requireable);
 	this.addTrait(lucid.html.base.traits.Autofocusable);
 
-	this.tag = 'input';
-	this.allowQuickClose = true;
-	this.allowChildren = false;
 };
 lucid.html.base.tags.input.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.input = lucid.html.base.tags.input;
@@ -1187,12 +1219,12 @@ lucid.html.factory.tags.input = lucid.html.base.tags.input;
 lucid.html.base.tags.inputCheckbox = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.input.apply(this, arguments);
-	this.addTrait(lucid.html.base.traits.Checkable);
-
 	this.tag = 'input';
 	this.allowedAttributes.push('value');
 	this.parameters = ['name', 'checked', 'postHtml'];
 	this.attributes['type'] = 'checkbox';
+	this.addTrait(lucid.html.base.traits.Checkable);
+
 };
 lucid.html.base.tags.inputCheckbox.prototype = Object.create(lucid.html.base.tags.input.prototype);
 lucid.html.factory.tags.inputCheckbox = lucid.html.base.tags.inputCheckbox;
@@ -1263,11 +1295,11 @@ lucid.html.factory.tags.inputPassword = lucid.html.base.tags.inputPassword;
 lucid.html.base.tags.inputRadio = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.input.apply(this, arguments);
-	this.addTrait(lucid.html.base.traits.Checkable);
-
 	this.tag = 'input';
 	this.parameters = ['name', 'value', 'checked', 'postHtml'];
 	this.attributes['type'] = 'radio';
+	this.addTrait(lucid.html.base.traits.Checkable);
+
 };
 lucid.html.base.tags.inputRadio.prototype = Object.create(lucid.html.base.tags.input.prototype);
 lucid.html.factory.tags.inputRadio = lucid.html.base.tags.inputRadio;

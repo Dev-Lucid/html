@@ -3,5 +3,13 @@
     "classes":["card"],
     "parameters":["header", "block", "footer"],
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
-    "properties":{"header":"null", "block":"null", "footer":"null"}
+    "properties":{
+        "header":"null", 
+        "block":"null", 
+        "footer":"null",
+        "bootstrapInversePrefix":"'card'", 
+        "bootstrapModifierPrefix":"'card'", 
+        "bootstrapModifiersAllowed":"['primary', 'success', 'warning','danger', 'info']"
+    },
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Inverseable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
 }

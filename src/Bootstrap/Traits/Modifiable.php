@@ -6,9 +6,7 @@ trait Modifiable
     
     public function ModifiableInit()
     {
-        if (property_exists($this, 'bootstrapModifiersAllowed') === false || property_exists($this, 'bootstrapModifierPrefix') === false) {
-            throw new \Exception('Class '.get_class($this).' cannot use trait Modifiable. In order to use this trait, it must have two properties: string ->bootstrapModifierPrefix and array ->bootstrapModifiersAllowed');
-        }
+        $this->requireProperties(__TRAIT__, ['bootstrapModifiersAllowed', 'bootstrapModifierPrefix']);
     }
     
     # to use this trait, you must define two properties on your class. Below are examples:

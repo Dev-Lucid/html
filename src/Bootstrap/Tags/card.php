@@ -3,11 +3,18 @@ namespace Lucid\Html\Bootstrap\Tags;
 
 class card extends \Lucid\Html\Tag
 {
+	use \Lucid\Html\Bootstrap\Traits\Modifiable;
+	use \Lucid\Html\Bootstrap\Traits\Inverseable;
+	use \Lucid\Html\Bootstrap\Traits\Pullable;
+
 	public $tag = 'div';
 	public $parameters = ['header', 'block', 'footer'];
 	public $header = null;
 	public $block = null;
 	public $footer = null;
+	public $bootstrapInversePrefix = 'card';
+	public $bootstrapModifierPrefix = 'card';
+	public $bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info'];
 
 	public function init()
 	{

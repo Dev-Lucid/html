@@ -4,6 +4,7 @@ if (typeof lucid == 'undefined') {
     var lucid = {};
 }
 lucid.html = {};
+lucid.html.exception = {};
 
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.js */
 
@@ -15,7 +16,7 @@ lucid.html.factory=function(){
 lucid.html.factory.prototype.build=function(tag){
     var obj;
     if (typeof(lucid.html.factory.tags[tag]) == 'function'){
-        obj = new lucid.html.factory.tags[tag](this);
+        obj = new lucid.html.factory.tags[tag](this, tag);
         
         var newArgs = [];
         for (var i=1; i<arguments.length; i++) {
@@ -23,10 +24,10 @@ lucid.html.factory.prototype.build=function(tag){
         }
         obj.setProperties(newArgs);
     } else {
-        obj = new lucid.html.tag(this);
+        obj = new lucid.html.tag(this, tag);
         obj.tag = tag;
     }
-    obj.instantiatorName = tag;
+    
     return obj;
 };
 
@@ -35,10 +36,11 @@ lucid.html.factory.tags = {};
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.factory.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/lucid.html.tag.js */
-lucid.html.tag = function(factory){
+lucid.html.tag = function(factory, instantiatorName){
     this.factory = factory;
+    this.instantiatorName = instantiatorName;
+
     this.tag = null;
-    this.instantiatorName = null;
     this.attributes = {};
 
     // From here: http://www.w3schools.com/tags/ref_standardattributes.asp
@@ -61,14 +63,17 @@ lucid.html.tag.prototype.checkValidChild=function(child){
 
 // sort of a compatibility hack for php traits
 lucid.html.tag.prototype.addTrait=function(newTrait){
-    for(var key in newTrait) {
-        if (key != 'traitInit') {
-            this[key] = newTrait[key];
-        }
-    }
+    var callTraitInit = false;
     if (typeof(newTrait.traitInit) == 'function') {
-        newTrait.traitInit.call(this);
+        callTraitInit = true;
     }
+    for(var key in newTrait) {
+        this[key] = newTrait[key];
+    }
+    if (callTraitInit === true) {
+        this.traitInit();
+    }
+    
     return this;
 };
 
@@ -137,6 +142,22 @@ lucid.html.tag.prototype.setProperties=function(params) {
         }
     }
     return this;
+};
+
+lucid.html.tag.prototype.requireProperties=function(traitName, names) {
+    for(var name in names) {
+        // http://stackoverflow.com/questions/9716468/is-there-any-function-like-isnumeric-in-javascript-to-validate-numbers
+        if (Number(parseFloat(name)) == name) {
+            name = names[name];
+            var description = '';
+        } else {
+            var description = names[name];
+        }
+        //console.log('checking for property '+name+': '+typeof(this[name]));
+        if (typeof(this[name]) == 'undefined') {
+            throw new lucid.html.exception.MissingRequiredProperty(this.instantiatorName, traitName, name, description);
+        }
+    }
 };
 
 lucid.html.tag.prototype.set=function(name, value) {
@@ -478,6 +499,17 @@ lucid.html.Selector.prototype.test=function(tagToTest) {
 
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.Selector.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Exception/MissingRequiredProperty.js */
+lucid.html.exception.MissingRequiredProperty=function(className, traitName, propertyName, description){
+    this.message = 'Class '+String(className)+' cannot use trait '+String(traitName)+' until it has a property named '+String(propertyName);
+    if (typeof(description) == 'string' && description !== '') {
+        this.message += String(description);
+    }
+};
+lucid.html.exception.MissingRequiredProperty.prototype = Object.create(Error.prototype);
+
+/* File end: /Volumes/Lucid/html/bin/../src/Exception/MissingRequiredProperty.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Base/js/lucid.html.base.js */
 lucid.html.base={
     tags:{},
@@ -747,14 +779,14 @@ lucid.html.factory.tags.br = lucid.html.base.tags.br;
 lucid.html.base.tags.button = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
-	this.addTrait(lucid.html.base.traits.Disableable);
-	this.addTrait(lucid.html.base.traits.Autofocusable);
-
 	this.tag = 'button';
 	this.allowedAttributes.push('type');
 	this.allowedAttributes.push('name');
 	this.parameters = ['child', 'onclick'];
 	this.attributes['type'] = 'button';
+	this.addTrait(lucid.html.base.traits.Disableable);
+	this.addTrait(lucid.html.base.traits.Autofocusable);
+
 };
 lucid.html.base.tags.button.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.button = lucid.html.base.tags.button;
@@ -1169,14 +1201,14 @@ lucid.html.factory.tags.image = lucid.html.base.tags.image;
 lucid.html.base.tags.input = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
+	this.tag = 'input';
+	this.allowQuickClose = true;
+	this.allowChildren = false;
 	this.addTrait(lucid.html.base.traits.Disableable);
 	this.addTrait(lucid.html.base.traits.Readonlyable);
 	this.addTrait(lucid.html.base.traits.Requireable);
 	this.addTrait(lucid.html.base.traits.Autofocusable);
 
-	this.tag = 'input';
-	this.allowQuickClose = true;
-	this.allowChildren = false;
 };
 lucid.html.base.tags.input.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.input = lucid.html.base.tags.input;
@@ -1187,12 +1219,12 @@ lucid.html.factory.tags.input = lucid.html.base.tags.input;
 lucid.html.base.tags.inputCheckbox = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.input.apply(this, arguments);
-	this.addTrait(lucid.html.base.traits.Checkable);
-
 	this.tag = 'input';
 	this.allowedAttributes.push('value');
 	this.parameters = ['name', 'checked', 'postHtml'];
 	this.attributes['type'] = 'checkbox';
+	this.addTrait(lucid.html.base.traits.Checkable);
+
 };
 lucid.html.base.tags.inputCheckbox.prototype = Object.create(lucid.html.base.tags.input.prototype);
 lucid.html.factory.tags.inputCheckbox = lucid.html.base.tags.inputCheckbox;
@@ -1263,11 +1295,11 @@ lucid.html.factory.tags.inputPassword = lucid.html.base.tags.inputPassword;
 lucid.html.base.tags.inputRadio = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.input.apply(this, arguments);
-	this.addTrait(lucid.html.base.traits.Checkable);
-
 	this.tag = 'input';
 	this.parameters = ['name', 'value', 'checked', 'postHtml'];
 	this.attributes['type'] = 'radio';
+	this.addTrait(lucid.html.base.traits.Checkable);
+
 };
 lucid.html.base.tags.inputRadio.prototype = Object.create(lucid.html.base.tags.input.prototype);
 lucid.html.factory.tags.inputRadio = lucid.html.base.tags.inputRadio;
@@ -1959,11 +1991,30 @@ lucid.html.bootstrap.traits.Activable = {
 
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Activable.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Inverseable.js */
+lucid.html.bootstrap.traits.Inverseable = {
+    traitInit:function(){
+        this.requireProperties('Inverseable', ['bootstrapInversePrefix']);
+    },
+    setInverse:function(val) {
+        if (val === true) {
+            this.addClass(this.bootstrapInversePrefix + '-inverse');
+        } else if (val === false) {
+            this.removeClass(this.bootstrapInversePrefix + '-inverse');
+        } else {
+            throw 'Tag '+String(this.tag)+' inverse property may only be set to true or false';
+        }
+        return this;
+    }
+};
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Inverseable.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Modifiable.js */
 lucid.html.bootstrap.traits.Modifiable = {
 
     traitInit:function() {
-        // check for
+        this.requireProperties('Modifiable', ['bootstrapModifiersAllowed', 'bootstrapModifierPrefix']);
     },
 
     setModifier:function(val) {
@@ -1990,14 +2041,16 @@ lucid.html.bootstrap.traits.Modifiable = {
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Pillable.js */
 lucid.html.bootstrap.traits.Pillable = {
-
+    traitInit:function(){
+        this.requireProperties('Pillable', ['bootstrapPillPrefix']);
+    },
     setPill:function(val) {
         if (val === true) {
-            this.addClass('label-pill');
+            this.addClass(this.bootstrapPillPrefix+'-pill');
         } else if (val === false) {
-            this.removeClass('label-pill');
+            this.removeClass(this.bootstrapPillPrefix+'-pill');
         } else {
-            throw 'Tag '+String(this.tag)+' pill property may only be set to true or false';
+            throw 'Class '+String(this.instantiatorName)+' pill property may only be set to true or false';
         }
         return this;
     }
@@ -2045,12 +2098,12 @@ lucid.html.bootstrap.traits.Pullable = {
 lucid.html.bootstrap.traits.Sizeable = {
 
     traitInit:function() {
-        // check for
+        this.requireProperties('Pullable', ['bootstrapSizesAllowed', 'bootstrapSizePrefix']);
     },
 
     setSize:function(val) {
         if (this.bootstrapSizesAllowed.indexOf(val) < 0) {
-            throw 'Tag '+this.instantiatorName+' does not support size '+String(val)+'. The only supported modifiers are: '+(this.bootstrapSizesAllowed.join(', '));
+            throw 'Class '+this.instantiatorName+' does not support size '+String(val)+'. The only supported modifiers are: '+(this.bootstrapSizesAllowed.join(', '));
         }
 
         var classesToRemove = [];
@@ -2074,9 +2127,6 @@ lucid.html.bootstrap.traits.Sizeable = {
 lucid.html.bootstrap.tags.alert = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'div';
 	this.parameters = ['modifier', 'title'];
 	this.title = null;
@@ -2084,6 +2134,9 @@ lucid.html.bootstrap.tags.alert = function(factory){
 	this.bootstrapModifiersAllowed = ['success', 'warning','danger', 'info'];
 	this.attributes['role'] = 'alert';
 	this.addClass('alert');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.alert.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.alert = lucid.html.bootstrap.tags.alert;
@@ -2115,12 +2168,12 @@ lucid.html.bootstrap.tags.alert.prototype.preChildren=function(){
 lucid.html.bootstrap.tags.anchor = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.anchor.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'a';
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.anchor.prototype = Object.create(lucid.html.base.tags.anchor.prototype);
 lucid.html.factory.tags.anchor = lucid.html.bootstrap.tags.anchor;
@@ -2131,10 +2184,6 @@ lucid.html.factory.tags.anchor = lucid.html.bootstrap.tags.anchor;
 lucid.html.bootstrap.tags.anchorButton = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.button.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'a';
 	this.parameters = ['modifier', 'onclick'];
 	this.title = null;
@@ -2145,6 +2194,10 @@ lucid.html.bootstrap.tags.anchorButton = function(factory){
 	this.attributes['role'] = 'button';
 	this.attributes['type'] = null;
 	this.addClass('btn');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.anchorButton.prototype = Object.create(lucid.html.base.tags.button.prototype);
 lucid.html.factory.tags.anchorButton = lucid.html.bootstrap.tags.anchorButton;
@@ -2155,15 +2208,16 @@ lucid.html.factory.tags.anchorButton = lucid.html.bootstrap.tags.anchorButton;
 lucid.html.bootstrap.tags.badge = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
+	this.tag = 'span';
+	this.parameters = ['modifier'];
+	this.bootstrapPillPrefix = 'label';
+	this.bootstrapModifierPrefix = 'label';
+	this.bootstrapModifiersAllowed = ['default', 'primary', 'secondary', 'success', 'warning','danger', 'info'];
+	this.addClass('label');
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 	this.addTrait(lucid.html.bootstrap.traits.Pillable);
 
-	this.tag = 'span';
-	this.parameters = ['modifier'];
-	this.bootstrapModifierPrefix = 'label';
-	this.bootstrapModifiersAllowed = ['default', 'primary', 'secondary', 'success', 'warning','danger', 'info'];
-	this.addClass('label');
 };
 lucid.html.bootstrap.tags.badge.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.badge = lucid.html.bootstrap.tags.badge;
@@ -2186,10 +2240,6 @@ lucid.html.factory.tags.breadcrumb = lucid.html.bootstrap.tags.breadcrumb;
 lucid.html.bootstrap.tags.button = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.button.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'button';
 	this.parameters = ['modifier', 'onclick'];
 	this.title = null;
@@ -2199,6 +2249,10 @@ lucid.html.bootstrap.tags.button = function(factory){
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.attributes['type'] = 'button';
 	this.addClass('btn');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.button.prototype = Object.create(lucid.html.base.tags.button.prototype);
 lucid.html.factory.tags.button = lucid.html.bootstrap.tags.button;
@@ -2214,7 +2268,14 @@ lucid.html.bootstrap.tags.card = function(factory){
 	this.header = null;
 	this.block = null;
 	this.footer = null;
+	this.bootstrapInversePrefix = 'card';
+	this.bootstrapModifierPrefix = 'card';
+	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info'];
 	this.addClass('card');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Inverseable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.card.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.card = lucid.html.bootstrap.tags.card;
@@ -2393,7 +2454,10 @@ lucid.html.bootstrap.tags.cardBlock.prototype.add=function(child){
     if (typeof(child) == 'string') {
         lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
     } else {
-        if (
+        if (child.tag == 'blockquote') {
+            child.addClass('card-blockquote');
+            lucid.html.tag.prototype.add.call(this, child);
+        } else if (
             (child.tag == 'h3' && child.hasClass('card-title') === true) || 
             (child.tag == 'h4' && child.hasClass('card-title') === true) || 
             (child.tag == 'h6' && child.hasClass('card-subtitle') === true) || 
@@ -2465,12 +2529,12 @@ lucid.html.factory.tags.cardTitle = lucid.html.bootstrap.tags.cardTitle;
 lucid.html.bootstrap.tags.div = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.div.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'div';
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.div.prototype = Object.create(lucid.html.base.tags.div.prototype);
 lucid.html.factory.tags.div = lucid.html.bootstrap.tags.div;
@@ -2516,16 +2580,16 @@ lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
 lucid.html.bootstrap.tags.inputEmail = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputEmail.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'input';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputEmail.prototype = Object.create(lucid.html.base.tags.inputEmail.prototype);
 lucid.html.factory.tags.inputEmail = lucid.html.bootstrap.tags.inputEmail;
@@ -2536,13 +2600,13 @@ lucid.html.factory.tags.inputEmail = lucid.html.bootstrap.tags.inputEmail;
 lucid.html.bootstrap.tags.inputFile = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputFile.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'input';
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control-file');
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputFile.prototype = Object.create(lucid.html.base.tags.inputFile.prototype);
 lucid.html.factory.tags.inputFile = lucid.html.bootstrap.tags.inputFile;
@@ -2597,16 +2661,16 @@ lucid.html.factory.tags.inputHelp = lucid.html.bootstrap.tags.inputHelp;
 lucid.html.bootstrap.tags.inputNumber = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputNumber.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'input';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputNumber.prototype = Object.create(lucid.html.base.tags.inputNumber.prototype);
 lucid.html.factory.tags.inputNumber = lucid.html.bootstrap.tags.inputNumber;
@@ -2617,16 +2681,16 @@ lucid.html.factory.tags.inputNumber = lucid.html.bootstrap.tags.inputNumber;
 lucid.html.bootstrap.tags.inputPassword = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputPassword.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'input';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputPassword.prototype = Object.create(lucid.html.base.tags.inputPassword.prototype);
 lucid.html.factory.tags.inputPassword = lucid.html.bootstrap.tags.inputPassword;
@@ -2637,16 +2701,16 @@ lucid.html.factory.tags.inputPassword = lucid.html.bootstrap.tags.inputPassword;
 lucid.html.bootstrap.tags.inputSelect = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputSelect.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'select';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputSelect.prototype = Object.create(lucid.html.base.tags.inputSelect.prototype);
 lucid.html.factory.tags.inputSelect = lucid.html.bootstrap.tags.inputSelect;
@@ -2657,16 +2721,16 @@ lucid.html.factory.tags.inputSelect = lucid.html.bootstrap.tags.inputSelect;
 lucid.html.bootstrap.tags.inputTelephone = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputTelephone.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'input';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputTelephone.prototype = Object.create(lucid.html.base.tags.inputTelephone.prototype);
 lucid.html.factory.tags.inputTelephone = lucid.html.bootstrap.tags.inputTelephone;
@@ -2677,16 +2741,16 @@ lucid.html.factory.tags.inputTelephone = lucid.html.bootstrap.tags.inputTelephon
 lucid.html.bootstrap.tags.inputText = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputText.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'input';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputText.prototype = Object.create(lucid.html.base.tags.inputText.prototype);
 lucid.html.factory.tags.inputText = lucid.html.bootstrap.tags.inputText;
@@ -2697,16 +2761,16 @@ lucid.html.factory.tags.inputText = lucid.html.bootstrap.tags.inputText;
 lucid.html.bootstrap.tags.inputTextarea = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputTextarea.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'inputTextarea';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputTextarea.prototype = Object.create(lucid.html.base.tags.inputTextarea.prototype);
 lucid.html.factory.tags.inputTextarea = lucid.html.bootstrap.tags.inputTextarea;
@@ -2717,16 +2781,16 @@ lucid.html.factory.tags.inputTextarea = lucid.html.bootstrap.tags.inputTextarea;
 lucid.html.bootstrap.tags.inputUrl = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputUrl.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'input';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.inputUrl.prototype = Object.create(lucid.html.base.tags.inputUrl.prototype);
 lucid.html.factory.tags.inputUrl = lucid.html.bootstrap.tags.inputUrl;
@@ -2749,12 +2813,12 @@ lucid.html.factory.tags.pagination = lucid.html.bootstrap.tags.pagination;
 lucid.html.bootstrap.tags.paragraph = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.paragraph.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'p';
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.paragraph.prototype = Object.create(lucid.html.base.tags.paragraph.prototype);
 lucid.html.factory.tags.paragraph = lucid.html.bootstrap.tags.paragraph;
@@ -2765,12 +2829,12 @@ lucid.html.factory.tags.paragraph = lucid.html.bootstrap.tags.paragraph;
 lucid.html.bootstrap.tags.span = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.span.apply(this, arguments);
-	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
 	this.tag = 'span';
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.span.prototype = Object.create(lucid.html.base.tags.span.prototype);
 lucid.html.factory.tags.span = lucid.html.bootstrap.tags.span;

@@ -52,7 +52,10 @@ lucid.html.bootstrap.tags.cardBlock.prototype.add=function(child){
     if (typeof(child) == 'string') {
         lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
     } else {
-        if (
+        if (child.tag == 'blockquote') {
+            child.addClass('card-blockquote');
+            lucid.html.tag.prototype.add.call(this, child);
+        } else if (
             (child.tag == 'h3' && child.hasClass('card-title') === true) || 
             (child.tag == 'h4' && child.hasClass('card-title') === true) || 
             (child.tag == 'h6' && child.hasClass('card-subtitle') === true) || 

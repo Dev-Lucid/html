@@ -1,12 +1,14 @@
 lucid.html.bootstrap.traits.Pillable = {
-
+    traitInit:function(){
+        this.requireProperties('Pillable', ['bootstrapPillPrefix']);
+    },
     setPill:function(val) {
         if (val === true) {
-            this.addClass('label-pill');
+            this.addClass(this.bootstrapPillPrefix+'-pill');
         } else if (val === false) {
-            this.removeClass('label-pill');
+            this.removeClass(this.bootstrapPillPrefix+'-pill');
         } else {
-            throw 'Tag '+String(this.tag)+' pill property may only be set to true or false';
+            throw 'Class '+String(this.instantiatorName)+' pill property may only be set to true or false';
         }
         return this;
     }

@@ -3,7 +3,7 @@ namespace Lucid\Html;
 
 Interface TagInterface extends FactoryInterface
 {
-    function __construct(FactoryInterface $factory);
+    function __construct(FactoryInterface $factory, string $instantiatorName);
     
     public function __toString() : string;
     public function render() : string;
@@ -18,6 +18,7 @@ Interface TagInterface extends FactoryInterface
     public function getTag() : string;
     public function get(string $name);
     public function set(string $name, $value) : TagInterface;
+    public function requireProperties(string $trait, array $names);
     public function setProperties(array $params = []) : TagInterface;
     
     public function queryChildren(SelectorInterface $selector, bool $recurse = true) : array;

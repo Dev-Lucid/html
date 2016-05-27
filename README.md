@@ -5,13 +5,16 @@ A library for building HTML.
 
 ```javascript
 # in Javascript!
-var myAnchor = lucid.html.build('anchor', 'http://google.com', 'google');
+var factory = new lucid.html.factory();
+var myAnchor = factory.build('anchor', 'http://google.com', 'google');
 console.log(myAnchor.render());
 ```
 
 ```php
 # in PHP!
-$myAnchor = \Lucid\Html\Html::build('anchor', 'http://google.com', 'google');
+# (this assumes you've configured an autoloader to find this class)
+$factory = new \Lucid\Html\Factory();
+$myAnchor = $factory->build('anchor', 'http://google.com', 'google');
 echo($myAnchor->render());
 ```
 

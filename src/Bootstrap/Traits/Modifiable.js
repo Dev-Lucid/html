@@ -1,7 +1,7 @@
 lucid.html.bootstrap.traits.Modifiable = {
 
     traitInit:function() {
-        // check for
+        this.requireProperties('Modifiable', ['bootstrapModifiersAllowed', 'bootstrapModifierPrefix']);
     },
 
     setModifier:function(val) {

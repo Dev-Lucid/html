@@ -3,6 +3,11 @@ namespace Lucid\Html\Bootstrap\Traits;
 
 trait Pillable
 {
+    public function PillableInit()
+    {
+        $this->requireProperties('Pillable', ['bootstrapPillPrefix']);
+    }
+    
     public function setPill($val)
     {
         if ($val === true) {

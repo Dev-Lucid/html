@@ -25,9 +25,11 @@ class Tag implements TagInterface
     public $preChildrenHtml  = '';
     public $postChildrenHtml = '';
 
-    function __construct(FactoryInterface $factory)
+    function __construct(FactoryInterface $factory, string $instantiatorName)
     {
         $this->factory = $factory;
+        $this->instantiatorName = $instantiatorName;
+        
         $allTraits  = [];
         $allClasses = class_parents($this);
 
@@ -65,6 +67,19 @@ class Tag implements TagInterface
             }
         }
         return $this;
+    }
+    
+    public function requireProperties(string $trait, array $names)
+    {
+        foreach ($names as $name=>$description) {
+            if (is_numeric($name) === true) {
+                $name = $description;
+                $description = '';
+            }
+            if (property_exists($this, $name) === false) {
+                throw new Exception\MissingRequiredProperty(get_class($this), $trait, $name, $description);
+            }
+        }
     }
     
     public function queryChildren(SelectorInterface $selector, bool $recurse = true, TagInterface $tag = null, array $results = []) : array

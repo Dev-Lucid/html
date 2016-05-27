@@ -4,6 +4,7 @@
     "classes":["label"],
     "parameters":["modifier"],
     "properties":{
+        "bootstrapPillPrefix":"'label'", 
         "bootstrapModifierPrefix":"'label'", 
         "bootstrapModifiersAllowed":"['default', 'primary', 'secondary', 'success', 'warning','danger', 'info']"
     },

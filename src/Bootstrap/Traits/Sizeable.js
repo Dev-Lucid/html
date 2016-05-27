@@ -1,12 +1,12 @@
 lucid.html.bootstrap.traits.Sizeable = {
 
     traitInit:function() {
-        // check for
+        this.requireProperties('Pullable', ['bootstrapSizesAllowed', 'bootstrapSizePrefix']);
     },
 
     setSize:function(val) {
         if (this.bootstrapSizesAllowed.indexOf(val) < 0) {
-            throw 'Tag '+this.instantiatorName+' does not support size '+String(val)+'. The only supported modifiers are: '+(this.bootstrapSizesAllowed.join(', '));
+            throw 'Class '+this.instantiatorName+' does not support size '+String(val)+'. The only supported modifiers are: '+(this.bootstrapSizesAllowed.join(', '));
         }
 
         var classesToRemove = [];

@@ -8,6 +8,8 @@ $files = [
         '/lucid.html.factory.js',
         '/lucid.html.tag.js',
         '/lucid.html.Selector.js',
+        '/Exception/*.js',
+        
         '/Base/js/*.js',
         '/Base/Traits/*.js',
         '/Base/Tags/*.js',

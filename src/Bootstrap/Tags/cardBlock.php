@@ -63,7 +63,10 @@ class cardBlock extends \Lucid\Html\Tag
         if (is_object($child) === false) {
             parent::add($this->build('paragraph')->addClass('card-text')->add($child));
         } else {
-            if (
+            if ($child->tag == 'blockquote') {
+                $child->addClass('card-blockquote');
+                parent::add($child);
+            } else if (
                 ($child->tag == 'h3' && $child->hasClass('card-title') === true) || 
                 ($child->tag == 'h4' && $child->hasClass('card-title') === true) || 
                 ($child->tag == 'h6' && $child->hasClass('card-subtitle') === true) || 

@@ -6,7 +6,14 @@ lucid.html.bootstrap.tags.card = function(factory){
 	this.header = null;
 	this.block = null;
 	this.footer = null;
+	this.bootstrapInversePrefix = 'card';
+	this.bootstrapModifierPrefix = 'card';
+	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info'];
 	this.addClass('card');
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Inverseable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.card.prototype = Object.create(lucid.html.tag.prototype);
 lucid.html.factory.tags.card = lucid.html.bootstrap.tags.card;

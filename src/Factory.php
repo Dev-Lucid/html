@@ -6,7 +6,7 @@ class Factory implements FactoryInterface
     protected $config           = [];
     protected $loadedClassCache = [];
     protected $autoloadMap      = [];
-    public    $hooks            = [];
+    protected $hooks            = [];
     const SUPPORTED_FLAVORS = ['Bootstrap'];
 
     public function __construct(string $flavor = '')
@@ -33,6 +33,35 @@ class Factory implements FactoryInterface
         if (class_exists("Lucid\Html\Tag") === false) {
             include(__DIR__.'/Tag.php');
         }
+    }
+    
+    public function addHook(array $tags, string $action, Callable $callable)
+    {
+        foreach ($tags as $tag) {
+            if (isset($this->hooks[$tag.'__'.$action]) === false) {
+                $this->hooks[$tag.'__'.$action] = [];
+            }
+            $this->hooks[$tag.'__'.$action][] = $callable;
+        }
+    }
+    
+    public function callHooks(TagInterface $tag, string $action)
+    {
+        if (isset($this->hooks[$tag->instantiatorName.'__'.$action]) === true) {
+            foreach ($this->hooks[$tag->instantiatorName.'__'.$action] as $callable) {
+                $callable($tag);
+            }
+        }
+    }
+    
+    public function setJavascriptHook(Callable $callable)
+    {
+        $this->hooks['javascript'] = $callable;
+    }
+    
+    public function javascript($jsToRun)
+    {
+        return $this->hooks['javascript']($jsToRun);
     }
 
     public function addFlavor(string $namespacePrefix, string $path) : FactoryInterface
@@ -81,10 +110,7 @@ class Factory implements FactoryInterface
         $obj->instantiatorName = $name;
         $obj->setProperties($params);
 
-        if (isset($this->hooks[$name.'__create']) === true && is_callable($this->hooks[$name.'__create']) === true) {
-            $func = $this->hooks[$name.'__create'];
-            $func($obj);
-        }
+        $this->callHooks($obj, 'create');
 
         return $obj;
     }

@@ -26,15 +26,13 @@
   },
   "require":{
       "php": "^7.0",
-    "dev-lucid/container": "^2.1"
   },
   "require-dev":{
       "tedivm/jshrink": "^1.1",
       "phpunit/phpunit": "^5.0"
   },
   "suggest": {
-      "twbs/bootstrap": "dev-v4-dev",
-      "zurb/foundation": "^6.2.0"
+      "twbs/bootstrap": "dev-v4-dev"
   },
   "license": "MIT",
   "bin": [

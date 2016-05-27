@@ -6,7 +6,6 @@ class BaseTagTest extends BaseTest
     
     public function setup()
     {
-        Lucid\Html\Html::init();
     }
 
     public function testClassFunctions()

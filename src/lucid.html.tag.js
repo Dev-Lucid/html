@@ -1,4 +1,5 @@
-lucid.html.tag = function(){
+lucid.html.tag = function(factory){
+    this.factory = factory;
     this.tag = null;
     this.instantiatorName = null;
     this.attributes = {};
@@ -35,7 +36,12 @@ lucid.html.tag.prototype.addTrait=function(newTrait){
 };
 
 lucid.html.tag.prototype.build=function(){
-    return lucid.html.build.apply(null, arguments);
+    var args = [];
+    for(var i=0; i<arguments.length; i++){
+        args.push(arguments[i]);
+    }
+    var result = this.factory.build.apply(this.factory, args);
+    return result;
 };
 
 lucid.html.tag.prototype.queryChildren=function(selector, recurse, tag, results) {

@@ -2,7 +2,7 @@
     public function getLegend() : \Lucid\Html\TagInterface
     {
         if (is_null($this->legend) === true) {
-            $this->legend = static::build('legend');
+            $this->legend = $this->build('legend');
         }
         return $this->legend;
     }

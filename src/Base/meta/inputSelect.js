@@ -17,7 +17,7 @@ lucid.html.base.tags.inputSelect.prototype.preRender=function(){
                 label = this.data[i][1];
             }
             
-            this.add(lucid.html.build('option', value, label, (this.value == value)));
+            this.add(this.build('option', value, label, (this.value == value)));
         }
         
     }

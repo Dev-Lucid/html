@@ -2,7 +2,7 @@
 <?php
 
 $file = $argv[1];
-$dir = str_replace('/meta', '/tags', dirname($file));
+$dir = str_replace('/meta', '/Tags', dirname($file));
 $config = json_decode(file_get_contents($file), true);
 $config['name'] = str_replace('.json', '', basename($file));
 if (isset($config['tag']) === false) {
@@ -34,15 +34,15 @@ if ($config['inheritFrom'] == 'Lucid\\Html\\Tag') {
 }
 
 
-$files = glob(__DIR__.'/../src/base/meta/*.json');
 echo("\tBuilding JS for ".str_pad($config['name'], 27, ".", STR_PAD_RIGHT));
 generateJavascript($config);
 echo("★\n");
 
 function generateJavascript($config)
 {
-    $src = $config['namespace'].".".$config['name']." = function(){\n";
-    $src .= "\t".$config['inheritFrom'].".call(this);\n";
+    $src = $config['namespace'].".".$config['name']." = function(factory){\n";
+    $src .= "\tthis.factory = factory;\n";
+    $src .= "\t".$config['inheritFrom'].".apply(this, arguments);\n";
     
     if (isset($config['traits']) === true) {
         foreach ($config['traits'] as $trait) {
@@ -106,7 +106,7 @@ function generateJavascript($config)
     
     $src .= $config['namespace'].".".$config['name'].".prototype = Object.create(".$config['inheritFrom'].".prototype);\n";
     #$src .= "lucid.html.base.tags.".$config['name'].".prototype.constructor = lucid.html.base.tags.".$config['name'].";\n";
-    $src .= "lucid.html.builder.tags.".$config['name']." = ".$config['namespace'].".".$config['name'].";\n";
+    $src .= "lucid.html.factory.tags.".$config['name']." = ".$config['namespace'].".".$config['name'].";\n";
     #$src .= "lucid.html.builder.tags.".$config['name'].".prototype = new lucid.html.tag();\n";
 
     /*

@@ -2,7 +2,7 @@
 <?php
 
 $file = $argv[1];
-$dir = str_replace('/meta', '/tags', dirname($file));
+$dir = str_replace('/meta', '/Tags', dirname($file));
 $config = json_decode(file_get_contents($file), true);
 $config['name'] = str_replace('.json', '', basename($file));
 if (isset($config['tag']) === false) {

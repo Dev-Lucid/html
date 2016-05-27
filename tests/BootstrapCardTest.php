@@ -5,7 +5,7 @@ class BootstrapCardTest extends BaseTest
 {
     public function setup()
     {
-        Lucid\Html\Html::init('Bootstrap');
+        static::$phpConstruct = '$factory = new \Lucid\Html\Factory(\'Bootstrap\');';
         static::$jsLibrary = 'buildBootstrap';
     }
 

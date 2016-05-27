@@ -5,17 +5,17 @@ include(__DIR__.'/../vendor/autoload.php');
 $files = [
     'base'=>[
         '/lucid.html.js',
-        '/lucid.html.builder.js',
+        '/lucid.html.factory.js',
         '/lucid.html.tag.js',
         '/lucid.html.Selector.js',
         '/Base/js/*.js',
-        '/Base/traits/*.js',
-        '/Base/tags/*.js',
+        '/Base/Traits/*.js',
+        '/Base/Tags/*.js',
     ],
     'bootstrap'=>[
         '/Bootstrap/js/*.js',
-        '/Bootstrap/traits/*.js',
-        '/Bootstrap/tags/*.js',
+        '/Bootstrap/Traits/*.js',
+        '/Bootstrap/Tags/*.js',
     ],
     'foundation'=>[
     ],

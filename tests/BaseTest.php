@@ -3,6 +3,8 @@
 abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     public static $jsLibrary = 'buildBaseTagsOnly';
+    public static $jsConstruct = 'var factory = new lucid.html.factory();';
+    public static $phpConstruct = '$factory = new \Lucid\Html\Factory();';
     public function translateMetaCode(string $metaCode, string $language) : string
     {
         $translators = [
@@ -13,7 +15,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             ']@' => [ 'php'=>']', 'js'=>'}', ],
             '#[' => [ 'php'=>'[', 'js'=>'[', ],
             ']#' => [ 'php'=>']', 'js'=>']', ],
-            '@build'=> ['php'=>'\\Lucid\\Html\\Html::build', 'js'=>'lucid.html.build'],
+            '@build'=> ['php'=>'$factory->build', 'js'=>'factory.build'],
         ];
         
         foreach ($translators as $meta=>$final ){
@@ -32,7 +34,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         foreach ($searchReplace as $key=>$value) {
             $metaCode = str_replace($key, $value, $metaCode);
         }
-        $finalSrc = '( cat '.__DIR__.'/../dist/lucid.html.'.(static::$jsLibrary).'.js ;  echo "console.log(';
+        $finalSrc = '( cat '.__DIR__.'/../dist/lucid.html.'.(static::$jsLibrary).'.js ;  echo " '.static::$jsConstruct.' console.log(';
         $finalSrc .= $metaCode;
         $finalSrc .= ');") | node';
 
@@ -46,7 +48,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         foreach ($searchReplace as $key=>$value) {
             $php = str_replace($key, $value, $php);
         }
-        return trim(eval('return '.$php.';'));
+        
+        return trim(eval(static::$phpConstruct.'return '.$php.';'));
     }
 
     public function runTestWithoutParameters(string $className, string $tagName=null)

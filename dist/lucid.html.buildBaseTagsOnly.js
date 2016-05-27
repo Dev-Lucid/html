@@ -5,22 +5,17 @@ if (typeof lucid == 'undefined') {
 }
 lucid.html = {};
 
-lucid.html.build=function(){
-    return lucid.html.builder.build.apply(null, arguments);
-};
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/lucid.html.builder.js */
-lucid.html.builder=function(){
-    return 'called';
+/* File start: /Volumes/Lucid/html/bin/../src/lucid.html.factory.js */
+
+lucid.html.factory=function(){
 };
 
-lucid.html.builder.tags = {};
-
-lucid.html.builder.build=function(tag){
+lucid.html.factory.prototype.build=function(tag){
     var obj;
-    if (typeof(lucid.html.builder.tags[tag]) == 'function'){
-        obj = new lucid.html.builder.tags[tag]();
+    if (typeof(lucid.html.factory.tags[tag]) == 'function'){
+        obj = new lucid.html.factory.tags[tag](this);
         
         var newArgs = [];
         for (var i=1; i<arguments.length; i++) {
@@ -28,18 +23,20 @@ lucid.html.builder.build=function(tag){
         }
         obj.setProperties(newArgs);
     } else {
-        obj = new lucid.html.tag();
+        obj = new lucid.html.tag(this);
         obj.tag = tag;
     }
     obj.instantiatorName = tag;
     return obj;
 };
 
+lucid.html.factory.tags = {};
 
-/* File end: /Volumes/Lucid/html/bin/../src/lucid.html.builder.js */
+/* File end: /Volumes/Lucid/html/bin/../src/lucid.html.factory.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/lucid.html.tag.js */
-lucid.html.tag = function(){
+lucid.html.tag = function(factory){
+    this.factory = factory;
     this.tag = null;
     this.instantiatorName = null;
     this.attributes = {};
@@ -76,7 +73,12 @@ lucid.html.tag.prototype.addTrait=function(newTrait){
 };
 
 lucid.html.tag.prototype.build=function(){
-    return lucid.html.build.apply(null, arguments);
+    var args = [];
+    for(var i=0; i<arguments.length; i++){
+        args.push(arguments[i]);
+    }
+    var result = this.factory.build.apply(this.factory, args);
+    return result;
 };
 
 lucid.html.tag.prototype.queryChildren=function(selector, recurse, tag, results) {
@@ -483,7 +485,7 @@ lucid.html.base={
 };
 /* File end: /Volumes/Lucid/html/bin/../src/Base/js/lucid.html.base.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/traits/Autofocusable.js */
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Traits/Autofocusable.js */
 lucid.html.base.traits.Autofocusable = {
 
     traitInit:function() {
@@ -504,9 +506,9 @@ lucid.html.base.traits.Autofocusable = {
     }
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/traits/Autofocusable.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Traits/Autofocusable.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/traits/Checkable.js */
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Traits/Checkable.js */
 lucid.html.base.traits.Checkable = {
 
     traitInit:function() {
@@ -545,9 +547,9 @@ lucid.html.base.traits.Checkable = {
         return val;
     }
 };
-/* File end: /Volumes/Lucid/html/bin/../src/Base/traits/Checkable.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Traits/Checkable.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/traits/Disableable.js */
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Traits/Disableable.js */
 lucid.html.base.traits.Disableable = {
 
     traitInit:function() {
@@ -568,9 +570,9 @@ lucid.html.base.traits.Disableable = {
     }
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/traits/Disableable.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Traits/Disableable.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/traits/Readonlyable.js */
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Traits/Readonlyable.js */
 lucid.html.base.traits.Readonlyable = {
 
     traitInit:function() {
@@ -591,9 +593,9 @@ lucid.html.base.traits.Readonlyable = {
     }
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/traits/Readonlyable.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Traits/Readonlyable.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/traits/Requireable.js */
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Traits/Requireable.js */
 lucid.html.base.traits.Requireable = {
 
     traitInit:function() {
@@ -614,39 +616,42 @@ lucid.html.base.traits.Requireable = {
     }
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/traits/Requireable.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Traits/Requireable.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/abbreviation.js */
-lucid.html.base.tags.abbreviation = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/abbreviation.js */
+lucid.html.base.tags.abbreviation = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'abbr';
 	this.parameters = ['title'];
 };
 lucid.html.base.tags.abbreviation.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.abbreviation = lucid.html.base.tags.abbreviation;
+lucid.html.factory.tags.abbreviation = lucid.html.base.tags.abbreviation;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/abbreviation.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/abbreviation.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/address.js */
-lucid.html.base.tags.address = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/address.js */
+lucid.html.base.tags.address = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'address';
 };
 lucid.html.base.tags.address.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.address = lucid.html.base.tags.address;
+lucid.html.factory.tags.address = lucid.html.base.tags.address;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/address.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/address.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/anchor.js */
-lucid.html.base.tags.anchor = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/anchor.js */
+lucid.html.base.tags.anchor = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'a';
 	this.allowedAttributes.push('name');
 	this.allowedAttributes.push('target');
 	this.parameters = ['href'];
 };
 lucid.html.base.tags.anchor.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.anchor = lucid.html.base.tags.anchor;
+lucid.html.factory.tags.anchor = lucid.html.base.tags.anchor;
 
 lucid.html.base.tags.anchor.prototype.checkValidChild=function(child){
 	if (['a'].indexOf(child.tag) >= 0) {
@@ -654,86 +659,94 @@ lucid.html.base.tags.anchor.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/anchor.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/anchor.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/article.js */
-lucid.html.base.tags.article = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/article.js */
+lucid.html.base.tags.article = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'article';
 };
 lucid.html.base.tags.article.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.article = lucid.html.base.tags.article;
+lucid.html.factory.tags.article = lucid.html.base.tags.article;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/article.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/article.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/aside.js */
-lucid.html.base.tags.aside = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/aside.js */
+lucid.html.base.tags.aside = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'aside';
 };
 lucid.html.base.tags.aside.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.aside = lucid.html.base.tags.aside;
+lucid.html.factory.tags.aside = lucid.html.base.tags.aside;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/aside.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/aside.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/base.js */
-lucid.html.base.tags.base = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/base.js */
+lucid.html.base.tags.base = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'base';
 	this.parameters = ['href', 'target'];
 };
 lucid.html.base.tags.base.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.base = lucid.html.base.tags.base;
+lucid.html.factory.tags.base = lucid.html.base.tags.base;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/base.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/base.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/blockquote.js */
-lucid.html.base.tags.blockquote = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/blockquote.js */
+lucid.html.base.tags.blockquote = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'blockquote';
 	this.parameters = ['cite'];
 };
 lucid.html.base.tags.blockquote.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.blockquote = lucid.html.base.tags.blockquote;
+lucid.html.factory.tags.blockquote = lucid.html.base.tags.blockquote;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/blockquote.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/blockquote.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/body.js */
-lucid.html.base.tags.body = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/body.js */
+lucid.html.base.tags.body = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'body';
 	this.allowedAttributes.push('align');
 };
 lucid.html.base.tags.body.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.body = lucid.html.base.tags.body;
+lucid.html.factory.tags.body = lucid.html.base.tags.body;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/body.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/body.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/bold.js */
-lucid.html.base.tags.bold = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/bold.js */
+lucid.html.base.tags.bold = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'b';
 };
 lucid.html.base.tags.bold.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.bold = lucid.html.base.tags.bold;
+lucid.html.factory.tags.bold = lucid.html.base.tags.bold;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/bold.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/bold.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/br.js */
-lucid.html.base.tags.br = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/br.js */
+lucid.html.base.tags.br = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'br';
 	this.allowQuickClose = true;
 	this.allowChildren = false;
 };
 lucid.html.base.tags.br.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.br = lucid.html.base.tags.br;
+lucid.html.factory.tags.br = lucid.html.base.tags.br;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/br.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/br.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/button.js */
-lucid.html.base.tags.button = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/button.js */
+lucid.html.base.tags.button = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.addTrait(lucid.html.base.traits.Disableable);
 	this.addTrait(lucid.html.base.traits.Autofocusable);
 
@@ -744,81 +757,88 @@ lucid.html.base.tags.button = function(){
 	this.attributes['type'] = 'button';
 };
 lucid.html.base.tags.button.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.button = lucid.html.base.tags.button;
+lucid.html.factory.tags.button = lucid.html.base.tags.button;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/button.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/button.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/canvas.js */
-lucid.html.base.tags.canvas = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/canvas.js */
+lucid.html.base.tags.canvas = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'canvas';
 	this.parameters = ['height', 'width'];
 };
 lucid.html.base.tags.canvas.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.canvas = lucid.html.base.tags.canvas;
+lucid.html.factory.tags.canvas = lucid.html.base.tags.canvas;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/canvas.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/canvas.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/caption.js */
-lucid.html.base.tags.caption = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/caption.js */
+lucid.html.base.tags.caption = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'caption';
 	this.allowedAttributes.push('align');
 };
 lucid.html.base.tags.caption.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.caption = lucid.html.base.tags.caption;
+lucid.html.factory.tags.caption = lucid.html.base.tags.caption;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/caption.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/caption.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/cite.js */
-lucid.html.base.tags.cite = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/cite.js */
+lucid.html.base.tags.cite = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'cite';
 };
 lucid.html.base.tags.cite.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.cite = lucid.html.base.tags.cite;
+lucid.html.factory.tags.cite = lucid.html.base.tags.cite;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/cite.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/cite.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/code.js */
-lucid.html.base.tags.code = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/code.js */
+lucid.html.base.tags.code = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'code';
 };
 lucid.html.base.tags.code.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.code = lucid.html.base.tags.code;
+lucid.html.factory.tags.code = lucid.html.base.tags.code;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/code.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/code.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/column.js */
-lucid.html.base.tags.column = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/column.js */
+lucid.html.base.tags.column = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'col';
 	this.allowedAttributes.push('width');
 	this.allowedAttributes.push('span');
 };
 lucid.html.base.tags.column.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.column = lucid.html.base.tags.column;
+lucid.html.factory.tags.column = lucid.html.base.tags.column;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/column.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/column.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/columnGroup.js */
-lucid.html.base.tags.columnGroup = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/columnGroup.js */
+lucid.html.base.tags.columnGroup = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'colgroup';
 };
 lucid.html.base.tags.columnGroup.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.columnGroup = lucid.html.base.tags.columnGroup;
+lucid.html.factory.tags.columnGroup = lucid.html.base.tags.columnGroup;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/columnGroup.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/columnGroup.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/dataList.js */
-lucid.html.base.tags.dataList = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/dataList.js */
+lucid.html.base.tags.dataList = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'datalist';
 };
 lucid.html.base.tags.dataList.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.dataList = lucid.html.base.tags.dataList;
+lucid.html.factory.tags.dataList = lucid.html.base.tags.dataList;
 
 lucid.html.base.tags.dataList.prototype.checkValidChild=function(child){
 	if (['option'].indexOf(child.tag) < 0) {
@@ -826,35 +846,38 @@ lucid.html.base.tags.dataList.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/dataList.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/dataList.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/definition.js */
-lucid.html.base.tags.definition = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/definition.js */
+lucid.html.base.tags.definition = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'dfn';
 };
 lucid.html.base.tags.definition.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.definition = lucid.html.base.tags.definition;
+lucid.html.factory.tags.definition = lucid.html.base.tags.definition;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/definition.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/definition.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/definitionDescription.js */
-lucid.html.base.tags.definitionDescription = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/definitionDescription.js */
+lucid.html.base.tags.definitionDescription = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'dd';
 };
 lucid.html.base.tags.definitionDescription.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.definitionDescription = lucid.html.base.tags.definitionDescription;
+lucid.html.factory.tags.definitionDescription = lucid.html.base.tags.definitionDescription;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/definitionDescription.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/definitionDescription.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/definitionList.js */
-lucid.html.base.tags.definitionList = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/definitionList.js */
+lucid.html.base.tags.definitionList = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'dl';
 };
 lucid.html.base.tags.definitionList.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.definitionList = lucid.html.base.tags.definitionList;
+lucid.html.factory.tags.definitionList = lucid.html.base.tags.definitionList;
 
 lucid.html.base.tags.definitionList.prototype.checkValidChild=function(child){
 	if (['dd', 'dt'].indexOf(child.tag) < 0) {
@@ -862,36 +885,39 @@ lucid.html.base.tags.definitionList.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/definitionList.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/definitionList.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/definitionTerm.js */
-lucid.html.base.tags.definitionTerm = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/definitionTerm.js */
+lucid.html.base.tags.definitionTerm = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'dt';
 };
 lucid.html.base.tags.definitionTerm.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.definitionTerm = lucid.html.base.tags.definitionTerm;
+lucid.html.factory.tags.definitionTerm = lucid.html.base.tags.definitionTerm;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/definitionTerm.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/definitionTerm.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/details.js */
-lucid.html.base.tags.details = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/details.js */
+lucid.html.base.tags.details = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'details';
 };
 lucid.html.base.tags.details.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.details = lucid.html.base.tags.details;
+lucid.html.factory.tags.details = lucid.html.base.tags.details;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/details.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/details.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/dialog.js */
-lucid.html.base.tags.dialog = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/dialog.js */
+lucid.html.base.tags.dialog = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'dialog';
 	this.allowedAttributes.push('open');
 };
 lucid.html.base.tags.dialog.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.dialog = lucid.html.base.tags.dialog;
+lucid.html.factory.tags.dialog = lucid.html.base.tags.dialog;
 
 lucid.html.base.tags.dialog.prototype.setOpen=function(val){
     if (val !== true && val !== false) {
@@ -905,37 +931,40 @@ lucid.html.base.tags.dialog.prototype.renderOpen=function(){
     var val = (this.attributes.open === true)?'open':null;
     return val;
 };
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/dialog.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/dialog.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/div.js */
-lucid.html.base.tags.div = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/div.js */
+lucid.html.base.tags.div = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'div';
 };
 lucid.html.base.tags.div.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.div = lucid.html.base.tags.div;
+lucid.html.factory.tags.div = lucid.html.base.tags.div;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/div.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/div.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/emphasis.js */
-lucid.html.base.tags.emphasis = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/emphasis.js */
+lucid.html.base.tags.emphasis = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'em';
 };
 lucid.html.base.tags.emphasis.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.emphasis = lucid.html.base.tags.emphasis;
+lucid.html.factory.tags.emphasis = lucid.html.base.tags.emphasis;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/emphasis.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/emphasis.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/fieldset.js */
-lucid.html.base.tags.fieldset = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/fieldset.js */
+lucid.html.base.tags.fieldset = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'fieldset';
 	this.parameters = ['legend'];
 	this.legend = null;
 };
 lucid.html.base.tags.fieldset.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.fieldset = lucid.html.base.tags.fieldset;
+lucid.html.factory.tags.fieldset = lucid.html.base.tags.fieldset;
 
 lucid.html.base.tags.fieldset.prototype.getLegend=function(){
     if (this.legend === null) {
@@ -958,41 +987,45 @@ lucid.html.base.tags.fieldset.prototype.preChildren=function(){
     return lucid.html.tag.prototype.preChildren.call(this);
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/fieldset.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/fieldset.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/figure.js */
-lucid.html.base.tags.figure = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/figure.js */
+lucid.html.base.tags.figure = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'figure';
 };
 lucid.html.base.tags.figure.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.figure = lucid.html.base.tags.figure;
+lucid.html.factory.tags.figure = lucid.html.base.tags.figure;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/figure.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/figure.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/figureCaption.js */
-lucid.html.base.tags.figureCaption = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/figureCaption.js */
+lucid.html.base.tags.figureCaption = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'figcaption';
 };
 lucid.html.base.tags.figureCaption.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.figureCaption = lucid.html.base.tags.figureCaption;
+lucid.html.factory.tags.figureCaption = lucid.html.base.tags.figureCaption;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/figureCaption.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/figureCaption.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/footer.js */
-lucid.html.base.tags.footer = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/footer.js */
+lucid.html.base.tags.footer = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'footer';
 };
 lucid.html.base.tags.footer.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.footer = lucid.html.base.tags.footer;
+lucid.html.factory.tags.footer = lucid.html.base.tags.footer;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/footer.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/footer.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/form.js */
-lucid.html.base.tags.form = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/form.js */
+lucid.html.base.tags.form = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'form';
 	this.allowedAttributes.push('onsubmit');
 	this.allowedAttributes.push('enctype');
@@ -1001,7 +1034,7 @@ lucid.html.base.tags.form = function(){
 	this.parameters = ['name', 'action'];
 };
 lucid.html.base.tags.form.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.form = lucid.html.base.tags.form;
+lucid.html.factory.tags.form = lucid.html.base.tags.form;
 
 lucid.html.base.tags.form.prototype.checkValidChild=function(child){
 	if (['form'].indexOf(child.tag) >= 0) {
@@ -1009,75 +1042,82 @@ lucid.html.base.tags.form.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/form.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/form.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/h1.js */
-lucid.html.base.tags.h1 = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/h1.js */
+lucid.html.base.tags.h1 = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'h1';
 };
 lucid.html.base.tags.h1.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.h1 = lucid.html.base.tags.h1;
+lucid.html.factory.tags.h1 = lucid.html.base.tags.h1;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/h1.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/h1.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/h2.js */
-lucid.html.base.tags.h2 = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/h2.js */
+lucid.html.base.tags.h2 = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'h2';
 };
 lucid.html.base.tags.h2.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.h2 = lucid.html.base.tags.h2;
+lucid.html.factory.tags.h2 = lucid.html.base.tags.h2;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/h2.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/h2.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/h3.js */
-lucid.html.base.tags.h3 = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/h3.js */
+lucid.html.base.tags.h3 = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'h3';
 };
 lucid.html.base.tags.h3.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.h3 = lucid.html.base.tags.h3;
+lucid.html.factory.tags.h3 = lucid.html.base.tags.h3;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/h3.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/h3.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/h4.js */
-lucid.html.base.tags.h4 = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/h4.js */
+lucid.html.base.tags.h4 = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'h4';
 };
 lucid.html.base.tags.h4.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.h4 = lucid.html.base.tags.h4;
+lucid.html.factory.tags.h4 = lucid.html.base.tags.h4;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/h4.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/h4.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/h5.js */
-lucid.html.base.tags.h5 = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/h5.js */
+lucid.html.base.tags.h5 = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'h5';
 };
 lucid.html.base.tags.h5.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.h5 = lucid.html.base.tags.h5;
+lucid.html.factory.tags.h5 = lucid.html.base.tags.h5;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/h5.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/h5.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/h6.js */
-lucid.html.base.tags.h6 = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/h6.js */
+lucid.html.base.tags.h6 = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'h6';
 };
 lucid.html.base.tags.h6.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.h6 = lucid.html.base.tags.h6;
+lucid.html.factory.tags.h6 = lucid.html.base.tags.h6;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/h6.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/h6.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/head.js */
-lucid.html.base.tags.head = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/head.js */
+lucid.html.base.tags.head = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'head';
 };
 lucid.html.base.tags.head.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.head = lucid.html.base.tags.head;
+lucid.html.factory.tags.head = lucid.html.base.tags.head;
 
 lucid.html.base.tags.head.prototype.checkValidChild=function(child){
 	if (['title', 'link', 'script', 'base', 'meta', 'style'].indexOf(child.tag) < 0) {
@@ -1085,46 +1125,50 @@ lucid.html.base.tags.head.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/head.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/head.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/header.js */
-lucid.html.base.tags.header = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/header.js */
+lucid.html.base.tags.header = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'header';
 };
 lucid.html.base.tags.header.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.header = lucid.html.base.tags.header;
+lucid.html.factory.tags.header = lucid.html.base.tags.header;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/header.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/header.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/hr.js */
-lucid.html.base.tags.hr = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/hr.js */
+lucid.html.base.tags.hr = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'hr';
 	this.allowQuickClose = true;
 	this.allowChildren = false;
 };
 lucid.html.base.tags.hr.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.hr = lucid.html.base.tags.hr;
+lucid.html.factory.tags.hr = lucid.html.base.tags.hr;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/hr.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/hr.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/image.js */
-lucid.html.base.tags.image = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/image.js */
+lucid.html.base.tags.image = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'img';
 	this.parameters = ['src', 'width', 'height', 'alt'];
 	this.allowQuickClose = true;
 	this.allowChildren = false;
 };
 lucid.html.base.tags.image.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.image = lucid.html.base.tags.image;
+lucid.html.factory.tags.image = lucid.html.base.tags.image;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/image.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/image.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/input.js */
-lucid.html.base.tags.input = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/input.js */
+lucid.html.base.tags.input = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.addTrait(lucid.html.base.traits.Disableable);
 	this.addTrait(lucid.html.base.traits.Readonlyable);
 	this.addTrait(lucid.html.base.traits.Requireable);
@@ -1135,13 +1179,14 @@ lucid.html.base.tags.input = function(){
 	this.allowChildren = false;
 };
 lucid.html.base.tags.input.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.input = lucid.html.base.tags.input;
+lucid.html.factory.tags.input = lucid.html.base.tags.input;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/input.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/input.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputCheckbox.js */
-lucid.html.base.tags.inputCheckbox = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputCheckbox.js */
+lucid.html.base.tags.inputCheckbox = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.addTrait(lucid.html.base.traits.Checkable);
 
 	this.tag = 'input';
@@ -1150,13 +1195,14 @@ lucid.html.base.tags.inputCheckbox = function(){
 	this.attributes['type'] = 'checkbox';
 };
 lucid.html.base.tags.inputCheckbox.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputCheckbox = lucid.html.base.tags.inputCheckbox;
+lucid.html.factory.tags.inputCheckbox = lucid.html.base.tags.inputCheckbox;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputCheckbox.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputCheckbox.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputEmail.js */
-lucid.html.base.tags.inputEmail = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputEmail.js */
+lucid.html.base.tags.inputEmail = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
@@ -1164,25 +1210,27 @@ lucid.html.base.tags.inputEmail = function(){
 	this.attributes['type'] = 'email';
 };
 lucid.html.base.tags.inputEmail.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputEmail = lucid.html.base.tags.inputEmail;
+lucid.html.factory.tags.inputEmail = lucid.html.base.tags.inputEmail;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputEmail.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputEmail.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputFile.js */
-lucid.html.base.tags.inputFile = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputFile.js */
+lucid.html.base.tags.inputFile = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'input';
 	this.parameters = ['name'];
 	this.attributes['type'] = 'file';
 };
 lucid.html.base.tags.inputFile.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputFile = lucid.html.base.tags.inputFile;
+lucid.html.factory.tags.inputFile = lucid.html.base.tags.inputFile;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputFile.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputFile.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputNumber.js */
-lucid.html.base.tags.inputNumber = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputNumber.js */
+lucid.html.base.tags.inputNumber = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
@@ -1192,13 +1240,14 @@ lucid.html.base.tags.inputNumber = function(){
 	this.attributes['type'] = 'number';
 };
 lucid.html.base.tags.inputNumber.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputNumber = lucid.html.base.tags.inputNumber;
+lucid.html.factory.tags.inputNumber = lucid.html.base.tags.inputNumber;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputNumber.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputNumber.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputPassword.js */
-lucid.html.base.tags.inputPassword = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputPassword.js */
+lucid.html.base.tags.inputPassword = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
@@ -1206,13 +1255,14 @@ lucid.html.base.tags.inputPassword = function(){
 	this.attributes['type'] = 'password';
 };
 lucid.html.base.tags.inputPassword.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputPassword = lucid.html.base.tags.inputPassword;
+lucid.html.factory.tags.inputPassword = lucid.html.base.tags.inputPassword;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputPassword.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputPassword.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputRadio.js */
-lucid.html.base.tags.inputRadio = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputRadio.js */
+lucid.html.base.tags.inputRadio = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.addTrait(lucid.html.base.traits.Checkable);
 
 	this.tag = 'input';
@@ -1220,20 +1270,21 @@ lucid.html.base.tags.inputRadio = function(){
 	this.attributes['type'] = 'radio';
 };
 lucid.html.base.tags.inputRadio.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputRadio = lucid.html.base.tags.inputRadio;
+lucid.html.factory.tags.inputRadio = lucid.html.base.tags.inputRadio;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputRadio.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputRadio.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputSelect.js */
-lucid.html.base.tags.inputSelect = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputSelect.js */
+lucid.html.base.tags.inputSelect = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'select';
 	this.parameters = ['name', 'value', 'data', 'onchange'];
 	this.data = null;
 	this.value = null;
 };
 lucid.html.base.tags.inputSelect.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.inputSelect = lucid.html.base.tags.inputSelect;
+lucid.html.factory.tags.inputSelect = lucid.html.base.tags.inputSelect;
 
 lucid.html.base.tags.inputSelect.prototype.checkValidChild=function(child){
 	if (['option', 'optgroup'].indexOf(child.tag) < 0) {
@@ -1259,7 +1310,7 @@ lucid.html.base.tags.inputSelect.prototype.preRender=function(){
                 label = this.data[i][1];
             }
             
-            this.add(lucid.html.build('option', value, label, (this.value == value)));
+            this.add(this.build('option', value, label, (this.value == value)));
         }
         
     }
@@ -1276,11 +1327,12 @@ lucid.html.base.tags.inputSelect.prototype.setValue=function(newValue) {
     return this;
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputSelect.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputSelect.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputTelephone.js */
-lucid.html.base.tags.inputTelephone = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputTelephone.js */
+lucid.html.base.tags.inputTelephone = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
@@ -1288,13 +1340,14 @@ lucid.html.base.tags.inputTelephone = function(){
 	this.attributes['type'] = 'tel';
 };
 lucid.html.base.tags.inputTelephone.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputTelephone = lucid.html.base.tags.inputTelephone;
+lucid.html.factory.tags.inputTelephone = lucid.html.base.tags.inputTelephone;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputTelephone.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputTelephone.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputText.js */
-lucid.html.base.tags.inputText = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputText.js */
+lucid.html.base.tags.inputText = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
@@ -1302,20 +1355,21 @@ lucid.html.base.tags.inputText = function(){
 	this.attributes['type'] = 'text';
 };
 lucid.html.base.tags.inputText.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputText = lucid.html.base.tags.inputText;
+lucid.html.factory.tags.inputText = lucid.html.base.tags.inputText;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputText.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputText.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputTextarea.js */
-lucid.html.base.tags.inputTextarea = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputTextarea.js */
+lucid.html.base.tags.inputTextarea = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'textarea';
 	this.parameters = ['name', 'rows', 'cols'];
 	this.allowQuickClose = false;
 	this.allowChildren = true;
 };
 lucid.html.base.tags.inputTextarea.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputTextarea = lucid.html.base.tags.inputTextarea;
+lucid.html.factory.tags.inputTextarea = lucid.html.base.tags.inputTextarea;
 
 lucid.html.base.tags.inputTextarea.prototype.setValue=function(newValue){
     if (this.children.length === 0){
@@ -1334,11 +1388,12 @@ lucid.html.base.tags.inputTextarea.prototype.getValue=function(){
         return this.renderChildren();
     }
 };
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputTextarea.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputTextarea.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/inputUrl.js */
-lucid.html.base.tags.inputUrl = function(){
-	lucid.html.base.tags.input.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/inputUrl.js */
+lucid.html.base.tags.inputUrl = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.input.apply(this, arguments);
 	this.tag = 'input';
 	this.allowedAttributes.push('autocomplete');
 	this.allowedAttributes.push('size');
@@ -1346,96 +1401,105 @@ lucid.html.base.tags.inputUrl = function(){
 	this.attributes['type'] = 'url';
 };
 lucid.html.base.tags.inputUrl.prototype = Object.create(lucid.html.base.tags.input.prototype);
-lucid.html.builder.tags.inputUrl = lucid.html.base.tags.inputUrl;
+lucid.html.factory.tags.inputUrl = lucid.html.base.tags.inputUrl;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/inputUrl.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/inputUrl.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/insert.js */
-lucid.html.base.tags.insert = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/insert.js */
+lucid.html.base.tags.insert = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'ins';
 };
 lucid.html.base.tags.insert.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.insert = lucid.html.base.tags.insert;
+lucid.html.factory.tags.insert = lucid.html.base.tags.insert;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/insert.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/insert.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/italic.js */
-lucid.html.base.tags.italic = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/italic.js */
+lucid.html.base.tags.italic = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'i';
 };
 lucid.html.base.tags.italic.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.italic = lucid.html.base.tags.italic;
+lucid.html.factory.tags.italic = lucid.html.base.tags.italic;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/italic.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/italic.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/label.js */
-lucid.html.base.tags.label = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/label.js */
+lucid.html.base.tags.label = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'label';
 	this.parameters = ['for'];
 };
 lucid.html.base.tags.label.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.label = lucid.html.base.tags.label;
+lucid.html.factory.tags.label = lucid.html.base.tags.label;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/label.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/label.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/legend.js */
-lucid.html.base.tags.legend = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/legend.js */
+lucid.html.base.tags.legend = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'legend';
 };
 lucid.html.base.tags.legend.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.legend = lucid.html.base.tags.legend;
+lucid.html.factory.tags.legend = lucid.html.base.tags.legend;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/legend.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/legend.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/listItem.js */
-lucid.html.base.tags.listItem = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/listItem.js */
+lucid.html.base.tags.listItem = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'li';
 };
 lucid.html.base.tags.listItem.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.listItem = lucid.html.base.tags.listItem;
+lucid.html.factory.tags.listItem = lucid.html.base.tags.listItem;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/listItem.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/listItem.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/main.js */
-lucid.html.base.tags.main = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/main.js */
+lucid.html.base.tags.main = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'main';
 };
 lucid.html.base.tags.main.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.main = lucid.html.base.tags.main;
+lucid.html.factory.tags.main = lucid.html.base.tags.main;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/main.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/main.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/mark.js */
-lucid.html.base.tags.mark = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/mark.js */
+lucid.html.base.tags.mark = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'mark';
 };
 lucid.html.base.tags.mark.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.mark = lucid.html.base.tags.mark;
+lucid.html.factory.tags.mark = lucid.html.base.tags.mark;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/mark.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/mark.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/menu.js */
-lucid.html.base.tags.menu = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/menu.js */
+lucid.html.base.tags.menu = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'menu';
 	this.allowedAttributes.push('type');
 	this.allowedAttributes.push('label');
 };
 lucid.html.base.tags.menu.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.menu = lucid.html.base.tags.menu;
+lucid.html.factory.tags.menu = lucid.html.base.tags.menu;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/menu.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/menu.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/menuitem.js */
-lucid.html.base.tags.menuitem = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/menuitem.js */
+lucid.html.base.tags.menuitem = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'menuitem';
 	this.allowedAttributes.push('checked');
 	this.allowedAttributes.push('default');
@@ -1446,13 +1510,14 @@ lucid.html.base.tags.menuitem = function(){
 	this.allowedAttributes.push('type');
 };
 lucid.html.base.tags.menuitem.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.menuitem = lucid.html.base.tags.menuitem;
+lucid.html.factory.tags.menuitem = lucid.html.base.tags.menuitem;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/menuitem.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/menuitem.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/meter.js */
-lucid.html.base.tags.meter = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/meter.js */
+lucid.html.base.tags.meter = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'meter';
 	this.allowedAttributes.push('form');
 	this.allowedAttributes.push('high');
@@ -1463,28 +1528,30 @@ lucid.html.base.tags.meter = function(){
 	this.allowedAttributes.push('value');
 };
 lucid.html.base.tags.meter.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.meter = lucid.html.base.tags.meter;
+lucid.html.factory.tags.meter = lucid.html.base.tags.meter;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/meter.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/meter.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/nav.js */
-lucid.html.base.tags.nav = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/nav.js */
+lucid.html.base.tags.nav = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'nav';
 };
 lucid.html.base.tags.nav.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.nav = lucid.html.base.tags.nav;
+lucid.html.factory.tags.nav = lucid.html.base.tags.nav;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/nav.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/nav.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/option.js */
-lucid.html.base.tags.option = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/option.js */
+lucid.html.base.tags.option = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'option';
 	this.parameters = ['value', 'child', 'selected'];
 };
 lucid.html.base.tags.option.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.option = lucid.html.base.tags.option;
+lucid.html.factory.tags.option = lucid.html.base.tags.option;
 
 lucid.html.base.tags.option.prototype.setSelected=function(val) {
     if (this.parent !== null) {
@@ -1503,15 +1570,16 @@ lucid.html.base.tags.option.prototype.getSelected=function(){
     return (typeof(this.attributes.selected) == 'undefined')?false:true;
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/option.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/option.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/orderedList.js */
-lucid.html.base.tags.orderedList = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/orderedList.js */
+lucid.html.base.tags.orderedList = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'ol';
 };
 lucid.html.base.tags.orderedList.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.orderedList = lucid.html.base.tags.orderedList;
+lucid.html.factory.tags.orderedList = lucid.html.base.tags.orderedList;
 
 lucid.html.base.tags.orderedList.prototype.checkValidChild=function(child){
 	if (['li'].indexOf(child.tag) < 0) {
@@ -1519,155 +1587,170 @@ lucid.html.base.tags.orderedList.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/orderedList.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/orderedList.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/paragraph.js */
-lucid.html.base.tags.paragraph = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/paragraph.js */
+lucid.html.base.tags.paragraph = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'p';
 };
 lucid.html.base.tags.paragraph.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.paragraph = lucid.html.base.tags.paragraph;
+lucid.html.factory.tags.paragraph = lucid.html.base.tags.paragraph;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/paragraph.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/paragraph.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/preformatted.js */
-lucid.html.base.tags.preformatted = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/preformatted.js */
+lucid.html.base.tags.preformatted = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'pre';
 };
 lucid.html.base.tags.preformatted.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.preformatted = lucid.html.base.tags.preformatted;
+lucid.html.factory.tags.preformatted = lucid.html.base.tags.preformatted;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/preformatted.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/preformatted.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/progress.js */
-lucid.html.base.tags.progress = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/progress.js */
+lucid.html.base.tags.progress = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'progress';
 	this.parameters = ['value', 'max'];
 };
 lucid.html.base.tags.progress.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.progress = lucid.html.base.tags.progress;
+lucid.html.factory.tags.progress = lucid.html.base.tags.progress;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/progress.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/progress.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/quote.js */
-lucid.html.base.tags.quote = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/quote.js */
+lucid.html.base.tags.quote = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'q';
 };
 lucid.html.base.tags.quote.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.quote = lucid.html.base.tags.quote;
+lucid.html.factory.tags.quote = lucid.html.base.tags.quote;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/quote.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/quote.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/sample.js */
-lucid.html.base.tags.sample = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/sample.js */
+lucid.html.base.tags.sample = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'samp';
 };
 lucid.html.base.tags.sample.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.sample = lucid.html.base.tags.sample;
+lucid.html.factory.tags.sample = lucid.html.base.tags.sample;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/sample.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/sample.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/section.js */
-lucid.html.base.tags.section = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/section.js */
+lucid.html.base.tags.section = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'section';
 };
 lucid.html.base.tags.section.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.section = lucid.html.base.tags.section;
+lucid.html.factory.tags.section = lucid.html.base.tags.section;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/section.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/section.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/small.js */
-lucid.html.base.tags.small = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/small.js */
+lucid.html.base.tags.small = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'small';
 };
 lucid.html.base.tags.small.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.small = lucid.html.base.tags.small;
+lucid.html.factory.tags.small = lucid.html.base.tags.small;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/small.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/small.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/span.js */
-lucid.html.base.tags.span = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/span.js */
+lucid.html.base.tags.span = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'span';
 };
 lucid.html.base.tags.span.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.span = lucid.html.base.tags.span;
+lucid.html.factory.tags.span = lucid.html.base.tags.span;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/span.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/span.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/strikethrough.js */
-lucid.html.base.tags.strikethrough = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/strikethrough.js */
+lucid.html.base.tags.strikethrough = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 's';
 };
 lucid.html.base.tags.strikethrough.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.strikethrough = lucid.html.base.tags.strikethrough;
+lucid.html.factory.tags.strikethrough = lucid.html.base.tags.strikethrough;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/strikethrough.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/strikethrough.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/strong.js */
-lucid.html.base.tags.strong = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/strong.js */
+lucid.html.base.tags.strong = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'strong';
 };
 lucid.html.base.tags.strong.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.strong = lucid.html.base.tags.strong;
+lucid.html.factory.tags.strong = lucid.html.base.tags.strong;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/strong.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/strong.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/style.js */
-lucid.html.base.tags.style = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/style.js */
+lucid.html.base.tags.style = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'style';
 	this.allowedAttributes.push('scoped');
 	this.allowedAttributes.push('type');
 	this.parameters = ['media'];
 };
 lucid.html.base.tags.style.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.style = lucid.html.base.tags.style;
+lucid.html.factory.tags.style = lucid.html.base.tags.style;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/style.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/style.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/subscript.js */
-lucid.html.base.tags.subscript = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/subscript.js */
+lucid.html.base.tags.subscript = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'sub';
 };
 lucid.html.base.tags.subscript.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.subscript = lucid.html.base.tags.subscript;
+lucid.html.factory.tags.subscript = lucid.html.base.tags.subscript;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/subscript.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/subscript.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/summary.js */
-lucid.html.base.tags.summary = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/summary.js */
+lucid.html.base.tags.summary = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'summary';
 };
 lucid.html.base.tags.summary.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.summary = lucid.html.base.tags.summary;
+lucid.html.factory.tags.summary = lucid.html.base.tags.summary;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/summary.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/summary.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/superscript.js */
-lucid.html.base.tags.superscript = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/superscript.js */
+lucid.html.base.tags.superscript = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'sup';
 };
 lucid.html.base.tags.superscript.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.superscript = lucid.html.base.tags.superscript;
+lucid.html.factory.tags.superscript = lucid.html.base.tags.superscript;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/superscript.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/superscript.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/table.js */
-lucid.html.base.tags.table = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/table.js */
+lucid.html.base.tags.table = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'table';
 	this.allowedAttributes.push('cellpadding');
 	this.allowedAttributes.push('cellspacing');
@@ -1676,7 +1759,7 @@ lucid.html.base.tags.table = function(){
 	this.allowedAttributes.push('sortable');
 };
 lucid.html.base.tags.table.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.table = lucid.html.base.tags.table;
+lucid.html.factory.tags.table = lucid.html.base.tags.table;
 
 lucid.html.base.tags.table.prototype.checkValidChild=function(child){
 	if (['thead', 'tfoot', 'tbody', 'tr'].indexOf(child.tag) < 0) {
@@ -1684,15 +1767,16 @@ lucid.html.base.tags.table.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/table.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/table.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/tableBody.js */
-lucid.html.base.tags.tableBody = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/tableBody.js */
+lucid.html.base.tags.tableBody = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'tbody';
 };
 lucid.html.base.tags.tableBody.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.tableBody = lucid.html.base.tags.tableBody;
+lucid.html.factory.tags.tableBody = lucid.html.base.tags.tableBody;
 
 lucid.html.base.tags.tableBody.prototype.checkValidChild=function(child){
 	if (['tr'].indexOf(child.tag) < 0) {
@@ -1700,17 +1784,18 @@ lucid.html.base.tags.tableBody.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/tableBody.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/tableBody.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/tableData.js */
-lucid.html.base.tags.tableData = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/tableData.js */
+lucid.html.base.tags.tableData = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'td';
 	this.allowedAttributes.push('rowspan');
 	this.allowedAttributes.push('colspan');
 };
 lucid.html.base.tags.tableData.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.tableData = lucid.html.base.tags.tableData;
+lucid.html.factory.tags.tableData = lucid.html.base.tags.tableData;
 
 lucid.html.base.tags.tableData.prototype.checkValidChild=function(child){
 	if (['th', 'td', 'tr'].indexOf(child.tag) >= 0) {
@@ -1718,7 +1803,7 @@ lucid.html.base.tags.tableData.prototype.checkValidChild=function(child){
 	}
 };
 
-lucid.html.builder.tags.tableData.prototype.renderColspan=function(child){
+lucid.html.factory.tags.tableData.prototype.renderColspan=function(child){
     var value = parseInt(this.attributes.colspan);
 	if (value == 1) {
         return null;
@@ -1726,17 +1811,18 @@ lucid.html.builder.tags.tableData.prototype.renderColspan=function(child){
 	return value;
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/tableData.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/tableData.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/tableFoot.js */
-lucid.html.base.tags.tableFoot = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/tableFoot.js */
+lucid.html.base.tags.tableFoot = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'tfoot';
 	this.preChildrenHtml = '<tr>';
 	this.postChildrenHtml = '</tr>';
 };
 lucid.html.base.tags.tableFoot.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.tableFoot = lucid.html.base.tags.tableFoot;
+lucid.html.factory.tags.tableFoot = lucid.html.base.tags.tableFoot;
 
 lucid.html.base.tags.tableFoot.prototype.checkValidChild=function(child){
 	if (['th', 'td'].indexOf(child.tag) < 0) {
@@ -1744,17 +1830,18 @@ lucid.html.base.tags.tableFoot.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/tableFoot.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/tableFoot.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/tableHead.js */
-lucid.html.base.tags.tableHead = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/tableHead.js */
+lucid.html.base.tags.tableHead = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'thead';
 	this.preChildrenHtml = '<tr>';
 	this.postChildrenHtml = '</tr>';
 };
 lucid.html.base.tags.tableHead.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.tableHead = lucid.html.base.tags.tableHead;
+lucid.html.factory.tags.tableHead = lucid.html.base.tags.tableHead;
 
 lucid.html.base.tags.tableHead.prototype.checkValidChild=function(child){
 	if (['th', 'td'].indexOf(child.tag) < 0) {
@@ -1762,17 +1849,18 @@ lucid.html.base.tags.tableHead.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/tableHead.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/tableHead.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/tableHeader.js */
-lucid.html.base.tags.tableHeader = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/tableHeader.js */
+lucid.html.base.tags.tableHeader = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'th';
 	this.allowedAttributes.push('rowspan');
 	this.allowedAttributes.push('colspan');
 };
 lucid.html.base.tags.tableHeader.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.tableHeader = lucid.html.base.tags.tableHeader;
+lucid.html.factory.tags.tableHeader = lucid.html.base.tags.tableHeader;
 
 lucid.html.base.tags.tableHeader.prototype.checkValidChild=function(child){
 	if (['th', 'td', 'tr'].indexOf(child.tag) >= 0) {
@@ -1780,7 +1868,7 @@ lucid.html.base.tags.tableHeader.prototype.checkValidChild=function(child){
 	}
 };
 
-lucid.html.builder.tags.tableHeader.prototype.renderColspan=function(child){
+lucid.html.factory.tags.tableHeader.prototype.renderColspan=function(child){
     var value = parseInt(this.attributes.colspan);
 	if (value == 1) {
         return null;
@@ -1788,15 +1876,16 @@ lucid.html.builder.tags.tableHeader.prototype.renderColspan=function(child){
 	return value;
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/tableHeader.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/tableHeader.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/tableRow.js */
-lucid.html.base.tags.tableRow = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/tableRow.js */
+lucid.html.base.tags.tableRow = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'tr';
 };
 lucid.html.base.tags.tableRow.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.tableRow = lucid.html.base.tags.tableRow;
+lucid.html.factory.tags.tableRow = lucid.html.base.tags.tableRow;
 
 lucid.html.base.tags.tableRow.prototype.checkValidChild=function(child){
 	if (['th', 'td'].indexOf(child.tag) < 0) {
@@ -1804,36 +1893,39 @@ lucid.html.base.tags.tableRow.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/tableRow.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/tableRow.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/time.js */
-lucid.html.base.tags.time = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/time.js */
+lucid.html.base.tags.time = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'time';
 	this.allowedAttributes.push('datetime');
 };
 lucid.html.base.tags.time.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.time = lucid.html.base.tags.time;
+lucid.html.factory.tags.time = lucid.html.base.tags.time;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/time.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/time.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/underline.js */
-lucid.html.base.tags.underline = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/underline.js */
+lucid.html.base.tags.underline = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'u';
 };
 lucid.html.base.tags.underline.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.underline = lucid.html.base.tags.underline;
+lucid.html.factory.tags.underline = lucid.html.base.tags.underline;
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/underline.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/underline.js */
 
-/* File start: /Volumes/Lucid/html/bin/../src/Base/tags/unorderedList.js */
-lucid.html.base.tags.unorderedList = function(){
-	lucid.html.tag.call(this);
+/* File start: /Volumes/Lucid/html/bin/../src/Base/Tags/unorderedList.js */
+lucid.html.base.tags.unorderedList = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
 	this.tag = 'ul';
 };
 lucid.html.base.tags.unorderedList.prototype = Object.create(lucid.html.tag.prototype);
-lucid.html.builder.tags.unorderedList = lucid.html.base.tags.unorderedList;
+lucid.html.factory.tags.unorderedList = lucid.html.base.tags.unorderedList;
 
 lucid.html.base.tags.unorderedList.prototype.checkValidChild=function(child){
 	if (['li'].indexOf(child.tag) < 0) {
@@ -1841,4 +1933,4 @@ lucid.html.base.tags.unorderedList.prototype.checkValidChild=function(child){
 	}
 };
 
-/* File end: /Volumes/Lucid/html/bin/../src/Base/tags/unorderedList.js */
+/* File end: /Volumes/Lucid/html/bin/../src/Base/Tags/unorderedList.js */

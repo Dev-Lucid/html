@@ -5,7 +5,7 @@ class BootstrapTagTest extends BaseTest
 {
     public function setup()
     {
-        Lucid\Html\Html::init('Bootstrap');
+        static::$phpConstruct = '$factory = new \Lucid\Html\Factory(\'Bootstrap\');';
         static::$jsLibrary = 'buildBootstrap';
     }
     
@@ -28,5 +28,13 @@ class BootstrapTagTest extends BaseTest
         $code = "@build('badge', 'primary', 'test')->set('pill', true)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
-    }    
+    } 
+    
+    public function test_breadcrumb()
+    {
+        $output = '<ol class="breadcrumb"></ol>';
+        $code = "@build('breadcrumb')->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }   
 }

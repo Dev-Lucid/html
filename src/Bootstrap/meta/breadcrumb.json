@@ -1,0 +1,6 @@
+{
+    "tag":"ol",
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\orderedList",
+    "classes":["breadcrumb"]
+}

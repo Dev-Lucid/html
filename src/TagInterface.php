@@ -1,8 +1,10 @@
 <?php
 namespace Lucid\Html;
 
-Interface TagInterface
+Interface TagInterface extends FactoryInterface
 {
+    function __construct(FactoryInterface $factory);
+    
     public function __toString() : string;
     public function render() : string;
     

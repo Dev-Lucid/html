@@ -20,7 +20,7 @@
                 }
                 settype($this->value, 'string');
                 settype($value, 'string');
-                $this->add(\Lucid\Html\Html::build('option', $value, $label, ($this->value == $value)));
+                $this->add($this->build('option', $value, $label, ($this->value == $value)));
             }
         }
         return parent::preRender();

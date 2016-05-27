@@ -425,7 +425,7 @@ lucid.html.tag.prototype.renderStyle=function() {
 
 lucid.html.tag.prototype.setHidden=function(val) {
     if (val !== true && val !== false) {
-        throw 'Attribute hidden only accepts values true or false.';
+        throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'hidden', val, ['true', 'false']);
     }
     this.attributes.hidden = val;
     return this;
@@ -514,6 +514,17 @@ lucid.html.exception.InvalidAttribute=function(className, badAttribute, allowedA
 lucid.html.exception.InvalidAttribute.prototype = Object.create(Error.prototype);
 
 /* File end: /Volumes/Lucid/html/bin/../src/Exception/InvalidAttribute.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Exception/InvalidAttributeValue.js */
+lucid.html.exception.InvalidAttributeValue=function(className, attributeName, badAttributeValue, allowedValues){
+    this.message = 'Class '+String(className)+'.'+String(attributeName)+' cannot have value ' + String(badAttributeValue) + '.';
+    if (typeof(allowedValues) == 'object' && allowedValues.length > 0){
+        this.message += ' Supported attributes are: ' + allowedValues.join(', ');
+    }
+};
+lucid.html.exception.InvalidAttributeValue.prototype = Object.create(Error.prototype);
+
+/* File end: /Volumes/Lucid/html/bin/../src/Exception/InvalidAttributeValue.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Exception/MissingRequiredProperty.js */
 lucid.html.exception.MissingRequiredProperty=function(className, traitName, propertyName, description){

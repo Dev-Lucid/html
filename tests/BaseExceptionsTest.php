@@ -18,4 +18,10 @@ class BaseExceptionsTest extends BaseTest
         $this->setExpectedException(\Lucid\Html\Exception\InvalidAttribute::class);
         $this->runAsPHP("@build('image')->set('hiya', 'NOYOU')->render()");
     }
+    
+    public function testInvalidAttributeValue()
+    {
+        $this->setExpectedException(\Lucid\Html\Exception\InvalidAttributeValue::class);
+        $this->runAsPHP("@build('image')->set('hidden', 'NOYOU')->render()");
+    }
 }

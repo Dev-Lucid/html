@@ -320,7 +320,7 @@ class Tag implements TagInterface
     public function paragraph($text) : TagInterface
     {
         if ($this->allowChildren === false) {
-            throw new \Exception('Class '.get_class($this).' does not support ->paragraph because this class does not support having children.');
+            throw new Exception\ChildrenNotAllowed(get_class($this));
         }
         $this->add(html::p($text));
         return $this;
@@ -418,7 +418,7 @@ class Tag implements TagInterface
     public function setHidden($val) : TagInterface
     {
         if ($val !== true && $val !== false){
-            throw new \Exception('Attribute hidden only accepts values true or false.');
+            throw new Exception\InvalidAttributeValue($this->instantiatorName, 'hidden', $val, ['true', 'false']);
         }
         $this->attributes['hidden'] = $val;
         return $this;

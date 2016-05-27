@@ -387,7 +387,7 @@ lucid.html.tag.prototype.renderStyle=function() {
 
 lucid.html.tag.prototype.setHidden=function(val) {
     if (val !== true && val !== false) {
-        throw 'Attribute hidden only accepts values true or false.';
+        throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'hidden', val, ['true', 'false']);
     }
     this.attributes.hidden = val;
     return this;

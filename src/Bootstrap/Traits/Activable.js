@@ -6,7 +6,7 @@ lucid.html.bootstrap.traits.Activable = {
         } else if (val === false) {
             this.removeClass('active');
         } else {
-            throw 'Tag '+String(this.tag)+' active property may only be set to true or false';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'active', val, ['true', 'false']);
         }
         return this;
     }

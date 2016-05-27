@@ -15,7 +15,7 @@ trait Pillable
         } elseif ($val === false) {
             $this->removeClass('label-pill');
         } else {
-            throw new \Exception('Class '.get_class($this).' pill property may only be set to true or false');
+            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'pill', $val, ['true', 'false']);
         }
         return $this;
     }

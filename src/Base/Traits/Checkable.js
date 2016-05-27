@@ -24,7 +24,7 @@ lucid.html.base.traits.Checkable = {
         }
 
         if (typeof(val) != 'boolean') {
-            throw 'Attribute checked only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'checked', val, ['true', 'false']);
         }
 
         this.attributes.checked = (val === true || val === 'true' || val === 1 || val === String('1'));

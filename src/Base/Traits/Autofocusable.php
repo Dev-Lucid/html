@@ -5,13 +5,13 @@ trait Autofocusable
 {
     public function AutofocusInit()
     {
-        $this->allowedAttributes[] = 'required';
+        $this->allowedAttributes[] = 'autofocus';
     }
 
     public function setAutofocus($val)
     {
         if ($val !== true && $val !== false) {
-            throw new \Exception('Attribute autofocus only accepts values true or false.');
+            throw new Exception\InvalidAttributeValue($this->instantiatorName, 'autofocus', $val, ['true', 'false']);
         }
         $this->attributes['autofocus'] = $val;
         return $this;

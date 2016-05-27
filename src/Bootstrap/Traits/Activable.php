@@ -10,7 +10,7 @@ trait Activable
         } elseif ($val === false) {
             $this->removeClass('active');
         } else {
-            throw new \Exception('Class '.get_class($this).' active property may only be set to true or false');
+            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'active', $val, ['true', 'false']);
         }
         return $this;
     }

@@ -15,7 +15,7 @@ trait Modifiable
     public function setModifier($val)
     {
         if (in_array($val, $this->bootstrapModifiersAllowed) === false && is_null($val) === false){
-            throw new \Exception('Class '.get_class($this).' does not support modifier '.$val.'. The only supported modifiers are: '.implode(', ', $this->bootstrapModifiersAllowed));
+            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'modifier', $val, $this->bootstrapModifiersAllowed);
         }
 
         $classesToRemove = [];

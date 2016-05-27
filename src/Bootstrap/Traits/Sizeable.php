@@ -14,7 +14,7 @@ trait Sizeable
     public function setSize($val)
     {
         if (in_array($val, $this->bootstrapSizesAllowed) === false && is_null($val) === false){
-            throw new \Exception('Class '.get_class($this).' does not support size '.$val.'. The only supported sizes are: '.implode(', ', $this->bootstrapSizesAllowed));
+            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'size', $val,  $this->bootstrapSizesAllowed);
         }
 
         $classesToRemove = [];

@@ -11,7 +11,7 @@ trait Requireable
     public function setRequired($val)
     {
         if ($val !== true && $val !== false) {
-            throw new \Exception('Attribute required only accepts values true or false.');
+            throw new Exception\InvalidAttributeValue($this->instantiatorName, 'autofocus', $val, ['true', 'false']);
         }
         $this->attributes['required'] = $val;
         return $this;

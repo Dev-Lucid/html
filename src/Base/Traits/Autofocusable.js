@@ -6,7 +6,7 @@ lucid.html.base.traits.Autofocusable = {
 
     setAutofocus:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute autofocus only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'autofocus', val, ['true', 'false']);
         }
         this.attributes.autofocus = val;
         return this;

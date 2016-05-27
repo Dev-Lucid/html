@@ -8,7 +8,7 @@ lucid.html.bootstrap.traits.Pillable = {
         } else if (val === false) {
             this.removeClass(this.bootstrapPillPrefix+'-pill');
         } else {
-            throw 'Class '+String(this.instantiatorName)+' pill property may only be set to true or false';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'pill', val, ['true', 'false']);
         }
         return this;
     }

@@ -553,7 +553,7 @@ lucid.html.base.traits.Autofocusable = {
 
     setAutofocus:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute autofocus only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'autofocus', val, ['true', 'false']);
         }
         this.attributes.autofocus = val;
         return this;
@@ -594,7 +594,7 @@ lucid.html.base.traits.Checkable = {
         }
 
         if (typeof(val) != 'boolean') {
-            throw 'Attribute checked only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'checked', val, ['true', 'false']);
         }
 
         this.attributes.checked = (val === true || val === 'true' || val === 1 || val === String('1'));
@@ -617,7 +617,7 @@ lucid.html.base.traits.Disableable = {
 
     setDisabled:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute checked only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'autofocus', val, ['true', 'false']);
         }
         this.attributes.disabled = val;
         return this;
@@ -640,7 +640,7 @@ lucid.html.base.traits.Readonlyable = {
 
     setReadonly:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute readonly only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'readonly', val, ['true', 'false']);
         }
         this.attributes.readonly = val;
         return this;
@@ -663,7 +663,7 @@ lucid.html.base.traits.Requireable = {
 
     setRequired:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute required only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'required', val, ['true', 'false']);
         }
         this.attributes.required = val;
         return this;

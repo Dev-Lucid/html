@@ -8,7 +8,7 @@ lucid.html.bootstrap.traits.Inverseable = {
         } else if (val === false) {
             this.removeClass(this.bootstrapInversePrefix + '-inverse');
         } else {
-            throw 'Tag '+String(this.tag)+' inverse property may only be set to true or false';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'inverse', val, ['true', 'false']);
         }
         return this;
     }

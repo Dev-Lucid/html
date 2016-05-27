@@ -6,7 +6,7 @@ lucid.html.bootstrap.traits.Sizeable = {
 
     setSize:function(val) {
         if (this.bootstrapSizesAllowed.indexOf(val) < 0) {
-            throw 'Class '+this.instantiatorName+' does not support size '+String(val)+'. The only supported modifiers are: '+(this.bootstrapSizesAllowed.join(', '));
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'size', val, this.bootstrapSizesAllowed);
         }
 
         var classesToRemove = [];

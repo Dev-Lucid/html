@@ -15,7 +15,7 @@ trait Inverseable
         } elseif ($val === false) {
             $this->removeClass($this->bootstrapInversePrefix.'-inverse');
         } else {
-            throw new \Exception('Class '.get_class($this).' inverse property may only be set to true or false');
+            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'inverse', $val, ['true', 'false']);
         }
         return $this;
     }

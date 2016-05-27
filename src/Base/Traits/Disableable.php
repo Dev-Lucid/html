@@ -11,7 +11,7 @@ trait Disableable
     public function setDisabled($val)
     {
         if ($val !== true && $val !== false) {
-            throw new \Exception('Attribute checked only accepts values true or false.');
+            throw new Exception\InvalidAttributeValue($this->instantiatorName, 'disabled', $val, ['true', 'false']);
         }
         $this->attributes['disabled'] = $val;
         return $this;

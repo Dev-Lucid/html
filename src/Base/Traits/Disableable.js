@@ -6,7 +6,7 @@ lucid.html.base.traits.Disableable = {
 
     setDisabled:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute checked only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'autofocus', val, ['true', 'false']);
         }
         this.attributes.disabled = val;
         return this;

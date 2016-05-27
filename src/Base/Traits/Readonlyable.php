@@ -11,7 +11,7 @@ trait Readonlyable
     public function setReadonly($val)
     {
         if ($val !== true && $val !== false) {
-            throw new \Exception('Attribute readonly only accepts values true or false.');
+            throw new Exception\InvalidAttributeValue($this->instantiatorName, 'readonly', $val, ['true', 'false']);
         }
         $this->attributes['readonly'] = $val;
         return $this;

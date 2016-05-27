@@ -6,7 +6,7 @@ lucid.html.base.traits.Requireable = {
 
     setRequired:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute required only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'required', val, ['true', 'false']);
         }
         this.attributes.required = val;
         return this;

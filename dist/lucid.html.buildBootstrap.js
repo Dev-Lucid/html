@@ -553,7 +553,7 @@ lucid.html.base.traits.Autofocusable = {
 
     setAutofocus:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute autofocus only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'autofocus', val, ['true', 'false']);
         }
         this.attributes.autofocus = val;
         return this;
@@ -594,7 +594,7 @@ lucid.html.base.traits.Checkable = {
         }
 
         if (typeof(val) != 'boolean') {
-            throw 'Attribute checked only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'checked', val, ['true', 'false']);
         }
 
         this.attributes.checked = (val === true || val === 'true' || val === 1 || val === String('1'));
@@ -617,7 +617,7 @@ lucid.html.base.traits.Disableable = {
 
     setDisabled:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute checked only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'autofocus', val, ['true', 'false']);
         }
         this.attributes.disabled = val;
         return this;
@@ -640,7 +640,7 @@ lucid.html.base.traits.Readonlyable = {
 
     setReadonly:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute readonly only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'readonly', val, ['true', 'false']);
         }
         this.attributes.readonly = val;
         return this;
@@ -663,7 +663,7 @@ lucid.html.base.traits.Requireable = {
 
     setRequired:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute required only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'required', val, ['true', 'false']);
         }
         this.attributes.required = val;
         return this;
@@ -2010,7 +2010,7 @@ lucid.html.bootstrap.traits.Activable = {
         } else if (val === false) {
             this.removeClass('active');
         } else {
-            throw 'Tag '+String(this.tag)+' active property may only be set to true or false';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'active', val, ['true', 'false']);
         }
         return this;
     }
@@ -2029,7 +2029,7 @@ lucid.html.bootstrap.traits.Inverseable = {
         } else if (val === false) {
             this.removeClass(this.bootstrapInversePrefix + '-inverse');
         } else {
-            throw 'Tag '+String(this.tag)+' inverse property may only be set to true or false';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'inverse', val, ['true', 'false']);
         }
         return this;
     }
@@ -2046,7 +2046,7 @@ lucid.html.bootstrap.traits.Modifiable = {
 
     setModifier:function(val) {
         if (this.bootstrapModifiersAllowed.indexOf(val) < 0) {
-            throw 'Tag '+this.instantiatorName+' does not support modifier '+String(val)+'. The only supported modifiers are: '+(this.bootstrapModifiersAllowed.join(', '));
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'modifier', val, this.bootstrapModifiersAllowed);
         }
 
         var classesToRemove = [];
@@ -2077,7 +2077,7 @@ lucid.html.bootstrap.traits.Pillable = {
         } else if (val === false) {
             this.removeClass(this.bootstrapPillPrefix+'-pill');
         } else {
-            throw 'Class '+String(this.instantiatorName)+' pill property may only be set to true or false';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'pill', val, ['true', 'false']);
         }
         return this;
     }
@@ -2130,7 +2130,7 @@ lucid.html.bootstrap.traits.Sizeable = {
 
     setSize:function(val) {
         if (this.bootstrapSizesAllowed.indexOf(val) < 0) {
-            throw 'Class '+this.instantiatorName+' does not support size '+String(val)+'. The only supported modifiers are: '+(this.bootstrapSizesAllowed.join(', '));
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'size', val, this.bootstrapSizesAllowed);
         }
 
         var classesToRemove = [];

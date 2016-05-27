@@ -6,7 +6,7 @@ lucid.html.base.traits.Readonlyable = {
 
     setReadonly:function(val) {
         if (val !== true && val !== false) {
-            throw 'Attribute readonly only accepts values true or false.';
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'readonly', val, ['true', 'false']);
         }
         this.attributes.readonly = val;
         return this;

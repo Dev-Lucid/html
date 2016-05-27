@@ -6,7 +6,7 @@ lucid.html.bootstrap.traits.Modifiable = {
 
     setModifier:function(val) {
         if (this.bootstrapModifiersAllowed.indexOf(val) < 0) {
-            throw 'Tag '+this.instantiatorName+' does not support modifier '+String(val)+'. The only supported modifiers are: '+(this.bootstrapModifiersAllowed.join(', '));
+            throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'modifier', val, this.bootstrapModifiersAllowed);
         }
 
         var classesToRemove = [];

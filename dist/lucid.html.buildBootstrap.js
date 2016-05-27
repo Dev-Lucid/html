@@ -166,7 +166,7 @@ lucid.html.tag.prototype.set=function(name, value) {
         this['set'+key](value);
     } else {
         if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
-            throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + ((this.allowedAttributes.concat(this.parameters)).join(', '));
+            throw new lucid.html.exception.InvalidAttribute(this.instantiatorName, name, this.allowedAttributes);
         }
         if (typeof(this[name]) == 'undefined') {
             this.attributes[name] = value;
@@ -271,7 +271,7 @@ lucid.html.tag.prototype.setupChild=function(child, action){
         action = 'add';
     }
     if (this.allowChildren === false) {
-        throw 'Tag '+this.tag+' does not allow children to be added.';
+        throw new lucid.html.exception.ChildrenNotAllowed(this.instantiatorName);
     }
 
     if ((child instanceof Array) === true) {
@@ -498,6 +498,22 @@ lucid.html.Selector.prototype.test=function(tagToTest) {
 };
 
 /* File end: /Volumes/Lucid/html/bin/../src/lucid.html.Selector.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Exception/ChildrenNotAllowed.js */
+lucid.html.exception.ChildrenNotAllowed=function(className){
+    this.message = 'Class '+String(className)+' cannot have children.';
+};
+lucid.html.exception.ChildrenNotAllowed.prototype = Object.create(Error.prototype);
+
+/* File end: /Volumes/Lucid/html/bin/../src/Exception/ChildrenNotAllowed.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Exception/InvalidAttribute.js */
+lucid.html.exception.InvalidAttribute=function(className, badAttribute, allowedAttributes){
+    this.message = 'Class '+String(className)+' cannot have attribute ' + String(badAttribute) + '. Supported attributes are: ' + allowedAttributes.join(', ');
+};
+lucid.html.exception.InvalidAttribute.prototype = Object.create(Error.prototype);
+
+/* File end: /Volumes/Lucid/html/bin/../src/Exception/InvalidAttribute.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Exception/MissingRequiredProperty.js */
 lucid.html.exception.MissingRequiredProperty=function(className, traitName, propertyName, description){

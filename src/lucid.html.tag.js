@@ -128,7 +128,7 @@ lucid.html.tag.prototype.set=function(name, value) {
         this['set'+key](value);
     } else {
         if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
-            throw 'Invalid attribute '+name+'. Tag '+this.tag+' only allows these attributes: ' + ((this.allowedAttributes.concat(this.parameters)).join(', '));
+            throw new lucid.html.exception.InvalidAttribute(this.instantiatorName, name, this.allowedAttributes);
         }
         if (typeof(this[name]) == 'undefined') {
             this.attributes[name] = value;
@@ -233,7 +233,7 @@ lucid.html.tag.prototype.setupChild=function(child, action){
         action = 'add';
     }
     if (this.allowChildren === false) {
-        throw 'Tag '+this.tag+' does not allow children to be added.';
+        throw new lucid.html.exception.ChildrenNotAllowed(this.instantiatorName);
     }
 
     if ((child instanceof Array) === true) {

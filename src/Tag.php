@@ -208,7 +208,7 @@ class Tag implements TagInterface
     protected function setupChild($child, $action='add') : bool
     {
         if ($this->allowChildren === false){
-            throw new \Exception('Class '.get_class($this).' does not allow children to be added.');
+            throw new Exception\ChildrenNotAllowed(get_class($this));
         }
 
         if (is_array($child) === true) {
@@ -293,7 +293,7 @@ class Tag implements TagInterface
             return $this;
         }
         if (in_array($name, $this->allowedAttributes) === false && in_array($name, $this->parameters) === false) {
-            throw new \Exception('Invalid attribute '.$name.'. Tag '.$this->tag.' only allows these attributes: ' . (implode(', ', $this->allowedAttributes) .', '. implode(', ', $this->parameters)));
+            throw new Exception\InvalidAttribute($this->instantiatorName, $name, $this->allowedAttributes);
         }
         if (property_exists($this, $name) === true) {
             $this->$name = $value;

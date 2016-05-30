@@ -1,27 +1,4 @@
-<?php
-namespace Lucid\Html\Bootstrap\Tags;
-
-class table extends \Lucid\Html\Base\Tags\table
-{
-	use \Lucid\Html\Bootstrap\Traits\Modifiable;
-	use \Lucid\Html\Bootstrap\Traits\Sizeable;
-	use \Lucid\Html\Bootstrap\Traits\Inverseable;
-	use \Lucid\Html\Bootstrap\Traits\Pullable;
-
-	public $tag = 'table';
-	public $responsive = false;
-	public $bootstrapInversePrefix = 'table';
-	public $bootstrapSizePrefix = 'table';
-	public $bootstrapSizesAllowed = ['sm', null];
-	public $bootstrapModifierPrefix = 'text';
-	public $bootstrapModifiersAllowed = ['success', 'warning', 'danger', 'info', 'active'];
-
-	public function init()
-	{
-		$this->addClass('table');
-		parent::init();
-	}
-    
+<?php    
 
     public function setBordered($val)
     {
@@ -89,4 +66,4 @@ class table extends \Lucid\Html\Base\Tags\table
         }
         return parent::preRender();
     }
-}
+?>

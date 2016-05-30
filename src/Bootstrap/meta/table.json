@@ -1,0 +1,14 @@
+{
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\table",
+    "classes":["table"],
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Inverseable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"],
+    "properties":{
+        "responsive":"false",
+        "bootstrapInversePrefix":"'table'", 
+        "bootstrapSizePrefix":"'table'", 
+        "bootstrapSizesAllowed":"['sm', null]",
+        "bootstrapModifierPrefix":"'text'", 
+        "bootstrapModifiersAllowed":"['success', 'warning', 'danger', 'info', 'active']"
+    }
+}

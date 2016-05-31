@@ -2370,10 +2370,10 @@ lucid.html.bootstrap.tags.badge = function(factory){
 	lucid.html.tag.apply(this, arguments);
 	this.tag = 'span';
 	this.parameters = ['modifier'];
-	this.bootstrapPillPrefix = 'label';
-	this.bootstrapModifierPrefix = 'label';
+	this.bootstrapPillPrefix = 'tag';
+	this.bootstrapModifierPrefix = 'tag';
 	this.bootstrapModifiersAllowed = ['default', 'primary', 'secondary', 'success', 'warning','danger', 'info'];
-	this.addClass('label');
+	this.addClass('tag');
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 	this.addTrait(lucid.html.bootstrap.traits.Pillable);

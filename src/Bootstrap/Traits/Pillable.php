@@ -11,9 +11,9 @@ trait Pillable
     public function setPill($val)
     {
         if ($val === true) {
-            $this->addClass('label-pill');
+            $this->addClass($this->bootstrapPillPrefix.'-pill');
         } elseif ($val === false) {
-            $this->removeClass('label-pill');
+            $this->removeClass($this->bootstrapPillPrefix.'-pill');
         } else {
             throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'pill', $val, ['true', 'false']);
         }

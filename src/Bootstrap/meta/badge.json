@@ -1,11 +1,11 @@
 {
     "tag":"span",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
-    "classes":["label"],
+    "classes":["tag"],
     "parameters":["modifier"],
     "properties":{
-        "bootstrapPillPrefix":"'label'", 
-        "bootstrapModifierPrefix":"'label'", 
+        "bootstrapPillPrefix":"'tag'", 
+        "bootstrapModifierPrefix":"'tag'", 
         "bootstrapModifiersAllowed":"['default', 'primary', 'secondary', 'success', 'warning','danger', 'info']"
     },
     "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable", "Lucid\\Html\\Bootstrap\\Traits\\Pillable"]

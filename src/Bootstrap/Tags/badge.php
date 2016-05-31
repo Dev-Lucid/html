@@ -9,13 +9,13 @@ class badge extends \Lucid\Html\Tag
 
 	public $tag = 'span';
 	public $parameters = ['modifier'];
-	public $bootstrapPillPrefix = 'label';
-	public $bootstrapModifierPrefix = 'label';
+	public $bootstrapPillPrefix = 'tag';
+	public $bootstrapModifierPrefix = 'tag';
 	public $bootstrapModifiersAllowed = ['default', 'primary', 'secondary', 'success', 'warning','danger', 'info'];
 
 	public function init()
 	{
-		$this->addClass('label');
+		$this->addClass('tag');
 		parent::init();
 	}
 }

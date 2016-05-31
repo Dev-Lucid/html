@@ -1,0 +1,10 @@
+{
+    "tag":"tr",
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\tableRow",
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable"],
+    "properties":{
+        "bootstrapModifierPrefix":"'table'", 
+        "bootstrapModifiersAllowed":"['success', 'warning', 'danger', 'info', 'primary']"
+    }
+}

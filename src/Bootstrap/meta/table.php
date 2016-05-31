@@ -62,7 +62,7 @@
     {
         if ($this->responsive === true) {
             $this->preHtml .= '<div class="table-responsive">';
-            $this->postHtml = $this->postHtml . '<div class="table-responsive">';
+            $this->postHtml = $this->postHtml . '</div>';
         }
         return parent::preRender();
     }

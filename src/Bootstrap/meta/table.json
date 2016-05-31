@@ -8,7 +8,7 @@
         "bootstrapInversePrefix":"'table'", 
         "bootstrapSizePrefix":"'table'", 
         "bootstrapSizesAllowed":"['sm', null]",
-        "bootstrapModifierPrefix":"'text'", 
+        "bootstrapModifierPrefix":"'table'", 
         "bootstrapModifiersAllowed":"['success', 'warning', 'danger', 'info', 'active']"
     }
 }

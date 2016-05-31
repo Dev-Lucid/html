@@ -13,7 +13,7 @@ class table extends \Lucid\Html\Base\Tags\table
 	public $bootstrapInversePrefix = 'table';
 	public $bootstrapSizePrefix = 'table';
 	public $bootstrapSizesAllowed = ['sm', null];
-	public $bootstrapModifierPrefix = 'text';
+	public $bootstrapModifierPrefix = 'table';
 	public $bootstrapModifiersAllowed = ['success', 'warning', 'danger', 'info', 'active'];
 
 	public function init()
@@ -85,7 +85,7 @@ class table extends \Lucid\Html\Base\Tags\table
     {
         if ($this->responsive === true) {
             $this->preHtml .= '<div class="table-responsive">';
-            $this->postHtml = $this->postHtml . '<div class="table-responsive">';
+            $this->postHtml = $this->postHtml . '</div>';
         }
         return parent::preRender();
     }

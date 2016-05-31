@@ -2583,6 +2583,29 @@ lucid.html.factory.tags.cardTitle = lucid.html.bootstrap.tags.cardTitle;
 
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/cardTitle.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/container.js */
+lucid.html.bootstrap.tags.container = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
+	this.tag = 'div';
+	this.addClass('container');
+};
+lucid.html.bootstrap.tags.container.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.factory.tags.container = lucid.html.bootstrap.tags.container;
+
+lucid.html.bootstrap.tags.container.prototype.setFluid=function(val){
+    if (val === true) {
+        this.addClass('container-fluid');
+    } else if (val === false) {
+        this.removeClass('container-fluid');
+    } else {
+        throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'fluid', val, ['true', 'false']);
+    }
+    return this;
+};
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/container.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/div.js */
 lucid.html.bootstrap.tags.div = function(factory){
 	this.factory = factory;
@@ -2883,6 +2906,18 @@ lucid.html.factory.tags.paragraph = lucid.html.bootstrap.tags.paragraph;
 
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/paragraph.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/row.js */
+lucid.html.bootstrap.tags.row = function(factory){
+	this.factory = factory;
+	lucid.html.tag.apply(this, arguments);
+	this.tag = 'tr';
+	this.addClass('row');
+};
+lucid.html.bootstrap.tags.row.prototype = Object.create(lucid.html.tag.prototype);
+lucid.html.factory.tags.row = lucid.html.bootstrap.tags.row;
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/row.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/span.js */
 lucid.html.bootstrap.tags.span = function(factory){
 	this.factory = factory;
@@ -2908,7 +2943,7 @@ lucid.html.bootstrap.tags.table = function(factory){
 	this.bootstrapInversePrefix = 'table';
 	this.bootstrapSizePrefix = 'table';
 	this.bootstrapSizesAllowed = ['sm', null];
-	this.bootstrapModifierPrefix = 'text';
+	this.bootstrapModifierPrefix = 'table';
 	this.bootstrapModifiersAllowed = ['success', 'warning', 'danger', 'info', 'active'];
 	this.addClass('table');
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
@@ -2983,3 +3018,18 @@ lucid.html.bootstrap.tags.table.prototype.preRender=function(){
 };
 
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/table.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/tableRow.js */
+lucid.html.bootstrap.tags.tableRow = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.tableRow.apply(this, arguments);
+	this.tag = 'tr';
+	this.bootstrapModifierPrefix = 'table';
+	this.bootstrapModifiersAllowed = ['success', 'warning', 'danger', 'info', 'primary'];
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+
+};
+lucid.html.bootstrap.tags.tableRow.prototype = Object.create(lucid.html.base.tags.tableRow.prototype);
+lucid.html.factory.tags.tableRow = lucid.html.bootstrap.tags.tableRow;
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/tableRow.js */

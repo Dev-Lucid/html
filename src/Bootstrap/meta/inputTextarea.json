@@ -1,5 +1,5 @@
 {
-    "tag":"inputTextarea",
+    "tag":"textarea",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
     "inheritFrom":"Lucid\\Html\\Base\\Tags\\inputTextarea",
     "classes":["form-control"],
@@ -9,5 +9,5 @@
         "bootstrapSizePrefix":"'form-control'", 
         "bootstrapSizesAllowed":"['sm', 'lg']"
     },
-    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Gridable", "Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
 }

@@ -1,0 +1,10 @@
+{
+    "tag":"input",
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\inputCheckbox",
+    "properties":{
+        "bootstrapModifierPrefix":"'form-control'", 
+        "bootstrapModifiersAllowed":"['primary', 'secondary', 'success', 'warning','danger', 'info', 'link']"
+    },
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Gridable", "Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
+}

@@ -3,6 +3,7 @@ namespace Lucid\Html\Bootstrap\Tags;
 
 class table extends \Lucid\Html\Base\Tags\table
 {
+	use \Lucid\Html\Bootstrap\Traits\Gridable;
 	use \Lucid\Html\Bootstrap\Traits\Modifiable;
 	use \Lucid\Html\Bootstrap\Traits\Sizeable;
 	use \Lucid\Html\Bootstrap\Traits\Inverseable;

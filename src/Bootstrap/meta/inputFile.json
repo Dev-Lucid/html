@@ -7,5 +7,5 @@
         "bootstrapSizePrefix":"'form-control'", 
         "bootstrapSizesAllowed":"['sm', 'lg']"
     },
-    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Gridable", "Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
 }

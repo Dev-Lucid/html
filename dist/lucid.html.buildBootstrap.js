@@ -2293,6 +2293,7 @@ lucid.html.bootstrap.tags.alert = function(factory){
 	this.bootstrapModifiersAllowed = ['success', 'warning','danger', 'info'];
 	this.attributes['role'] = 'alert';
 	this.addClass('alert');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
@@ -2416,6 +2417,56 @@ lucid.html.bootstrap.tags.button = function(factory){
 lucid.html.bootstrap.tags.button.prototype = Object.create(lucid.html.base.tags.button.prototype);
 lucid.html.factory.tags.button = lucid.html.bootstrap.tags.button;
 
+lucid.html.bootstrap.tags.button.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/button.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/card.js */
@@ -2759,6 +2810,73 @@ lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
 };
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/formGroup.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputCheckbox.js */
+lucid.html.bootstrap.tags.inputCheckbox = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.inputCheckbox.apply(this, arguments);
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'form-control';
+	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+};
+lucid.html.bootstrap.tags.inputCheckbox.prototype = Object.create(lucid.html.base.tags.inputCheckbox.prototype);
+lucid.html.factory.tags.inputCheckbox = lucid.html.bootstrap.tags.inputCheckbox;
+
+lucid.html.bootstrap.tags.inputCheckbox.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputCheckbox.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputEmail.js */
 lucid.html.bootstrap.tags.inputEmail = function(factory){
 	this.factory = factory;
@@ -2769,6 +2887,7 @@ lucid.html.bootstrap.tags.inputEmail = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2777,6 +2896,56 @@ lucid.html.bootstrap.tags.inputEmail = function(factory){
 lucid.html.bootstrap.tags.inputEmail.prototype = Object.create(lucid.html.base.tags.inputEmail.prototype);
 lucid.html.factory.tags.inputEmail = lucid.html.bootstrap.tags.inputEmail;
 
+lucid.html.bootstrap.tags.inputEmail.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputEmail.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputFile.js */
@@ -2787,6 +2956,7 @@ lucid.html.bootstrap.tags.inputFile = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control-file');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
@@ -2794,6 +2964,56 @@ lucid.html.bootstrap.tags.inputFile = function(factory){
 lucid.html.bootstrap.tags.inputFile.prototype = Object.create(lucid.html.base.tags.inputFile.prototype);
 lucid.html.factory.tags.inputFile = lucid.html.bootstrap.tags.inputFile;
 
+lucid.html.bootstrap.tags.inputFile.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputFile.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputGroup.js */
@@ -2850,6 +3070,7 @@ lucid.html.bootstrap.tags.inputNumber = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2858,6 +3079,56 @@ lucid.html.bootstrap.tags.inputNumber = function(factory){
 lucid.html.bootstrap.tags.inputNumber.prototype = Object.create(lucid.html.base.tags.inputNumber.prototype);
 lucid.html.factory.tags.inputNumber = lucid.html.bootstrap.tags.inputNumber;
 
+lucid.html.bootstrap.tags.inputNumber.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputNumber.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputPassword.js */
@@ -2870,6 +3141,7 @@ lucid.html.bootstrap.tags.inputPassword = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2878,7 +3150,124 @@ lucid.html.bootstrap.tags.inputPassword = function(factory){
 lucid.html.bootstrap.tags.inputPassword.prototype = Object.create(lucid.html.base.tags.inputPassword.prototype);
 lucid.html.factory.tags.inputPassword = lucid.html.bootstrap.tags.inputPassword;
 
+lucid.html.bootstrap.tags.inputPassword.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputPassword.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputRadio.js */
+lucid.html.bootstrap.tags.inputRadio = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.inputRadio.apply(this, arguments);
+	this.tag = 'input';
+	this.bootstrapModifierPrefix = 'has';
+	this.bootstrapModifiersAllowed = ['success', 'warning', 'danger'];
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
+	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
+};
+lucid.html.bootstrap.tags.inputRadio.prototype = Object.create(lucid.html.base.tags.inputRadio.prototype);
+lucid.html.factory.tags.inputRadio = lucid.html.bootstrap.tags.inputRadio;
+
+lucid.html.bootstrap.tags.inputRadio.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputRadio.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputSelect.js */
 lucid.html.bootstrap.tags.inputSelect = function(factory){
@@ -2890,6 +3279,7 @@ lucid.html.bootstrap.tags.inputSelect = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2898,6 +3288,56 @@ lucid.html.bootstrap.tags.inputSelect = function(factory){
 lucid.html.bootstrap.tags.inputSelect.prototype = Object.create(lucid.html.base.tags.inputSelect.prototype);
 lucid.html.factory.tags.inputSelect = lucid.html.bootstrap.tags.inputSelect;
 
+lucid.html.bootstrap.tags.inputSelect.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputSelect.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputTelephone.js */
@@ -2910,6 +3350,7 @@ lucid.html.bootstrap.tags.inputTelephone = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2918,6 +3359,56 @@ lucid.html.bootstrap.tags.inputTelephone = function(factory){
 lucid.html.bootstrap.tags.inputTelephone.prototype = Object.create(lucid.html.base.tags.inputTelephone.prototype);
 lucid.html.factory.tags.inputTelephone = lucid.html.bootstrap.tags.inputTelephone;
 
+lucid.html.bootstrap.tags.inputTelephone.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputTelephone.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputText.js */
@@ -2930,6 +3421,7 @@ lucid.html.bootstrap.tags.inputText = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2938,18 +3430,69 @@ lucid.html.bootstrap.tags.inputText = function(factory){
 lucid.html.bootstrap.tags.inputText.prototype = Object.create(lucid.html.base.tags.inputText.prototype);
 lucid.html.factory.tags.inputText = lucid.html.bootstrap.tags.inputText;
 
+lucid.html.bootstrap.tags.inputText.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputText.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputTextarea.js */
 lucid.html.bootstrap.tags.inputTextarea = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.inputTextarea.apply(this, arguments);
-	this.tag = 'inputTextarea';
+	this.tag = 'textarea';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2958,6 +3501,56 @@ lucid.html.bootstrap.tags.inputTextarea = function(factory){
 lucid.html.bootstrap.tags.inputTextarea.prototype = Object.create(lucid.html.base.tags.inputTextarea.prototype);
 lucid.html.factory.tags.inputTextarea = lucid.html.bootstrap.tags.inputTextarea;
 
+lucid.html.bootstrap.tags.inputTextarea.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputTextarea.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputUrl.js */
@@ -2970,6 +3563,7 @@ lucid.html.bootstrap.tags.inputUrl = function(factory){
 	this.bootstrapSizePrefix = 'form-control';
 	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('form-control');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
@@ -2978,7 +3572,71 @@ lucid.html.bootstrap.tags.inputUrl = function(factory){
 lucid.html.bootstrap.tags.inputUrl.prototype = Object.create(lucid.html.base.tags.inputUrl.prototype);
 lucid.html.factory.tags.inputUrl = lucid.html.bootstrap.tags.inputUrl;
 
+lucid.html.bootstrap.tags.inputUrl.prototype.preRender=function(){
+    var classes = [];
+    
+    var grid = this.get('grid');
+    if (grid.length > 0) {
+        this.set('grid', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < grid.length && typeof(grid[i]) == 'number') {
+                classes.push('col-'+this.gridColumnNames[i]+'-'+String(grid[i]));
+            }
+        }
+    }
+    
+    var offset = this.get('offset');
+    if (offset.length > 0) {
+        this.set('offset', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < offset.length && typeof(offset[i]) == 'number') {
+                classes.push('offset-'+this.gridColumnNames[i]+'-'+String(offset[i]));
+            }
+        }
+    }
+    
+    var push = this.get('gridPush');
+    if (push.length > 0) {
+        this.set('gridPush', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < push.length && typeof(push[i]) == 'number') {
+                classes.push('push-'+this.gridColumnNames[i]+'-'+String(push[i]));
+            }
+        }
+    }
+    
+    var pull = this.get('gridPull');
+    if (pull.length > 0) {
+        this.set('gridPull', []);
+        for(var i=0; i<this.gridColumnNames.length; i++) {
+            if (i < pull.length && typeof(pull[i]) == 'number') {
+                classes.push('pull-'+this.gridColumnNames[i]+'-'+String(pull[i]));
+            }
+        }
+    }
+    
+    if (classes.length > 0) {
+        this.preHtml += '<div class="'+classes.join(' ')+'">';
+        this.postHtml = '</div>' + this.postHtml;
+    }
+    
+    return lucid.html.base.tags.inputText.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/inputUrl.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/label.js */
+lucid.html.bootstrap.tags.label = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.div.apply(this, arguments);
+	this.tag = 'label';
+	this.parameters = ['for'];
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
+
+};
+lucid.html.bootstrap.tags.label.prototype = Object.create(lucid.html.base.tags.div.prototype);
+lucid.html.factory.tags.label = lucid.html.bootstrap.tags.label;
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/label.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/pagination.js */
 lucid.html.bootstrap.tags.pagination = function(factory){
@@ -2999,6 +3657,7 @@ lucid.html.bootstrap.tags.paragraph = function(factory){
 	this.tag = 'p';
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
@@ -3048,6 +3707,7 @@ lucid.html.bootstrap.tags.table = function(factory){
 	this.bootstrapModifierPrefix = 'table';
 	this.bootstrapModifiersAllowed = ['success', 'warning', 'danger', 'info', 'active'];
 	this.addClass('table');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Inverseable);

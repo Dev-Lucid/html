@@ -8,6 +8,7 @@ lucid.html.bootstrap.tags.alert = function(factory){
 	this.bootstrapModifiersAllowed = ['success', 'warning','danger', 'info'];
 	this.attributes['role'] = 'alert';
 	this.addClass('alert');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 

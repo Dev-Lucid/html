@@ -9,6 +9,7 @@ lucid.html.bootstrap.tags.table = function(factory){
 	this.bootstrapModifierPrefix = 'table';
 	this.bootstrapModifiersAllowed = ['success', 'warning', 'danger', 'info', 'active'];
 	this.addClass('table');
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
 	this.addTrait(lucid.html.bootstrap.traits.Inverseable);

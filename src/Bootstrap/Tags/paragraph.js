@@ -4,6 +4,7 @@ lucid.html.bootstrap.tags.paragraph = function(factory){
 	this.tag = 'p';
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 

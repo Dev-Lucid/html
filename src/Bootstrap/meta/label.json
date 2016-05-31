@@ -1,0 +1,6 @@
+{
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\div",
+    "parameters":["for"],
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Gridable"]
+}

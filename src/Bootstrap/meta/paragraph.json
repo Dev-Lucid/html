@@ -2,7 +2,7 @@
     "tag":"p",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
     "inheritFrom":"Lucid\\Html\\Base\\Tags\\paragraph",
-    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"],
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Gridable", "Lucid\\Html\\Bootstrap\\Traits\\Modifiable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"],
     "properties":{
         "bootstrapModifierPrefix":"'text'", 
         "bootstrapModifiersAllowed":"['primary', 'success', 'warning','danger', 'info', 'muted']"

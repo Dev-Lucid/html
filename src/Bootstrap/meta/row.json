@@ -1,5 +1,5 @@
 {
-    "tag":"tr",
+    "tag":"div",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
     "classes":["row"]
 }

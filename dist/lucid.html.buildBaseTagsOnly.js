@@ -332,18 +332,25 @@ lucid.html.tag.prototype.lastChild=function() {
 lucid.html.tag.prototype.renderTagStart=function(){
     var html = '<'+this.tag;
     for(var key in this.attributes) {
-
-        renderMethod = 'render'+String(key).charAt(0).toUpperCase() + String(key).slice(1);
-        if (typeof(this[renderMethod]) == 'function') {
-            value = this[renderMethod]();
-        } else {
-            value = this.attributes[key];
-        }
-        if (typeof(value) != 'undefined' && value !== null) {
-            html += ' ' + String(key).replace('_', '-')+'="'+value+'"';
+        if (key != 'class') {
+            renderMethod = 'render'+String(key).charAt(0).toUpperCase() + String(key).slice(1);
+            if (typeof(this[renderMethod]) == 'function') {
+                value = this[renderMethod]();
+            } else {
+                value = this.attributes[key];
+            }
+            if (typeof(value) != 'undefined' && value !== null) {
+                html += ' ' + String(key).replace('_', '-')+'="'+value+'"';
+            }
         }
     }
 
+    if (typeof(this.attributes.class) == 'object') {
+        var classValue = this.renderClass();
+        if (classValue !== '') {
+            html += ' class="'+String(classValue)+'"';
+        }
+    }
 
     if (this.allowQuickClose === true && this.children.length === 0) {
         return html += ' />';
@@ -379,7 +386,7 @@ lucid.html.tag.prototype.renderClass=function() {
     if ((this.attributes['class'] instanceof Array) === false) {
         this.attributes['class'] = [];
     }
-    return this.attributes['class'].join(' ');
+    return ''+this.attributes['class'].join(' ');
 };
 
 lucid.html.tag.prototype.hasClass=function(classToCheck) {

@@ -332,18 +332,25 @@ lucid.html.tag.prototype.lastChild=function() {
 lucid.html.tag.prototype.renderTagStart=function(){
     var html = '<'+this.tag;
     for(var key in this.attributes) {
-
-        renderMethod = 'render'+String(key).charAt(0).toUpperCase() + String(key).slice(1);
-        if (typeof(this[renderMethod]) == 'function') {
-            value = this[renderMethod]();
-        } else {
-            value = this.attributes[key];
-        }
-        if (typeof(value) != 'undefined' && value !== null) {
-            html += ' ' + String(key).replace('_', '-')+'="'+value+'"';
+        if (key != 'class') {
+            renderMethod = 'render'+String(key).charAt(0).toUpperCase() + String(key).slice(1);
+            if (typeof(this[renderMethod]) == 'function') {
+                value = this[renderMethod]();
+            } else {
+                value = this.attributes[key];
+            }
+            if (typeof(value) != 'undefined' && value !== null) {
+                html += ' ' + String(key).replace('_', '-')+'="'+value+'"';
+            }
         }
     }
 
+    if (typeof(this.attributes.class) == 'object') {
+        var classValue = this.renderClass();
+        if (classValue !== '') {
+            html += ' class="'+String(classValue)+'"';
+        }
+    }
 
     if (this.allowQuickClose === true && this.children.length === 0) {
         return html += ' />';
@@ -379,7 +386,7 @@ lucid.html.tag.prototype.renderClass=function() {
     if ((this.attributes['class'] instanceof Array) === false) {
         this.attributes['class'] = [];
     }
-    return this.attributes['class'].join(' ');
+    return ''+this.attributes['class'].join(' ');
 };
 
 lucid.html.tag.prototype.hasClass=function(classToCheck) {
@@ -2049,6 +2056,34 @@ lucid.html.bootstrap.traits.Activable = {
 
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Activable.js */
 
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Gridable.js */
+lucid.html.bootstrap.traits.Gridable = {
+    gridColumnNames: ['xs', 'sm', 'md', 'lg', 'xl'], 
+    setGrid:function(val) {
+        this.attributes.grid = val;
+    }, 
+    
+    getGrid:function(){
+        if (typeof(this.attributes.grid) != 'object') {
+            return [];
+        }
+        return this.attributes.grid;
+    },
+    
+    renderGrid:function(){
+        if (typeof(this.attributes.grid) == 'object') {
+            for(var i=0; i<this.gridColumnNames.length; i++) {
+                if (i < this.attributes.grid.length && typeof(this.attributes.grid[i]) == 'number') {
+                    this.addClass('col-'+this.gridColumnNames[i]+'-'+String(this.attributes.grid[i]));
+                }
+            }
+        }
+        return null;
+    }
+};
+
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Gridable.js */
+
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Traits/Inverseable.js */
 lucid.html.bootstrap.traits.Inverseable = {
     traitInit:function(){
@@ -2613,6 +2648,7 @@ lucid.html.bootstrap.tags.div = function(factory){
 	this.tag = 'div';
 	this.bootstrapModifierPrefix = 'text';
 	this.bootstrapModifiersAllowed = ['primary', 'success', 'warning','danger', 'info', 'muted'];
+	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);
 
@@ -2910,7 +2946,7 @@ lucid.html.factory.tags.paragraph = lucid.html.bootstrap.tags.paragraph;
 lucid.html.bootstrap.tags.row = function(factory){
 	this.factory = factory;
 	lucid.html.tag.apply(this, arguments);
-	this.tag = 'tr';
+	this.tag = 'div';
 	this.addClass('row');
 };
 lucid.html.bootstrap.tags.row.prototype = Object.create(lucid.html.tag.prototype);

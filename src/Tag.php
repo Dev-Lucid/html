@@ -246,16 +246,25 @@ class Tag implements TagInterface
     {
         $html = '<'.$this->tag;
         foreach ($this->attributes as $key=>$value) {
-            $render_method = 'render'.$key;
-            if (method_exists($this, $render_method) === true) {
-                $value = $this->$render_method();
-                if (is_null($value) === false) {
-                    $html .= ' '.str_replace('_','-',$key).'="'.$value.'"';
+            if ($key != 'class') {
+                $render_method = 'render'.$key;
+                if (method_exists($this, $render_method) === true) {
+                    $value = $this->$render_method();
+                    if (is_null($value) === false) {
+                        $html .= ' '.str_replace('_','-',$key).'="'.$value.'"';
+                    }
+                } else {
+                    if (is_null($value) === false) {
+                        $html .= ' '.str_replace('_','-',$key).'="'.$value.'"';
+                    }
                 }
-            } else {
-                if (is_null($value) === false) {
-                    $html .= ' '.str_replace('_','-',$key).'="'.$value.'"';
-                }
+            }
+        }
+        
+        if (isset($this->attributes['class']) === true && is_array($this->attributes['class']) === true) {
+            $classValue = $this->renderClass();
+            if ($classValue != '') {
+                $html .= ' class="'.$classValue.'"';
             }
         }
 
@@ -334,7 +343,7 @@ class Tag implements TagInterface
 
     protected function renderClass() : string
     {
-        return implode(' ',$this->attributes['class']);
+        return ''.implode(' ',$this->attributes['class']);
     }
 
     public function hasClass(string $testClass) : bool

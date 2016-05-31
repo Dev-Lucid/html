@@ -11,7 +11,7 @@ class BootstrapFormTest extends BaseTest
     
     public function test_inputGroup()
     {
-        $output = '<div class="input-group"><span class="input-group-addon">@</span><input type="text" class="form-control" name="test" /></div>';
+        $output = '<div class="input-group"><span class="input-group-addon">@</span><input type="text" name="test" class="form-control" /></div>';
         $code = "@build('inputGroup')->add('@')->add(@build('inputText', 'test'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
@@ -19,7 +19,7 @@ class BootstrapFormTest extends BaseTest
     
     public function test_formGroup()
     {
-        $output = '<fieldset class="form-group"><input type="text" class="form-control" name="test" /></fieldset>';
+        $output = '<fieldset class="form-group"><input type="text" name="test" class="form-control" /></fieldset>';
         $code = "@build('formGroup')->add(@build('inputText', 'test'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
@@ -39,7 +39,7 @@ class BootstrapFormTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
-        $output = '<fieldset class="form-group"><label for="email">Email</label><input type="email" class="form-control" name="email" /><small class="text-muted">help</small></fieldset>';
+        $output = '<fieldset class="form-group"><label for="email">Email</label><input type="email" name="email" class="form-control" /><small class="text-muted">help</small></fieldset>';
         $code = "@build('formGroup', @build('label', 'email', 'Email'), @build('inputEmail', 'email'), @build('inputHelp', 'help'))->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));

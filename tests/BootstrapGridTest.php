@@ -43,4 +43,46 @@ class BootstrapGridTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
 
     }
+    
+    public function test_gridoffset()
+    {
+        $output = '<div class="offset-xs-12 offset-sm-11 offset-md-10 offset-lg-9 offset-xl-8"></div>';
+        $code = "@build('div')->set('offset', [12, 11, 10, 9, 8])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<div class="offset-xs-12 offset-md-10 offset-xl-8"></div>';
+        $code = "@build('div')->set('offset', [12, null, 10, null, 8])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+    }
+    
+    public function test_gridpull()
+    {
+        $output = '<div class="pull-xs-12 pull-sm-11 pull-md-10 pull-lg-9 pull-xl-8"></div>';
+        $code = "@build('div')->set('gridPull', [12, 11, 10, 9, 8])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<div class="pull-xs-12 pull-md-10 pull-xl-8"></div>';
+        $code = "@build('div')->set('gridPull', [12, null, 10, null, 8])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+    }
+    
+    public function test_gridpush()
+    {
+        $output = '<div class="push-xs-12 push-sm-11 push-md-10 push-lg-9 push-xl-8"></div>';
+        $code = "@build('div')->set('gridPush', [12, 11, 10, 9, 8])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+        $output = '<div class="push-xs-12 push-md-10 push-xl-8"></div>';
+        $code = "@build('div')->set('gridPush', [12, null, 10, null, 8])->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+
+    }
 }

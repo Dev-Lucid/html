@@ -70,6 +70,7 @@ class Factory implements FactoryInterface
             throw new Exception\InvalidFlavorPath($path);
         }
         $this->autoloadMap[$namespacePrefix] = $path;
+        
         return $this;
     }
 
@@ -80,10 +81,7 @@ class Factory implements FactoryInterface
         }
 
         foreach ($this->autoloadMap as $prefix=>$path) {
-            
-            $filePath = $path.'tags/'.$name.'.php';
             $class = $prefix.'\\Tags\\'.$name;
-        
             if (class_exists($class, true) === true) {
                 $this->loadedClassCache[$name] = $class;
             } 

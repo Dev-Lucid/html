@@ -106,4 +106,11 @@ class BootstrapCardTest extends BaseTest
         $this->assertEquals($output, $this->runAsPHP($code));
     }
     
+    public function test_cardAddToForm()
+    {
+        $output = '<div><div class="card"><div class="card-header">Login</div><div class="card-block"><form name="test-form"></form></div></div></div>';
+        $code = "@build('form', 'test-form')->addTo(@build('card', 'Login')->addTo(@build('div')))->getParent()->getParent()->getParent()->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
+    }
 }

@@ -46,7 +46,9 @@
     public function add($child) : \Lucid\Html\TagInterface
     {
         if (is_object($child) === false) {
-            parent::add($this->build('paragraph')->addClass('card-text')->add($child));
+            if (trim($child) != '') {
+                parent::add($this->build('paragraph')->addClass('card-text')->add($child));
+            }
         } else {
             if ($child->tag == 'blockquote') {
                 $child->addClass('card-blockquote');
@@ -62,7 +64,8 @@
             ) {
                 parent::add($child);
             } else {
-                parent::add($this->build('paragraph')->addClass('card-text')->add($child));
+                parent::add($child);
+                #parent::add($this->build('paragraph')->addClass('card-text')->add($child));
             }
         }
         return $this;

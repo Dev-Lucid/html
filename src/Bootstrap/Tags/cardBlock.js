@@ -65,7 +65,8 @@ lucid.html.bootstrap.tags.cardBlock.prototype.add=function(child){
         ) {
             lucid.html.tag.prototype.add.call(this, child);
         } else {
-            lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
+            lucid.html.tag.prototype.add.call(this, child);
+            //lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
         }
     }
     return this;

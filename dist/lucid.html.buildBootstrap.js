@@ -208,6 +208,11 @@ lucid.html.tag.prototype.set=function(name, value) {
     return this;
 };
 
+lucid.html.tag.prototype.setParent=function(parent){
+    this.parent = parent;
+    return this;
+};
+
 lucid.html.tag.prototype.getParent=function(){
     return this.parent;
 };
@@ -297,6 +302,16 @@ lucid.html.tag.prototype.prepend=function(child){
     return this;
 };
 
+lucid.html.tag.prototype.addTo=function(parent){
+    parent.add(this);
+    return this;
+};
+
+lucid.html.tag.prototype.prependTo=function(parent){
+    parent.prepend(this);
+    return this;
+};
+
 lucid.html.tag.prototype.setupChild=function(child, action){
     if (typeof(action) == 'undefined') {
         action = 'add';
@@ -312,7 +327,7 @@ lucid.html.tag.prototype.setupChild=function(child, action){
         return false;
     } else if (typeof(child) == 'object') {
         this.checkValidChild(child);
-        child.parent = this;
+        child.setParent(this);
     }
     return true;
 };
@@ -2677,7 +2692,8 @@ lucid.html.bootstrap.tags.cardBlock.prototype.add=function(child){
         ) {
             lucid.html.tag.prototype.add.call(this, child);
         } else {
-            lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
+            lucid.html.tag.prototype.add.call(this, child);
+            //lucid.html.tag.prototype.add.call(this, this.build('paragraph').addClass('card-text').add(child));
         }
     }
     return this;

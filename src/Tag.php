@@ -204,6 +204,18 @@ class Tag implements TagInterface
         }
         return $this;
     }
+    
+    public function addTo(TagInterface $parent) : TagInterface
+    {
+        $parent->add($this);
+        return $this;
+    }
+
+    public function prependTo(TagInterface $parent) : TagInterface
+    {
+        $parent->prepend($this);
+        return $this;
+    }
 
     protected function setupChild($child, $action='add') : bool
     {
@@ -218,12 +230,18 @@ class Tag implements TagInterface
             return false;
         } elseif (is_object($child) === true) {
             $this->checkValidChild($child);
-            $child->parent = $this;
+            $child->setParent($this);
         }
         return true;
     }
 
-    public function parent()
+    public function setParent(TagInterface $parent) : TagInterface
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+    
+    public function getParent()
     {
         return $this->parent;
     }
@@ -281,11 +299,6 @@ class Tag implements TagInterface
             return '';
         }
         return '</'.$this->tag.'>';
-    }
-    
-    public function getParent()
-    {
-        return $this->parent;
     }
     
     public function getTag() : string

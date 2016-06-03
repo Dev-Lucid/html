@@ -10,8 +10,11 @@ Interface TagInterface extends FactoryInterface
     
     public function add($child) : TagInterface;
     public function prepend($child) : TagInterface;
+    public function addTo(TagInterface $parent) : TagInterface;
+    public function prependTo(TagInterface $parent) : TagInterface;
     
-    public function parent();
+    public function setParent(TagInterface $parent) : TagInterface;
+    public function getParent();
     public function firstChild();
     public function lastChild();
     

@@ -16,7 +16,7 @@ class BootstrapGridTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
         
-        $output = '<div class="container container-fluid"></div>';
+        $output = '<div class="container-fluid"></div>';
         $code = "@build('container')->set('fluid', true)->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));

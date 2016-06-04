@@ -54,5 +54,9 @@ class BootstrapFormTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
+        $output = '<div class="form-group row"><label class="col-sm-3"></label><div class="col-sm-9"><div class="form-check"><label class="form-check-label"><input type="checkbox" name="remember_me" checked="checked" class="form-check-input" /> Remember Me<small class="text-muted">help</small></label></div></div></div>';
+        $code = "@build('formGroup', 'remember_me', ' Remember Me', 'inputCheckbox', true, 'help')->set('rowLayout', true)->set('gridSizeLabel', 3)->set('gridSizeField', 9)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
     }
 }

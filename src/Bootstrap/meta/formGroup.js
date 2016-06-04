@@ -5,39 +5,51 @@ lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
 
     var radioSelector = new lucid.html.Selector('input[type=radio]');
     var radios = this.queryChildren(radioSelector, true);
-
-    if (checkboxes.length > 0) {
-        this.tag = 'div';
-        this.removeClass('form-group');
-        this.addClass('checkbox');
-		this.preChildrenHtml  += '<label>';
-		this.postChildrenHtml += '</label>';
-    }
-    if (radios.length > 0) {
-        this.tag = 'div';
-        this.removeClass('form-group');
-        this.addClass('radio');
-		this.preChildrenHtml  += '<label>';
-		this.postChildrenHtml += '</label>';
-    }
     
-    if (typeof(this.attributes.rowLayout) != 'undefined') {
-        if (this.attributes.rowLayout === true) {
-            this.addClass('row');
+    var useRowLayout = (typeof(this.attributes.rowLayout) != 'undefined' && this.attributes.rowLayout === true);
+    this.attributes.rowLayout = null;
+    
+    if (checkboxes.length > 0 || radios.length > 0) {
+        this.tag = 'div';
+        
+        if (useRowLayout === true) {
             
-            var labels = this.queryChildren(new lucid.html.Selector('label'), true);
-            for (var i=0; i<labels.length; i++) {
-                labels[i].addClass('col-sm-'+String(this.gridSizeLabel));
-                labels[i].addClass('col-form-label');
+            this.preChildrenHtml  += '<label class="form-check-label">';
+            this.postChildrenHtml = '</label>'+this.postChildrenHtml;
+
+            this.preChildrenHtml  = '<label class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeLabel)+'"></label><div class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeField)+'"><div class="form-check">'+this.preChildrenHtml;
+            this.postChildrenHtml += '</div></div>';
+            
+            for (var i=0; i < checkboxes.length; i++) {
+                checkboxes[i].addClass('form-check-input');
             }
             
-            var fields = this.queryChildren(new lucid.html.Selector('.form-control'), true);
-            for (var j=0; j<fields.length; j++) {
-                fields[j].preHtml += '<div class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeField)+'">';
-                fields[j].postHtml = '</div>' + fields[j].postHtml;
+            for (var j=0; j < radios.length; j++) {
+                radios[j].addClass('form-check-input');
             }
+        } else {
+            this.removeClass('form-group');
+            this.addClass(((checkboxes.length > 0)?'checkbox':'radio'));
+    		this.preChildrenHtml  += '<label>';
+    		this.postChildrenHtml += '</label>';
         }
-        this.attributes.rowLayout = null;
+    }
+
+    
+    if (useRowLayout === true) {
+        this.addClass('row');
+        
+        var labels = this.queryChildren(new lucid.html.Selector('label'), true);
+        for (var i=0; i<labels.length; i++) {
+            labels[i].addClass('col-sm-'+String(this.gridSizeLabel));
+            labels[i].addClass('col-form-label');
+        }
+        
+        var fields = this.queryChildren(new lucid.html.Selector('.form-control'), true);
+        for (var j=0; j<fields.length; j++) {
+            fields[j].preHtml += '<div class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeField)+'">';
+            fields[j].postHtml = '</div>' + fields[j].postHtml;
+        }
     }
     return lucid.html.tag.prototype.preRender.call(this);
 };
@@ -59,8 +71,14 @@ lucid.html.bootstrap.tags.formGroup.prototype.setProperties=function(params) {
     var help      = (params.length > 4)?params[4]:null;
     
     if (field !== null) {
-        this.label = this.add(this.build('label', field, label)).lastChild();
-        this.field = this.add(this.build(inputType, field, value)).lastChild();
+        if (inputType == 'inputCheckbox') {
+            this.field = this.add(this.build(inputType, field, value, label)).lastChild();            
+        } else if (inputType == 'inputRadio') {
+            this.field = this.add(this.build(inputType, field, value, label)).lastChild();
+        } else {
+            this.label = this.add(this.build('label', field, label)).lastChild();
+            this.field = this.add(this.build(inputType, field, value)).lastChild();
+        }
     }
     if (help !== null) {
         this.help = this.add(this.build('inputHelp', help)).lastChild();

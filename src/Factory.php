@@ -7,6 +7,7 @@ class Factory implements FactoryInterface
     protected $loadedClassCache = [];
     protected $autoloadMap      = [];
     protected $hooks            = [];
+    protected $defaults         = [];
     const SUPPORTED_FLAVORS = ['Bootstrap'];
 
     public function __construct(string $flavor = '')
@@ -33,6 +34,17 @@ class Factory implements FactoryInterface
         if (class_exists("Lucid\Html\Tag") === false) {
             include(__DIR__.'/Tag.php');
         }
+    }
+    
+    public function addDefaults(string $instantiatorName, array $settings) : FactoryInterface
+    {
+        if (isset($this->defaults[$instantiatorName]) === false) {
+            $this->defaults[$instantiatorName] = [];
+        }
+        foreach ($settings as $key=>$value) {
+            $this->defaults[$instantiatorName][$key] = $value;
+        }
+        return $this;
     }
     
     public function addHook(array $tags, string $action, Callable $callable)
@@ -106,7 +118,16 @@ class Factory implements FactoryInterface
             $obj->tag = $name;
         }
         $obj->instantiatorName = $name;
+        
+        if (isset($this->defaults[$name]) === true) {
+            foreach ($this->defaults[$name] as $key=>$value) {
+                $obj->set($key, $value);
+            }
+        }
+        
         $obj->setProperties($params);
+
+        
 
         $this->callHooks($obj, 'create');
 

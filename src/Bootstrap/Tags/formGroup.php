@@ -6,8 +6,8 @@ class formGroup extends \Lucid\Html\Tag
 	public $tag = 'fieldset';
 	public $parameters = ['field', 'label', 'inputType', 'value', 'help'];
 	public $gridSizeMinimum = 'sm';
-	public $gridWidthLabel = 2;
-	public $gridWidthField = 10;
+	public $gridSizeLabel = 2;
+	public $gridSizeField = 10;
 
 	public function init()
 	{

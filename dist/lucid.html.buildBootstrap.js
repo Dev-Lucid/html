@@ -12,9 +12,20 @@ lucid.html.exception = {};
 
 lucid.html.factory=function(){
     this.hooks = {};
+    this.defaults = {};
     this.hooks.javascript = function(jsToRun) {
         return eval(jsToRun);
     };
+};
+
+lucid.html.factory.prototype.addDefaults=function(instantiatorName, settings){
+    if (typeof(this.defaults[instantiatorName]) == 'undefined') {
+        this.defaults[instantiatorName] = {};
+    }
+    for (var key in settings) {
+        this.defaults[instantiatorName][key] = settings[key];
+    }
+    return this;
 };
 
 lucid.html.factory.prototype.addHook=function(tags, action, callable){
@@ -47,16 +58,23 @@ lucid.html.factory.prototype.build=function(tag){
     var obj;
     if (typeof(lucid.html.factory.tags[tag]) == 'function'){
         obj = new lucid.html.factory.tags[tag](this, tag);
-        
-        var newArgs = [];
-        for (var i=1; i<arguments.length; i++) {
-            newArgs.push(arguments[i]);
-        }
-        obj.setProperties(newArgs);
     } else {
         obj = new lucid.html.tag(this, tag);
         obj.tag = tag;
     }
+    
+    if (typeof(this.defaults[tag]) == 'object') {
+        for (var key in this.defaults[tag]) {
+            obj.set(key, this.defaults[tag][key]);
+        }
+    }
+    
+    var newArgs = [];
+    for (var i=1; i<arguments.length; i++) {
+        newArgs.push(arguments[i]);
+    }
+    obj.setProperties(newArgs);
+    
     
     this.callHooks(obj, 'create');
     return obj;
@@ -2804,8 +2822,8 @@ lucid.html.bootstrap.tags.formGroup = function(factory){
 	this.tag = 'fieldset';
 	this.parameters = ['field', 'label', 'inputType', 'value', 'help'];
 	this.gridSizeMinimum = 'sm';
-	this.gridWidthLabel = 2;
-	this.gridWidthField = 10;
+	this.gridSizeLabel = 2;
+	this.gridSizeField = 10;
 	this.addClass('form-group');
 };
 lucid.html.bootstrap.tags.formGroup.prototype = Object.create(lucid.html.tag.prototype);

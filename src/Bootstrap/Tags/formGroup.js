@@ -4,8 +4,8 @@ lucid.html.bootstrap.tags.formGroup = function(factory){
 	this.tag = 'fieldset';
 	this.parameters = ['field', 'label', 'inputType', 'value', 'help'];
 	this.gridSizeMinimum = 'sm';
-	this.gridWidthLabel = 2;
-	this.gridWidthField = 10;
+	this.gridSizeLabel = 2;
+	this.gridSizeField = 10;
 	this.addClass('form-group');
 };
 lucid.html.bootstrap.tags.formGroup.prototype = Object.create(lucid.html.tag.prototype);

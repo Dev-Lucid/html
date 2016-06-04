@@ -20,6 +20,25 @@ lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
 		this.preChildrenHtml  += '<label>';
 		this.postChildrenHtml += '</label>';
     }
+    
+    if (typeof(this.attributes.rowLayout) != 'undefined') {
+        if (this.attributes.rowLayout === true) {
+            this.addClass('row');
+            
+            var labels = this.queryChildren(new lucid.html.Selector('label'), true);
+            for (var i=0; i<labels.length; i++) {
+                labels[i].addClass('col-sm-'+String(this.gridSizeLabel));
+                labels[i].addClass('col-form-label');
+            }
+            
+            var fields = this.queryChildren(new lucid.html.Selector('.form-control'), true);
+            for (var j=0; j<fields.length; j++) {
+                fields[j].preHtml += '<div class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeField)+'">';
+                fields[j].postHtml = '</div>' + fields[j].postHtml;
+            }
+        }
+        this.attributes.rowLayout = null;
+    }
     return lucid.html.tag.prototype.preRender.call(this);
 };
 
@@ -59,4 +78,19 @@ lucid.html.bootstrap.tags.formGroup.prototype.getLabel=function() {
 
 lucid.html.bootstrap.tags.formGroup.prototype.getHelp=function() {
     return this.help;
+};
+
+lucid.html.bootstrap.tags.formGroup.prototype.setGridSizeMinimum=function(val) {
+    this.gridSizeMinimum = val;
+    return this;
+};
+
+lucid.html.bootstrap.tags.formGroup.prototype.setGridSizeLabel=function(val) {
+    this.gridSizeLabel = val;
+    return this;
+};
+
+lucid.html.bootstrap.tags.formGroup.prototype.setGridSizeField=function(val) {
+    this.gridSizeField = val;
+    return this;
 };

@@ -1,6 +1,11 @@
 {
     "tag":"fieldset",
     "classes":["form-group"],
+    "properties":{
+        "gridSizeMinimum":"'sm'", 
+        "gridWidthLabel":"2", 
+        "gridWidthField":"10"
+    },
     "parameters":["field", "label", "inputType", "value", "help"],
     "namespace":"Lucid\\Html\\Bootstrap\\Tags"
 }

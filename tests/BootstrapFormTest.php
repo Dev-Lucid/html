@@ -48,6 +48,11 @@ class BootstrapFormTest extends BaseTest
         $code = "@build('formGroup', 'email', 'Email', 'inputEmail', '', 'help')->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
+        
+        $output = '<fieldset class="form-group row"><label for="email" class="col-sm-3 col-form-label">Email</label><div class="col-sm-9"><input type="email" name="email" value="" class="form-control" /></div><small class="text-muted">help</small></fieldset>';
+        $code = "@build('formGroup', 'email', 'Email', 'inputEmail', '', 'help')->set('rowLayout', true)->set('gridSizeLabel', 3)->set('gridSizeField', 9)->render()";
+        $this->assertEquals($output, $this->runAsJs($code));
+        $this->assertEquals($output, $this->runAsPHP($code));
 
     }
 }

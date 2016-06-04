@@ -26,16 +26,16 @@
             $this->attributes['rowLayout'] = null;
             $this->addClass('row');
 
-            $labels = $this->queryChildren(new \Lucid\Html\Selector('label'));
+            $labels = $this->queryChildren(new \Lucid\Html\Selector('label'), true);
             foreach ($labels as $label) {
-                $label->addClass('col-sm-2');
+                $label->addClass('col-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel);
                 $label->addClass('col-form-label');
             }
 
             $fields = $this->queryChildren(new \Lucid\Html\Selector('.form-control'), true);
         
             foreach ($fields as $field) {
-                $field->preHtml .= '<div class="col-sm-10">';
+                $field->preHtml .= '<div class="col-'.$this->gridSizeMinimum.'-'.$this->gridSizeField.'">';
                 $field->postHtml = '</div>'.$field->postHtml;
             }
         }
@@ -86,4 +86,22 @@
 	{
 		return $this->help;
 	}
+    
+    public function setGridSizeMinimum($val)
+    {
+        $this->gridSizeMinimum = $val;
+        return $this;
+    }
+    
+    public function setGridSizeField($val)
+    {
+        $this->gridSizeField = $val;
+        return $this;
+    }
+    
+    public function setGridSizeLabel($val)
+    {
+        $this->gridSizeLabel = $val;
+        return $this;
+    }
 ?>

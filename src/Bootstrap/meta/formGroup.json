@@ -1,5 +1,6 @@
 {
     "tag":"fieldset",
     "classes":["form-group"],
+    "parameters":["field", "label", "inputType", "value", "help"],
     "namespace":"Lucid\\Html\\Bootstrap\\Tags"
 }

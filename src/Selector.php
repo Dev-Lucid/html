@@ -22,12 +22,13 @@ class Selector implements SelectorInterface
                 $attribute = array_pop($pattern);
                 $attribute = explode('=', str_replace(']', '', $attribute));
                 $this->attributeName  = $attribute[0];
-                $this->attributeValue = $attribute[1];
-                
-                $pattern = $pattern[0];
-            }
+                $this->attributeValue = $attribute[1];    
+            } 
+            $pattern = $pattern[0];
             
-            $this->tag = $pattern;
+            if (trim($pattern) != '') {
+                $this->tag = $pattern;
+            }
         }
     }
     

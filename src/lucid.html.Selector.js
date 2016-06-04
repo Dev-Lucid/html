@@ -17,7 +17,11 @@ lucid.html.Selector=function(pattern){
             this.attributeName  = attr[0];
             this.attributeValue = attr[1];
         }
-        this.tag = pattern[0];
+        pattern = pattern[0];
+        
+        if (pattern !== '') {
+            this.tag = pattern;
+        }
     }
 };
 

@@ -37,8 +37,7 @@ class Tag implements TagInterface
         foreach ($allClasses as $class) {
             $allTraits = array_merge($allTraits, class_uses($class));
         }
-
-    
+        
         foreach($allTraits as $trait)
         {
             $trait = explode('\\', $trait);

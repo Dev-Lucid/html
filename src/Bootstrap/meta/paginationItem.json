@@ -1,0 +1,11 @@
+{
+    "tag":"li",
+    "namespace":"Lucid\\Html\\Bootstrap\\Tags",
+    "inheritFrom":"Lucid\\Html\\Base\\Tags\\listItem",
+    "classes":["page-item"],
+    "properties":{
+        "href":"''"
+    },
+    "parameters":["href"],
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Activable"]
+}

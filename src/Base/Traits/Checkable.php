@@ -29,7 +29,7 @@ trait Checkable
             throw new \Exception('Attribute checked cannot be used on input type '.$type.'; only for types radio and checkbox.');
         }
         if ($val !== true && $val !== false) {
-            throw new Exception\InvalidAttributeValue($this->instantiatorName, 'checked', $val, ['true', 'false']);
+            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'checked', $val, ['true', 'false']);
         }
         $this->attributes['checked'] = ($val === true || $val === 'true' || $val === 1 || $val === strval('1'));
         return $this;

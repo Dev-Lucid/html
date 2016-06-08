@@ -15,6 +15,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             ']@' => [ 'php'=>']', 'js'=>'}', ],
             '#[' => [ 'php'=>'[', 'js'=>'[', ],
             ']#' => [ 'php'=>']', 'js'=>']', ],
+            '+.' => [ 'php'=>'.', 'js'=>'+', ],
             '@build'=> ['php'=>'$factory->build', 'js'=>'factory.build'],
         ];
         

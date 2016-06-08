@@ -1,41 +1,4 @@
 <?php
-namespace Lucid\Html\Bootstrap\Tags;
-
-class pagination extends \Lucid\Html\Base\Tags\unorderedList
-{
-	use \Lucid\Html\Bootstrap\Traits\Sizeable;
-	use \Lucid\Html\Bootstrap\Traits\Pullable;
-
-	public $tag = 'ul';
-	public $parameters = ['currentPage', 'nbrOfPages', 'showPreviousNextItems', 'showFirstLastItems', 'alwaysShowFirstPage', 'alwaysShowLastPage'];
-	public $ariaLabel = '';
-	public $currentPage = 0;
-	public $nbrOfPages = 1;
-	public $showRange = false;
-	public $rangeShowBeforeAfter = [2,2];
-	public $linkBuilder = null;
-	public $labelText = [['&laquo;', 'First'], ['&lt;', 'Previous'], ' (current)', ['&gt;', 'Next'], ['&raquo;', 'Last']];
-	public $autoBuildItems = true;
-	public $showPreviousNextItems = true;
-	public $showFirstLastItems = true;
-	public $rangeShowFirstLastPage = true;
-	public $rangeBoundaryStartText = '&hellip;';
-	public $rangeBoundaryEndText = '&hellip;';
-	public $bootstrapSizePrefix = 'pagination';
-	public $bootstrapSizesAllowed = ['sm', 'lg'];
-
-	public function init()
-	{
-		$this->addClass('pagination');
-		$this->allowedAttributes[] = 'linkBuilder';
-		$this->allowedAttributes[] = 'labelText';
-		$this->allowedAttributes[] = 'ariaLabel';
-		$this->allowedAttributes[] = 'showRange';
-		$this->allowedAttributes[] = 'rangeShowBeforeAfter';
-		$this->allowedAttributes[] = 'rangeShowFirstLastPage';
-		parent::init();
-	}
-
     public function preRender() : string
     {
         if ($this->autoBuildItems === true) {
@@ -148,4 +111,4 @@ class pagination extends \Lucid\Html\Base\Tags\unorderedList
         
         return parent::preRender();
     }
-}
+?>

@@ -2,5 +2,25 @@
     "tag":"ul",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
     "inheritFrom":"Lucid\\Html\\Base\\Tags\\unorderedList",
-    "classes":["pagination"]
+    "properties":{
+        "ariaLabel":"''",
+        "currentPage":0,
+        "nbrOfPages":1,
+        "showRange":"false",
+        "rangeShowBeforeAfter":"[2,2]",
+        "linkBuilder":"null",
+        "labelText":"[['&laquo;', 'First'], ['&lt;', 'Previous'], ' (current)', ['&gt;', 'Next'], ['&raquo;', 'Last']]",
+        "autoBuildItems":"true",
+        "showPreviousNextItems":"true",
+        "showFirstLastItems":"true",
+        "rangeShowFirstLastPage":"true",
+        "rangeBoundaryStartText":"'&hellip;'",
+        "rangeBoundaryEndText":"'&hellip;'",
+        "bootstrapSizePrefix":"'pagination'", 
+        "bootstrapSizesAllowed":"['sm', 'lg']"
+    },
+    "allowedAttributes":["linkBuilder", "labelText", "ariaLabel", "showRange", "rangeShowBeforeAfter","rangeShowFirstLastPage"],
+    "parameters":["currentPage", "nbrOfPages", "showPreviousNextItems", "showFirstLastItems", "alwaysShowFirstPage", "alwaysShowLastPage"],
+    "classes":["pagination"],
+    "traits":["Lucid\\Html\\Bootstrap\\Traits\\Sizeable", "Lucid\\Html\\Bootstrap\\Traits\\Pullable"]
 }

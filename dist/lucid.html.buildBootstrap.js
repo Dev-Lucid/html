@@ -3778,12 +3778,183 @@ lucid.html.bootstrap.tags.pagination = function(factory){
 	this.factory = factory;
 	lucid.html.base.tags.unorderedList.apply(this, arguments);
 	this.tag = 'ul';
+	this.allowedAttributes.push('linkBuilder');
+	this.allowedAttributes.push('labelText');
+	this.allowedAttributes.push('ariaLabel');
+	this.allowedAttributes.push('showRange');
+	this.allowedAttributes.push('rangeShowBeforeAfter');
+	this.allowedAttributes.push('rangeShowFirstLastPage');
+	this.parameters = ['currentPage', 'nbrOfPages', 'showPreviousNextItems', 'showFirstLastItems', 'alwaysShowFirstPage', 'alwaysShowLastPage'];
+	this.ariaLabel = '';
+	this.currentPage = 0;
+	this.nbrOfPages = 1;
+	this.showRange = false;
+	this.rangeShowBeforeAfter = [2,2];
+	this.linkBuilder = null;
+	this.labelText = [['&laquo;', 'First'], ['&lt;', 'Previous'], ' (current)', ['&gt;', 'Next'], ['&raquo;', 'Last']];
+	this.autoBuildItems = true;
+	this.showPreviousNextItems = true;
+	this.showFirstLastItems = true;
+	this.rangeShowFirstLastPage = true;
+	this.rangeBoundaryStartText = '&hellip;';
+	this.rangeBoundaryEndText = '&hellip;';
+	this.bootstrapSizePrefix = 'pagination';
+	this.bootstrapSizesAllowed = ['sm', 'lg'];
 	this.addClass('pagination');
+	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
+	this.addTrait(lucid.html.bootstrap.traits.Pullable);
+
 };
 lucid.html.bootstrap.tags.pagination.prototype = Object.create(lucid.html.base.tags.unorderedList.prototype);
 lucid.html.factory.tags.pagination = lucid.html.bootstrap.tags.pagination;
 
+
+lucid.html.bootstrap.tags.pagination.prototype.preRender=function(){
+    if (this.autoBuildItems === true) {
+        var linkBuilder;
+        if (typeof(this.linkBuilder) == 'function') {
+            linkBuilder = this.linkBuilder;
+        } else {
+            linkBuilder = function(){ return '#'; };
+        }
+        
+        if (this.showFirstLastItems === true) {
+            this.add(this.build(
+                'paginationItem', 
+                linkBuilder(this, 0), 
+                '<span aria-hidden="true">' + this.labelText[0][0] + '</span><span class="sr-only">' + this.labelText[0][1] + '</span>'
+            ));
+            if (this.currentPage === 0) {
+                this.lastChild().set('disabled', true);
+            }
+        }
+        if (this.showPreviousNextItems === true) {
+            var prevNbr = (this.currentPage > 0)?(this.currentPage - 1):0;
+            this.add(this.build(
+                'paginationItem', 
+                linkBuilder(this, prevNbr), 
+                '<span aria-hidden="true">' + this.labelText[1][0] + '</span><span class="sr-only">' + this.labelText[1][1] + '</span>'
+            ));
+            if (this.currentPage == prevNbr) {
+                this.lastChild().set('disabled', true);
+            }
+        }
+        
+        if (this.showRange === false) {
+            var startRange = 0;
+            var endRange   = this.nbrOfPages;
+        } else {
+            var rangeSize  = this.rangeShowBeforeAfter[0] + 1 + this.rangeShowBeforeAfter[1];
+            var startRange = this.currentPage - this.rangeShowBeforeAfter[0];
+            var endRange = startRange + rangeSize;
+            while (startRange < 0) {
+                startRange++;
+                endRange++;
+            }
+            if (endRange > this.nbrOfPages) {
+                endRange = this.nbrOfPages;
+            }
+        }
+        
+        if (this.showRange === true && this.rangeShowFirstLastPage === true && startRange > 0) {
+            this.add(this.build('paginationItem', linkBuilder(this, 0), 1));
+        }
+        for (var i=startRange; i<endRange; i++) {
+            var text = String(i + 1);
+            if (this.showRange === true) {
+                if (i == startRange && i > 1) {
+                    text = this.rangeBoundaryStartText;
+                }
+                if (i == (endRange - 1) && i < (this.nbrOfPages - 1)) {
+                    text = this.rangeBoundaryEndText;
+                }
+            }
+
+            
+            if (this.currentPage == i) {
+                text += '<span class="sr-only">' + this.labelText[2] + '</span>';
+                this.add(this.build('paginationItem').set('active', true).add(this.build('span', text).addClass('page-link')));
+            } else {
+                this.add(this.build('paginationItem', linkBuilder(this, i), text));
+            }
+        }
+        if (this.showRange === true && this.rangeShowFirstLastPage === true && endRange < (this.nbrOfPages - 1)) {
+            this.add(this.build('paginationItem', linkBuilder(this, (this.nbrOfPages - 1)), this.nbrOfPages));
+        }
+        
+        if (this.showPreviousNextItems === true) {
+            var nextNbr = (this.currentPage < (this.nbrOfPages - 1))?(this.currentPage + 1):this.currentPage;
+            this.add(this.build(
+                'paginationItem', 
+                linkBuilder(this, nextNbr), 
+                '<span aria-hidden="true">' + this.labelText[3][0] + '</span><span class="sr-only">' + this.labelText[3][1] + '</span>'
+            ));
+            if (this.currentPage == nextNbr) {
+                this.lastChild().set('disabled', true);
+            }
+        }
+        
+        if (this.showFirstLastItems === true) {
+            this.add(this.build(
+                'paginationItem', 
+                linkBuilder(this, (this.nbrOfPages - 1)), 
+                '<span aria-hidden="true">' + this.labelText[4][0] + '</span><span class="sr-only">' + this.labelText[4][1] + '</span>'
+            ));
+            if (this.currentPage == (this.nbrOfPages - 1)) {
+                this.lastChild().set('disabled', true);
+            }
+        }
+    }
+    
+    this.attributes['data-current-page'] = this.currentPage;
+    this.attributes['data-max-page'] = this.nbrOfPages;
+
+    if (String(this.ariaLabel).trim() !== '') {
+        this.preHtml += '<nav aria-label="' + this.ariaLabel + '">';
+    } else {
+        this.preHtml += '<nav>';
+    }
+    this.postHtml = '</nav>' + this.postHtml;
+    
+    return lucid.html.base.tags.unorderedList.prototype.preRender.call(this);
+};
 /* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/pagination.js */
+
+/* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/paginationItem.js */
+lucid.html.bootstrap.tags.paginationItem = function(factory){
+	this.factory = factory;
+	lucid.html.base.tags.listItem.apply(this, arguments);
+	this.tag = 'li';
+	this.parameters = ['href'];
+	this.href = '';
+	this.addClass('page-item');
+	this.addTrait(lucid.html.bootstrap.traits.Activable);
+
+};
+lucid.html.bootstrap.tags.paginationItem.prototype = Object.create(lucid.html.base.tags.listItem.prototype);
+lucid.html.factory.tags.paginationItem = lucid.html.bootstrap.tags.paginationItem;
+
+lucid.html.bootstrap.tags.paginationItem.prototype.setDisabled=function(val){
+    if (val === true) {
+        this.addClass('disabled');
+    } else {
+        this.removeClass('disabled');
+    }
+    return this;
+};
+
+lucid.html.bootstrap.tags.paginationItem.prototype.getDisabled=function(){
+    return this.hasClass('disabled');
+};
+
+lucid.html.bootstrap.tags.paginationItem.prototype.preRender=function(){
+    if (String(this.href).trim() != '') {
+        this.preChildrenHtml += '<a href="' + this.href + '" class="page-link">';
+        this.postChildrenHtml = '</a>' + this.postChildrenHtml;    
+    }
+    return lucid.html.base.tags.listItem.prototype.preRender.call(this);
+};
+/* File end: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/paginationItem.js */
 
 /* File start: /Volumes/Lucid/html/bin/../src/Bootstrap/Tags/paragraph.js */
 lucid.html.bootstrap.tags.paragraph = function(factory){

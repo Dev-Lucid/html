@@ -1,36 +1,3 @@
-lucid.html.bootstrap.tags.pagination = function(factory){
-	this.factory = factory;
-	lucid.html.base.tags.unorderedList.apply(this, arguments);
-	this.tag = 'ul';
-	this.allowedAttributes.push('linkBuilder');
-	this.allowedAttributes.push('labelText');
-	this.allowedAttributes.push('ariaLabel');
-	this.allowedAttributes.push('showRange');
-	this.allowedAttributes.push('rangeShowBeforeAfter');
-	this.allowedAttributes.push('rangeShowFirstLastPage');
-	this.parameters = ['currentPage', 'nbrOfPages', 'showPreviousNextItems', 'showFirstLastItems', 'alwaysShowFirstPage', 'alwaysShowLastPage'];
-	this.ariaLabel = '';
-	this.currentPage = 0;
-	this.nbrOfPages = 1;
-	this.showRange = false;
-	this.rangeShowBeforeAfter = [2,2];
-	this.linkBuilder = null;
-	this.labelText = [['&laquo;', 'First'], ['&lt;', 'Previous'], ' (current)', ['&gt;', 'Next'], ['&raquo;', 'Last']];
-	this.autoBuildItems = true;
-	this.showPreviousNextItems = true;
-	this.showFirstLastItems = true;
-	this.rangeShowFirstLastPage = true;
-	this.rangeBoundaryStartText = '&hellip;';
-	this.rangeBoundaryEndText = '&hellip;';
-	this.bootstrapSizePrefix = 'pagination';
-	this.bootstrapSizesAllowed = ['sm', 'lg'];
-	this.addClass('pagination');
-	this.addTrait(lucid.html.bootstrap.traits.Sizeable);
-	this.addTrait(lucid.html.bootstrap.traits.Pullable);
-
-};
-lucid.html.bootstrap.tags.pagination.prototype = Object.create(lucid.html.base.tags.unorderedList.prototype);
-lucid.html.factory.tags.pagination = lucid.html.bootstrap.tags.pagination;
 
 
 lucid.html.bootstrap.tags.pagination.prototype.preRender=function(){

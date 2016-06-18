@@ -4,6 +4,7 @@ lucid.html.bootstrap.tags.inputCheckbox = function(factory){
 	this.tag = 'input';
 	this.bootstrapModifierPrefix = 'form-control';
 	this.bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
+	this.addClass('form-check-input');
 	this.addTrait(lucid.html.bootstrap.traits.Gridable);
 	this.addTrait(lucid.html.bootstrap.traits.Modifiable);
 	this.addTrait(lucid.html.bootstrap.traits.Pullable);

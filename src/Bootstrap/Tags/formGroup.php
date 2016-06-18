@@ -3,125 +3,136 @@ namespace Lucid\Html\Bootstrap\Tags;
 
 class formGroup extends \Lucid\Html\Tag
 {
-	public $tag = 'fieldset';
+	public $tag = 'div';
 	public $parameters = ['field', 'label', 'inputType', 'value', 'help'];
+	public $groupLabel = null;
 	public $gridSizeMinimum = 'sm';
 	public $gridSizeLabel = 2;
 	public $gridSizeField = 10;
+	public $useRowLayout = false;
+	public $useCheckableLayout = false;
+	public $checkableLayoutClass = 'checkbox';
 
 	public function init()
 	{
-		$this->addClass('form-group');
+		$this->allowedAttributes[] = 'useRowLayout';
+		$this->allowedAttributes[] = 'useCheckableLayout';
+		$this->allowedAttributes[] = 'checkableLayoutClass';
 		parent::init();
 	}
 
     public function preRender() : string
     {
-        $checkboxSelector = new \Lucid\Html\Selector('input[type=checkbox]');
-        $checkboxes = $this->queryChildren($checkboxSelector, true);
-
-        $radioSelector = new \Lucid\Html\Selector('input[type=radio]');
-        $radios = $this->queryChildren($radioSelector, true);
-        
-        $useRowLayout = (isset($this->attributes['rowLayout']) === true && $this->attributes['rowLayout'] === true);
-        $this->attributes['rowLayout'] = null;
-        
-        if (count($checkboxes) > 0 || count($radios) > 0) {
-            $this->tag = 'div';
+        if ($this->useCheckableLayout === true) {
+            $this->addClass('form-group');
+            $this->preChildrenHtml .= '<div class="'.$this->checkableLayoutClass.'">';
+            $this->postChildrenHtml = '</div>'. $this->postChildrenHtml;
             
-            if ($useRowLayout === true) {
-
-        		$this->preChildrenHtml  .= '<label class="form-check-label">';
-        		$this->postChildrenHtml = '</label>'.$this->postChildrenHtml;
-
-        		$this->preChildrenHtml  = '<label class="col-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel.'"></label><div class="col-'.$this->gridSizeMinimum.'-'.$this->gridSizeField.'"><div class="form-check">'.$this->preChildrenHtml;
-        		$this->postChildrenHtml .= '</div></div>';
-                
-                for ($i=0; $i < count($checkboxes); $i++) {
-                    $checkboxes[$i]->addClass('form-check-input');
-                }
-                
-                for ($j=0; $j < count($radios); $j++) {
-                    $radios[$j]->addClass('form-check-input');
+            if ($this->useRowLayout === true) {
+                $this->addClass('row');
+                $this->groupLabel->addClass('col-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel);
+                $this->groupLabel->addClass('col-form-label');
+                $this->preChildrenHtml .= '<div class="col-'.$this->gridSizeMinimum.'-'.$this->gridSizeField.'">';
+                $this->postChildrenHtml = '</div>' . $this->postChildrenHtml;
+                foreach ($this->children as $child) {
+                    $child->preHtml = '<div class="form-check"><label class="form-check-label">' . $child->preHtml;
+                    $child->postHtml .= '</label></div>';
                 }
             } else {
-        		$this->preChildrenHtml  .= '<label>';
-        		$this->postChildrenHtml = '</label>'.$this->postChildrenHtml;
-                $this->removeClass('form-group');
-                $this->addClass(((count($checkboxes) > 0)?'checkbox':'radio'));
+                foreach ($this->children as $child) {
+                    $child->preHtml .= '<label>';
+                    $child->postHtml = '</label>'.$child->postHtml;
+                }
             }
-        }
-        
-        if  ($useRowLayout === true) {
+        } else {
+            $this->addClass('form-group');
+            if ($this->useRowLayout === true) {
+                $this->addClass('row');
+                $this->groupLabel->addClass('col-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel);
+                $this->groupLabel->addClass('col-form-label');
+                
+                $first = true;
+                foreach ($this->children as $child) {
+                    if ($first === true) {
+                        $child->preHtml .= '<div class="col-'.$this->gridSizeMinimum.'-'.$this->gridSizeField.'">';
+                        $first = false;
+                    } else {
+                        $child->preHtml .= '<div class="col-'.$this->gridSizeMinimum.'-'.$this->gridSizeField.' col-offset-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel.'">';
+                    }
+                    $child->postHtml = '</div>' . $child->postHtml;
+                }
+            } else {
+                # nothing to do in this case!
+            }
             
-            $this->addClass('row');
-
-            $labels = $this->queryChildren(new \Lucid\Html\Selector('label'), true);
-            foreach ($labels as $label) {
-                $label->addClass('col-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel);
-                $label->addClass('col-form-label');
-            }
-
-            $fields = $this->queryChildren(new \Lucid\Html\Selector('.form-control'), true);
-        
-            foreach ($fields as $field) {
-                $field->preHtml .= '<div class="col-'.$this->gridSizeMinimum.'-'.$this->gridSizeField.'">';
-                $field->postHtml = '</div>'.$field->postHtml;
-            }
         }
-        
+         
+        if (is_null($this->groupLabel) === false) {
+            $this->preChildrenHtml = $this->groupLabel->render() . $this->preChildrenHtml;
+        }
+       
         return parent::preRender();
     }
     
-    public function setRowLayout($val) : \Lucid\Html\TagInterface
+    public function setUseRowLayout($val) : \Lucid\Html\TagInterface
     {
         if ($val === true || $val === false) {
-            $this->attributes['rowLayout'] = $val;
+            $this->useRowLayout = $val;
         } else {
-            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'rowLayout', $val, ['true', 'false']);
+            throw new \Lucid\Html\Exception\InvalidAttributeValue($this->instantiatorName, 'useRowLayout', $val, ['true', 'false']);
         }
         return $this;
     }
     
     public function setProperties(array $properties = []) : \Lucid\Html\TagInterface
 	{
-		$field = (isset($properties[0]) === true)?$properties[0]:null;
-		$label = (isset($properties[1]) === true)?$properties[1]:null;
-		$inputType = (isset($properties[2]) === true)?$properties[2]:null;
-		$value = (isset($properties[3]) === true)?$properties[3]:null;
-		$help = (isset($properties[4]) === true)?$properties[4]:null;
+        $inputType = (isset($properties[0]) === true)?$properties[0]:null;
+        if ($inputType == 'inputCheckbox') { 
+    		$groupLabel= (isset($properties[1]) === true)?$properties[1]:null;
+    		$field     = (isset($properties[2]) === true)?$properties[2]:null;
+    		$checked   = (isset($properties[3]) === true)?$properties[3]:null;
+    		$label     = (isset($properties[4]) === true)?$properties[4]:null;
+    		$help      = (isset($properties[5]) === true)?$properties[5]:null;
+        } elseif ($inputType == 'inputRadio') {
+    		$groupLabel= (isset($properties[1]) === true)?$properties[1]:null;
+    		$field     = (isset($properties[2]) === true)?$properties[2]:null;
+    		$value     = (isset($properties[3]) === true)?$properties[3]:null;
+    		$checked   = (isset($properties[4]) === true)?$properties[4]:null;
+    		$label     = (isset($properties[5]) === true)?$properties[5]:null;
+    		$help      = (isset($properties[6]) === true)?$properties[6]:null;
+        } else {
+    		$groupLabel= (isset($properties[1]) === true)?$properties[1]:null;
+    		$field     = (isset($properties[2]) === true)?$properties[2]:null;
+    		$value     = (isset($properties[3]) === true)?$properties[3]:null;
+    		$help      = (isset($properties[4]) === true)?$properties[4]:null;
+        }
 		
         
+        if (is_null($groupLabel) === false) {
+            if ($groupLabel == '') {
+                $groupLabel = '&nbsp;';
+            }
+            $this->groupLabel = $this->build('label', $field, $groupLabel);
+        }
         if (is_null($field) === false) {
             if ($inputType == 'inputCheckbox') {
-    		    $this->field = $this->add($this->build($inputType, $field, $value, $label))->lastChild();
+    		    $this->add($this->build($inputType, $field, $checked, $label));
             } else if ($inputType == 'inputRadio') {
-    		    $this->field = $this->add($this->build($inputType, $field, $value, $label))->lastChild();
+    		    $this->add($this->build($inputType, $field, $value, $checked, $label));
             } else {
-                $this->label = $this->add($this->build('label', $field, $label))->lastChild();
-    		    $this->field = $this->add($this->build($inputType, $field, $value))->lastChild();
+    		    $this->add($this->build($inputType, $field, $value));
             }
 		}
 		if (is_null($help) === false) {
-			$this->help = $this->add($this->build('inputHelp', $help))->lastChild();
+            $this->children[0]->postHtml .= '<br />'.$this->build('inputHelp', $help);
 		}
 		
 		return $this;
 	}
     
-    public function getLabel() : \Lucid\Html\TagInterface
+    public function getGroupLabel() : \Lucid\Html\TagInterface
 	{
-		return $this->label;
-	}
-	
-	public function getField() : \Lucid\Html\TagInterface
-	{
-		return $this->field;
-	}
-
-	public function getHelp()
-	{
-		return $this->help;
+		return $this->groupLabel;
 	}
     
     public function setGridSizeMinimum($val)
@@ -139,6 +150,26 @@ class formGroup extends \Lucid\Html\Tag
     public function setGridSizeLabel($val)
     {
         $this->gridSizeLabel = $val;
+        return $this;
+    }
+    
+    public function add($child) : \Lucid\Html\TagInterface
+    {
+        if (is_object($child) === false) {
+            parent::add($child);
+        } else {
+            if ($child->tag == 'input' && $child->get('type') == 'checkbox') {
+                $this->useCheckableLayout = true;
+                $this->checkableLayoutClass = 'checkbox';
+                parent::add($child);
+            } else if ($child->tag == 'input' && $child->get('type') == 'radio') {
+                $this->useCheckableLayout = true;
+                $this->checkableLayoutClass = 'radio';
+                parent::add($child);
+            } else {
+                parent::add($child);
+            }
+        }
         return $this;
     }
 }

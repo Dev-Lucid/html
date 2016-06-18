@@ -1,88 +1,107 @@
 
 lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
-    var checkboxSelector = new lucid.html.Selector('input[type=checkbox]');
-    var checkboxes = this.queryChildren(checkboxSelector, true);
-
-    var radioSelector = new lucid.html.Selector('input[type=radio]');
-    var radios = this.queryChildren(radioSelector, true);
-    
-    var useRowLayout = (typeof(this.attributes.rowLayout) != 'undefined' && this.attributes.rowLayout === true);
-    this.attributes.rowLayout = null;
-    
-    if (checkboxes.length > 0 || radios.length > 0) {
-        this.tag = 'div';
-        
-        if (useRowLayout === true) {
-            
-            this.preChildrenHtml  += '<label class="form-check-label">';
-            this.postChildrenHtml = '</label>'+this.postChildrenHtml;
-
-            this.preChildrenHtml  = '<label class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeLabel)+'"></label><div class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeField)+'"><div class="form-check">'+this.preChildrenHtml;
-            this.postChildrenHtml += '</div></div>';
-            
-            for (var i=0; i < checkboxes.length; i++) {
-                checkboxes[i].addClass('form-check-input');
-            }
-            
-            for (var j=0; j < radios.length; j++) {
-                radios[j].addClass('form-check-input');
+    if (this.useCheckableLayout === true) {
+        this.addClass('form-group');
+        this.preChildrenHtml += '<div class="' + this.checkableLayoutClass + '">';
+        this.postChildrenHtml = '</div>' + this.postChildrenHtml;
+        if (this.useRowLayout === true) {
+            this.addClass('row');
+            this.groupLabel.addClass('col-' + this.gridSizeMinimum + '-' + String(this.gridSizeLabel));
+            this.groupLabel.addClass('col-form-label');
+            this.preChildrenHtml += '<div class="col-' + String(this.gridSizeMinimum) + '-' + String(this.gridSizeField) + '">';
+            this.postChildrenHtml = '</div>' + this.postChildrenHtml;
+            for (var i=0; i<this.children.length; i++) {
+                this.children[i].preHtml = '<div class="form-check"><label class="form-check-label">' + this.children[i].preHtml;
+                this.children[i].postHtml += '</label></div>';
             }
         } else {
-            this.removeClass('form-group');
-            this.addClass(((checkboxes.length > 0)?'checkbox':'radio'));
-    		this.preChildrenHtml  += '<label>';
-    		this.postChildrenHtml += '</label>';
+            for (var i=0; i<this.children.length; i++) {
+                this.children[i].preHtml += '<label>';
+                this.children[i].postHtml = '</label>' + this.children[i].postHtml;
+            }
+        }
+    } else {
+        this.addClass('form-group');
+        if (this.useRowLayout === true) {
+            this.addClass('row');
+            this.groupLabel.addClass('col-' + String(this.gridSizeMinimum) + '-' + String(this.gridSizeLabel));
+            this.groupLabel.addClass('col-form-label');
+            
+            var first = true;
+            for (var i=0; i<this.children.length; i++) {
+                if (first === true) {
+                    this.children[i].preHtml += '<div class="col-' + String(this.gridSizeMinimum) + '-' + String(this.gridSizeField) + '">';
+                    first = false;
+                } else {
+                    this.children[i].preHtml += '<div class="col-' + String(this.gridSizeMinimum) + '-' + String(this.gridSizeField) + ' col-offset-' + String(this.gridSizeMinimum) + '-' + String(this.gridSizeLabel) + '">';
+                }
+                this.children[i].postHtml = '</div>' + this.children[i].postHtml;
+            }
+        } else {
+            // nothing to do in this case!
         }
     }
-
     
-    if (useRowLayout === true) {
-        this.addClass('row');
-        
-        var labels = this.queryChildren(new lucid.html.Selector('label'), true);
-        for (var i=0; i<labels.length; i++) {
-            labels[i].addClass('col-sm-'+String(this.gridSizeLabel));
-            labels[i].addClass('col-form-label');
-        }
-        
-        var fields = this.queryChildren(new lucid.html.Selector('.form-control'), true);
-        for (var j=0; j<fields.length; j++) {
-            fields[j].preHtml += '<div class="col-'+this.gridSizeMinimum+'-'+String(this.gridSizeField)+'">';
-            fields[j].postHtml = '</div>' + fields[j].postHtml;
-        }
+    if (this.groupLabel !== null) {
+        this.preChildrenHtml = this.groupLabel.render() + this.preChildrenHtml;
     }
+    
     return lucid.html.tag.prototype.preRender.call(this);
 };
 
-lucid.html.bootstrap.tags.formGroup.prototype.setRowLayout=function(val){
+lucid.html.bootstrap.tags.formGroup.prototype.setUseRowLayout=function(val){
     if (val === true || val === false) {
-        this.attributes.rowLayout = val;
+        this.useRowLayout = val;
     } else {
-        throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'rowLayout', val, ['true', 'false']);
+        throw new lucid.html.exception.InvalidAttributeValue(this.instantiatorName, 'useRowLayout', val, ['true', 'false']);
     }
     return this;
 };
 
 lucid.html.bootstrap.tags.formGroup.prototype.setProperties=function(params) {
-    var field     = (params.length > 0)?params[0]:null;
-    var label     = (params.length > 1)?params[1]:null;
-    var inputType = (params.length > 2)?params[2]:null;
-    var value     = (params.length > 3)?params[3]:null;
-    var help      = (params.length > 4)?params[4]:null;
+    var inputType = (params.length > 0)?params[0]:null;
+    var groupLabel, field, checked, value, label, help;
+    if (inputType == 'inputCheckbox') { 
+		groupLabel= (params.length > 1)?params[1]:null;
+		field     = (params.length > 2)?params[2]:null;
+		checked   = (params.length > 3)?params[3]:null;
+		label     = (params.length > 4)?params[4]:null;
+		help      = (params.length > 5)?params[5]:null;
+    } else if (inputType == 'inputRadio') {
+		groupLabel= (params.length > 1)?params[1]:null;
+		field     = (params.length > 2)?params[2]:null;
+		value     = (params.length > 3)?params[3]:null;
+		checked   = (params.length > 4)?params[4]:null;
+		label     = (params.length > 5)?params[5]:null;
+		help      = (params.length > 6)?params[6]:null;
+    } else {
+		groupLabel= (params.length > 1)?params[1]:null;
+	    field     = (params.length > 2)?params[2]:null;
+		value     = (params.length > 3)?params[3]:null;
+		help      = (params.length > 4)?params[4]:null;
+    }
     
+    if (groupLabel !== null) {
+        if (groupLabel == '') {
+            groupLabel = '&nbsp;';
+        }
+        this.groupLabel = this.build('label', field, groupLabel);
+    }
     if (field !== null) {
         if (inputType == 'inputCheckbox') {
-            this.field = this.add(this.build(inputType, field, value, label)).lastChild();            
+		    this.add(this.build(inputType, field, checked, label));
         } else if (inputType == 'inputRadio') {
-            this.field = this.add(this.build(inputType, field, value, label)).lastChild();
+		    this.add(this.build(inputType, field, value, checked, label));
         } else {
-            this.label = this.add(this.build('label', field, label)).lastChild();
-            this.field = this.add(this.build(inputType, field, value)).lastChild();
+		    this.add(this.build(inputType, field, value));
         }
-    }
-    if (help !== null) {
-        this.help = this.add(this.build('inputHelp', help)).lastChild();
-    }
+        
+        if (help !== null) {
+            this.children[0].postHtml += '<br />' + String(this.build('inputHelp', help).render());
+    	}
+	}
+	
+    
     return this;
 };
 
@@ -110,5 +129,24 @@ lucid.html.bootstrap.tags.formGroup.prototype.setGridSizeLabel=function(val) {
 
 lucid.html.bootstrap.tags.formGroup.prototype.setGridSizeField=function(val) {
     this.gridSizeField = val;
+    return this;
+};
+
+lucid.html.bootstrap.tags.formGroup.prototype.add=function(child){
+    if (typeof(child) == 'string') {
+        lucid.html.tag.prototype.add.call(this, child);
+    } else {
+        if (child.tag == 'input' && child.get('type') == 'checkbox') {
+            this.useCheckableLayout = true;
+            this.checkableLayoutClass = 'checkbox';
+            lucid.html.tag.prototype.add.call(this, child);
+        } else if (child.tag == 'input' && child.get('type') == 'radio') {
+            this.useCheckableLayout = true;
+            this.checkableLayoutClass = 'radio';
+            lucid.html.tag.prototype.add.call(this, child);
+        } else {
+            lucid.html.tag.prototype.add.call(this, child);
+        }
+    }
     return this;
 };

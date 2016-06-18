@@ -2,6 +2,7 @@
     "tag":"input",
     "namespace":"Lucid\\Html\\Bootstrap\\Tags",
     "inheritFrom":"Lucid\\Html\\Base\\Tags\\inputRadio",
+    "classes":["form-check-input"],
     "properties":{
         "bootstrapModifierPrefix":"'has'", 
         "bootstrapModifiersAllowed":"['success', 'warning', 'danger']"

@@ -123,12 +123,12 @@ class BootstrapGridTest extends BaseTest
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
-        $output = '<div class="col-xs-8 offset-sm-5 push-md-3 pull-lg-2"><input type="checkbox" name="test" /></div>';
+        $output = '<div class="col-xs-8 offset-sm-5 push-md-3 pull-lg-2"><input type="checkbox" name="test" class="form-check-input" /></div>';
         $code = "@build('inputCheckbox', 'test')->set('grid', [8])->set('offset', [null, 5])->set('gridPush', [null, null, 3])->set('gridPull', [null, null, null, 2])->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));
 
-        $output = '<div class="col-xs-8 offset-sm-5 push-md-3 pull-lg-2"><input type="radio" name="test" /></div>';
+        $output = '<div class="col-xs-8 offset-sm-5 push-md-3 pull-lg-2"><input type="radio" name="test" class="form-check-input" /></div>';
         $code = "@build('inputRadio', 'test')->set('grid', [8])->set('offset', [null, 5])->set('gridPush', [null, null, 3])->set('gridPull', [null, null, null, 2])->render()";
         $this->assertEquals($output, $this->runAsJs($code));
         $this->assertEquals($output, $this->runAsPHP($code));

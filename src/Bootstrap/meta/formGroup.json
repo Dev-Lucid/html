@@ -1,11 +1,15 @@
 {
-    "tag":"fieldset",
-    "classes":["form-group"],
+    "tag":"div",
     "properties":{
+        "groupLabel":"null",
         "gridSizeMinimum":"'sm'", 
         "gridSizeLabel":"2", 
-        "gridSizeField":"10"
+        "gridSizeField":"10",
+        "useRowLayout":"false",
+        "useCheckableLayout":"false",
+        "checkableLayoutClass":"'checkbox'"
     },
+    "allowedAttributes":["useRowLayout", "useCheckableLayout", "checkableLayoutClass"],
     "parameters":["field", "label", "inputType", "value", "help"],
     "namespace":"Lucid\\Html\\Bootstrap\\Tags"
 }

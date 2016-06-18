@@ -11,6 +11,12 @@ class inputCheckbox extends \Lucid\Html\Base\Tags\inputCheckbox
 	public $bootstrapModifierPrefix = 'form-control';
 	public $bootstrapModifiersAllowed = ['primary', 'secondary', 'success', 'warning','danger', 'info', 'link'];
 
+	public function init()
+	{
+		$this->addClass('form-check-input');
+		parent::init();
+	}
+
 
     public function preRender() : string
     {

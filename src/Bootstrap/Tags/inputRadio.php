@@ -11,6 +11,12 @@ class inputRadio extends \Lucid\Html\Base\Tags\inputRadio
 	public $bootstrapModifierPrefix = 'has';
 	public $bootstrapModifiersAllowed = ['success', 'warning', 'danger'];
 
+	public function init()
+	{
+		$this->addClass('form-check-input');
+		parent::init();
+	}
+
 
     public function preRender() : string
     {

@@ -26,8 +26,10 @@
             $this->addClass('form-group');
             if ($this->useRowLayout === true) {
                 $this->addClass('row');
-                $this->groupLabel->addClass('col-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel);
-                $this->groupLabel->addClass('col-form-label');
+                if (is_object($this->groupLabel) === true) {
+                    $this->groupLabel->addClass('col-'.$this->gridSizeMinimum.'-'.$this->gridSizeLabel);
+                    $this->groupLabel->addClass('col-form-label');
+                }
                 
                 $first = true;
                 foreach ($this->children as $child) {

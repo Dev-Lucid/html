@@ -42,8 +42,10 @@ lucid.html.bootstrap.tags.formGroup.prototype.preRender=function(){
         this.addClass('form-group');
         if (this.useRowLayout === true) {
             this.addClass('row');
-            this.groupLabel.addClass('col-' + String(this.gridSizeMinimum) + '-' + String(this.gridSizeLabel));
-            this.groupLabel.addClass('col-form-label');
+            if (typeof(this.groupLabel) == 'object') {
+                this.groupLabel.addClass('col-' + String(this.gridSizeMinimum) + '-' + String(this.gridSizeLabel));
+                this.groupLabel.addClass('col-form-label');
+            }
             
             var first = true;
             for (var i=0; i<this.children.length; i++) {

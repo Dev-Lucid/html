@@ -105,6 +105,41 @@ class Factory implements FactoryInterface
         return '';
     }
     
+    public function buildFromArray(array $structure, array $defaults = [])
+    {
+        if (isset($structure['defaults']) === true) {
+            $defaults = array_merge($defaults, $structure['defaults']);
+            unset($structure['defaults']);    
+        }
+        
+        $finalAttributes = array_merge($defaults, $structure);
+
+        $type = $finalAttributes['type'] ?? null;
+        unset($finalAttributes['type']);
+        
+        $children = (isset($finalAttributes['children']) === true)?$finalAttributes['children']:[];
+        unset($finalAttributes['children']);
+
+        if (is_null($type) === true) {
+            throw new \Exception('Cannot build type: null');
+        }
+
+        $newObj = $this->build($type);
+        foreach($finalAttributes as $key=>$value) {
+            $newObj->set($key, $value);
+        }
+        
+        foreach ($children as $child) {
+            if (is_string($child) === true) {
+                $newObj->add($child);
+            } elseif (is_array($child) === true) {
+                $newObj->add($this->buildFromArray($child, $defaults));
+            }
+        }
+        
+        return $newObj;
+    }
+    
     public function build(string $name, ...$params) : TagInterface
     {
         $finalClass = $this->findClass($name);

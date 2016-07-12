@@ -304,17 +304,22 @@ class Tag implements TagInterface
     {
         return $this->tag;
     }
+    
+    public function attributeAllowed(string $name) : bool
+    {
+        $setter = 'set'.$name;
+        return (method_exists($this, $setter) === true || in_array($name, $this->parameters) === true || in_array($name, $this->allowedAttributes) === true || property_exists($this, $name) === true);
+    }
 
     public function set(string $name, $value) : TagInterface
     {
-        #echo("calling set on $name = $value\n");
+        if ($this->attributeAllowed($name) === false) {
+            throw new Exception\InvalidAttribute($this->instantiatorName, $name, $this->allowedAttributes);
+        }
         $setter = 'set'.$name;
         if (method_exists($this, $setter) === true) {
             $this->$setter($value);
             return $this;
-        }
-        if (in_array($name, $this->allowedAttributes) === false && in_array($name, $this->parameters) === false) {
-            throw new Exception\InvalidAttribute($this->instantiatorName, $name, $this->allowedAttributes);
         }
         if (property_exists($this, $name) === true) {
             $this->$name = $value;

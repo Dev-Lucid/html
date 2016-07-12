@@ -209,14 +209,19 @@ lucid.html.tag.prototype.requireProperties=function(traitName, names) {
     }
 };
 
+lucid.html.tag.prototype.attributeAllowed=function(name){
+    var key = String(name).charAt(0).toUpperCase() + String(name).slice(1);
+    return (typeof(this['set'+key]) == 'function' || this.parameters.indexOf(name) >= 0 || this.allowedAttributes.indexOf(name) >= 0 || typeof(this[name]) != 'undefined');
+};
+
 lucid.html.tag.prototype.set=function(name, value) {
+    if (this.attributeAllowed(name) === false) {
+        throw new lucid.html.exception.InvalidAttribute(this.instantiatorName, name, this.allowedAttributes);
+    }
     var key = String(name).charAt(0).toUpperCase() + String(name).slice(1);
     if (typeof(this['set'+key]) == 'function') {
         this['set'+key](value);
     } else {
-        if (this.allowedAttributes.indexOf(name) < 0 && this.parameters.indexOf(name) < 0) {
-            throw new lucid.html.exception.InvalidAttribute(this.instantiatorName, name, this.allowedAttributes);
-        }
         if (typeof(this[name]) == 'undefined') {
             this.attributes[name] = value;
         } else {
